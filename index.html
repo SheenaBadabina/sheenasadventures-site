@@ -1,1 +1,201 @@
+<!doctype html>
 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Collaborate with Sheena’s Adventures</title>
+  <meta name="description" content="Book a product placement or dedicated adventure video with Sheena’s Adventures. Secure checkout powered by Stripe." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0b0f14; /* deep navy */
+      --card:#111823;
+      --ink:#e7eef7;
+      --muted:#b7c3d4;
+      --accent:#1ad1c4; /* TEAL-ish */
+      --accent-2:#7cf2ea;
+      --ok:#49d17a;
+      --warn:#f2c94c;
+      --danger:#ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:radial-gradient(1200px 600px at 80% -10%, rgba(26,209,196,.25), transparent), var(--bg);color:var(--ink);font:16px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:32px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;padding:40px 0}
+    .badge{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(122,242,234,.12);color:var(--accent-2);font-weight:600;border:1px solid rgba(122,242,234,.35)}
+    h1{font-size:40px;line-height:1.1;margin:14px 0 8px;font-weight:800;letter-spacing:-.02em}
+    .lead{color:var(--muted);font-size:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid rgba(255,255,255,.08);border-radius:20px;box-shadow:var(--shadow)}
+    .card.pad{padding:22px}
+    .grid{display:grid;gap:22px}
+    .grid.cols-3{grid-template-columns:repeat(3, 1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2, 1fr)}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}.grid.cols-3{grid-template-columns:1fr}.grid.cols-2{grid-template-columns:1fr}}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;font-weight:700;border:1px solid transparent;transition:transform .08s ease, box-shadow .2s ease, background .2s ease}
+    .btn.primary{background:linear-gradient(180deg, var(--accent), var(--accent-2));color:#002b2e;box-shadow:0 6px 18px rgba(26,209,196,.35)}
+    .btn.primary:hover{transform:translateY(-1px)}
+    .btn.ghost{background:transparent;border-color:rgba(255,255,255,.18);color:var(--ink)}
+    .btn.block{width:100%}
+    .price{font-size:32px;font-weight:800}
+    .tiny{font-size:12px;color:var(--muted)}
+    ul.clean{list-style:none;padding-left:18px;margin:12px 0}
+    ul.clean li{margin:8px 0;position:relative}
+    ul.clean li:before{content:"✓";position:absolute;left:-18px;top:-1px;color:var(--ok);font-weight:800}
+    .muted{color:var(--muted)}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);font-size:12px}
+    .section{margin:40px 0}
+    .logo{font-weight:800;letter-spacing:.04em}
+    .footer{opacity:.8}
+    .note{border-left:3px solid var(--accent);padding:10px 14px;background:rgba(26,209,196,.06);border-radius:10px}
+    .faq dt{font-weight:700;margin-top:12px}
+    .faq dd{margin:8px 0 18px;color:var(--muted)}
+    .tag{display:inline-block;margin-right:6px;margin-bottom:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div class="logo">Sheena’s Adventures</div>
+      <nav class="muted" style="display:flex;gap:18px"><a href="#packages">Packages</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a href="#contact">Contact</a></nav>
+    </header><section class="hero">
+  <div>
+    <span class="badge">Brand Collaborations</span>
+    <h1>Showcase your product on real Utah expeditions</h1>
+    <p class="lead">Authentic field testing in uranium country, slot canyons, and desert landscapes. 
+    Secure, professional checkout powered by Stripe.</p>
+    <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+      <a class="btn primary" href="#packages">View packages</a>
+      <a class="btn ghost" href="#contact">Talk to Sheena</a>
+    </div>
+    <div style="margin-top:14px" class="muted tiny">Perfect for adventure, geology, outdoor, tools, and safety brands.</div>
+  </div>
+  <div class="card pad">
+    <div class="muted" style="margin-bottom:8px">Recent performance</div>
+    <div class="grid cols-2">
+      <div class="card pad">
+        <div class="tiny muted">Channel age</div>
+        <div class="price">5 mo</div>
+      </div>
+      <div class="card pad">
+        <div class="tiny muted">Lifetime views</div>
+        <div class="price">37,000+</div>
+      </div>
+    </div>
+    <div style="margin-top:10px" class="tiny muted">Niche audience seeking Utah geology, rockhounding, and adventure content.</div>
+  </div>
+</section>
+
+<section id="packages" class="section">
+  <h2 style="margin:0 0 12px 0">Packages</h2>
+  <div class="grid cols-3">
+    <!-- Integration Package -->
+    <div class="card pad">
+      <div class="pill tag">Best for awareness</div>
+      <h3 style="margin:8px 0 6px">30–60s Integration</h3>
+      <div class="price">$100</div>
+      <div class="muted" style="margin-top:6px">Feature inside a relevant adventure video.</div>
+      <ul class="clean" style="margin-top:10px">
+        <li>On-location demo in-field</li>
+        <li>Verbal + on-screen mention</li>
+        <li>Link + discount code in description</li>
+      </ul>
+      <!-- Replace with your Stripe Payment Link -->
+      <a class="btn primary block" target="_blank" href="https://buy.stripe.com/your_integration_payment_link">Pay in Full via Stripe</a>
+      <div class="tiny muted" style="margin-top:8px">Prefer a deposit? <a target="_blank" href="https://buy.stripe.com/your_integration_deposit_link">Reserve with 50%</a></div>
+    </div>
+
+    <!-- Dedicated Video -->
+    <div class="card pad">
+      <div class="pill tag">Most popular</div>
+      <h3 style="margin:8px 0 6px">Dedicated Adventure Video</h3>
+      <div class="price">$200</div>
+      <div class="muted" style="margin-top:6px">Full 8–10 minute field test storyline.</div>
+      <ul class="clean" style="margin-top:10px">
+        <li>Scouted location (e.g., Yellow Cat Road)</li>
+        <li>Scripted hook + field results</li>
+        <li>CTA + link + pinned comment</li>
+      </ul>
+      <!-- Replace with your Stripe Payment Link -->
+      <a class="btn primary block" target="_blank" href="https://buy.stripe.com/your_dedicated_payment_link">Pay in Full via Stripe</a>
+      <div class="tiny muted" style="margin-top:8px">Or <a target="_blank" href="https://buy.stripe.com/your_dedicated_deposit_link">Reserve with 50%</a></div>
+    </div>
+
+    <!-- Usage Rights Add-on -->
+    <div class="card pad">
+      <div class="pill tag">Add‑on</div>
+      <h3 style="margin:8px 0 6px">Footage Usage Rights</h3>
+      <div class="price">+$150</div>
+      <div class="muted" style="margin-top:6px">For brand ads, Amazon listings, or paid social.</div>
+      <ul class="clean" style="margin-top:10px">
+        <li>6‑month non‑exclusive license</li>
+        <li>Web + social + marketplace use</li>
+        <li>Original post remains on my channel</li>
+      </ul>
+      <!-- Replace with your Stripe Payment Link -->
+      <a class="btn primary block" target="_blank" href="https://buy.stripe.com/your_rights_payment_link">Add to Cart via Stripe</a>
+      <div class="tiny muted" style="margin-top:8px">Need 12 months or whitelisting? <a href="#contact">Contact me</a>.</div>
+    </div>
+  </div>
+  <p class="tiny muted" style="margin-top:12px">All payments are processed by Stripe. I never see card details.</p>
+</section>
+
+<section id="how" class="section">
+  <h2 style="margin:0 0 12px 0">How it works</h2>
+  <div class="grid cols-3">
+    <div class="card pad">
+      <h3 style="margin:6px 0">1) Pick a package</h3>
+      <p class="muted">Select Integration or Dedicated. Add Usage Rights if needed. Checkout securely via Stripe.</p>
+    </div>
+    <div class="card pad">
+      <h3 style="margin:6px 0">2) Align the brief</h3>
+      <p class="muted">Email your goals, key talking points, discount code, and timelines. I’ll confirm the filming plan & location.</p>
+    </div>
+    <div class="card pad">
+      <h3 style="margin:6px 0">3) Field shoot & delivery</h3>
+      <p class="muted">I film on location (e.g., Poison Strip / Yellow Cat mines), deliver for review, then publish to YouTube with links.</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top:10px">
+    <strong>Timeline:</strong> Typical turnaround 1–2 weeks from payment/brief. Rush available on request.
+  </div>
+</section>
+
+<section id="faq" class="section">
+  <h2 style="margin:0 0 12px 0">FAQ</h2>
+  <dl class="faq">
+    <dt>Can we approve the talking points?</dt>
+    <dd>Yes—send 3–5 key points and any mandatory disclosures (e.g., discount code). Final editorial control remains mine to keep reviews authentic.</dd>
+    <dt>Do you guarantee views?</dt>
+    <dd>No creator can. What I guarantee: authentic field use, clear messaging, and best practices for discoverability.</dd>
+    <dt>What about refunds?</dt>
+    <dd>Deposits are non‑refundable once pre‑production starts. If I cannot complete the shoot for reasons on my end, you’ll receive a full refund.</dd>
+    <dt>Do you shoot beyond Utah?</dt>
+    <dd>Primarily Utah. Travel projects are possible with added costs—email me to discuss.</dd>
+  </dl>
+</section>
+
+<section id="contact" class="section">
+  <h2 style="margin:0 0 12px 0">Contact</h2>
+  <div class="card pad">
+    <p class="muted">Ready to proceed or need a custom scope? Email me your brief and timeline.</p>
+    <p><strong>Email:</strong> <a href="mailto:collabs@sheenasadventures.com">collabs@sheenasadventures.com</a> &nbsp;•&nbsp; <strong>Subject:</strong> Collaboration Inquiry</p>
+    <p class="tiny muted">Don’t have a Stripe link yet? I can also send a one‑time invoice via Stripe.</p>
+  </div>
+</section>
+
+<footer class="footer section" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div class="tiny muted">© <span id="yr"></span> Sheena’s Adventures • Utah, USA</div>
+  <div class="tiny muted">Clear FTC disclosure on sponsored content. Secure payments by Stripe.</div>
+</footer>
+
+  </div>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  </script>
+</body>
+  </html>
