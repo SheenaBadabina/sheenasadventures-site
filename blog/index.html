@@ -2,39 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Blog — Sheena’s Adventures</title>
-  <style>
-    :root{--bg:#0e0f10;--card:#ffffff;--ink:#111;--muted:#666;--accent:#14b8a6}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fff;color:var(--ink)}
-    /* NAV */
-    .nav{background:var(--bg);color:#e9f8f6;display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
-    .brand a{color:#34d399;text-decoration:none;font-weight:700}
-    .burger{background:none;border:0;color:#e9f8f6;font-size:24px;line-height:1;display:inline-flex}
-    .menu{display:none;gap:18px}
-    .menu a{color:#e9f8f6;text-decoration:none}
-    @media(min-width:768px){.burger{display:none}.menu{display:flex}}
-    .open .menu{display:block;position:absolute;top:56px;left:0;right:0;background:var(--bg);padding:12px 18px;border-top:1px solid #1c1d20}
-    /* CONTENT */
-    .wrap{max-width:860px;margin:32px auto;padding:0 16px}
-    h1{font-size:34px;margin:0 0 8px}
-    p.lead{margin:0;color:#555}
-    ul.posts{list-style:none;padding:0;margin:28px 0 0}
-    ul.posts li{background:#fff;border:1px solid #eee;border-radius:14px;padding:18px 20px;margin-bottom:14px}
-    ul.posts a{text-decoration:none;color:#0b5cab;display:block}
-    ul.posts h2{font-size:22px;margin:0 0 6px}
-    .meta{font-size:13px;color:#666}
-    .desc{margin:8px 0 0;color:#333}
-  </style>
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="brand"><a href="/">Sheena’s Adventures</a></div>
-    <button class="burger" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
-    <div class="menu">
-      <a href="/">Home</a>
+  <header class="site-header">
+    <a href="/" class="brand">Sheena’s Adventures</a>
+    <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
+    <nav class="site-nav">
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/adventures.html">Adventures</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Blog</h1>
+    <p class="lead">Field notes and behind-the-scenes from Sheena’s Adventures.</p>
+
+    <ul class="posts">
+      <li>
+        <a href="/blog/meet-the-desert-dreamer.html">
+          <h2>Meet the Desert Dreamer</h2>
+          <div class="meta">September 12, 2025</div>
+          <p class="desc">The real story behind Sheena’s Adventures—passion, grit, and life in the Utah desert.</p>
+        </a>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>      <a href="/">Home</a>
       <a href="/blog/">Blog</a>
       <a href="/work-with-me.html">Work With Me</a>
       <a href="/contact.html">Contact</a>
