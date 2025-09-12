@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About • Sheena’s Adventures</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <a href="/" class="brand">Sheena’s Adventures</a>
+  <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
+  <nav class="site-nav">
+    <a href="/">Home</a>
+    <a href="/work-with-me.html">Work With Me</a>
+    <a href="/adventures.html">Adventures</a>
+    <a href="/blog/">Blog</a>
+    <a href="/contact.html">Contact</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1>About</h1>
+  <p>I’m Sheena—a Utah lifer, rockhound, photographer, and storyteller. I explore cliff dwellings, dinosaur country, and the desert’s hidden beauty.</p>
+  <p><em>“Remember, it’s all about the journey, not the destination.”</em></p>
+</main>
+
+<footer>
+  <p>© <span id="y"></span> Sheena’s Adventures</p>
+</footer>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
