@@ -2,46 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact • Sheena’s Adventures</title>
-  <link rel="stylesheet" href="/static/styles.css" />
+
+  <!-- (Optional) your site stylesheet -->
+  <link rel="stylesheet" href="/static/site.css" />
+
+  <!-- Turnstile widget -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <style>
+    /* Minimal safe styling in case CSS isn’t loaded */
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color:#eaeaea; background:#0f1115; }
+    header, main, footer { max-width: 900px; margin: 0 auto; padding: 16px; }
+    a { color:#35c9c9; text-decoration: none; }
+    nav a { margin-right: 14px; }
+    h1 { margin: 0.6rem 0 1rem; }
+    .form { display:grid; gap: 12px; max-width: 640px; }
+    label { display:grid; gap:6px; }
+    input, textarea { background:#171a21; color:#eaeaea; border:1px solid #2a2f3a; border-radius:8px; padding:10px 12px; }
+    .btn { background:#35c9c9; color:#0b0d11; border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; }
+    .btn:disabled { opacity:.6; cursor:not-allowed; }
+    .muted { color:#a3a9b6; font-size:.95rem; }
+    .toast { display:none; margin-top:16px; padding:12px 14px; background:#13251f; border:1px solid #2a4c43; border-radius:10px; color:#bff7df; }
+  </style>
 </head>
 <body>
-<header class="site-header">
-  <a href="/" class="brand">Sheena’s Adventures</a>
-  <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
-  <nav class="site-nav">
-    <a href="/">Home</a>
-    <a href="/work-with-me.html">Work With Me</a>
-    <a href="/adventures.html">Adventures</a>
-    <a href="/blog/">Blog</a>
-    <a href="/about.html">About</a>
-  </nav>
-</header>
+  <header>
+    <a href="/" style="font-weight:700; font-size:1.1rem;">Sheena’s Adventures</a>
+    <nav style="margin-top:10px;">
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/about.html">About</a>
+      <a href="/blog/">Blog</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <h1>Contact</h1>
-  <p>Got a question or media request? Say hello.</p>
-  <form class="form" method="post" action="/contact-submit">
-    <label>Your Name <input required name="name" /></label>
-    <label>Email <input required type="email" name="email" /></label>
-    <label>Message <textarea required name="message" rows="5"></textarea></label>
-    <div class="cf-turnstile" data-sitekey="0x4AAAAAAB0vOSqh9kDdb7s_"></div>
-    <button class="btn" type="submit">Send</button>
-    <p class="muted">This sends directly to my inbox.</p>
-  </form>
-  <div id="toast" class="card" style="display:none;margin-top:16px">Thanks! Your message was sent.</div>
-</main>
+  <main>
+    <h1>Contact</h1>
+    <p>Got a question or media request? Say hello.</p>
 
-<footer>
-  <p>© <span id="y"></span> Sheena’s Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a></p>
-</footer>
-<script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-  if (new URLSearchParams(location.search).get('sent')==='1') {
-    document.getElementById('toast').style.display='block';
-  }
-</script>
+    <form class="form" method="post" action="/contact-submit">
+      <label>
+        Your Name
+        <input required name="name" type="text" autocomplete="name" />
+      </label>
+
+      <label>
+        Email
+        <input required name="email" type="email" autocomplete="email" />
+      </label>
+
+      <label>
+        Message
+        <textarea required name="message" rows="5"></textarea>
+      </label>
+
+      <!-- Turnstile widget (paste your Site Key below) -->
+      <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
+
+      <button class="btn" type="submit">Send</button>
+      <p class="muted">This sends directly to my inbox.</p>
+    </form>
+
+    <div id="toast" class="toast">Thanks! Your message was sent.</div>
+  </main>
+
+  <footer style="opacity:.8; margin-top:24px;">
+    <small>© <span id="y"></span> Sheena’s Adventures ·
+      <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a>
+    </small>
+  </footer>
+
+  <script>
+    // year + “sent” toast
+    document.getElementById('y').textContent = new Date().getFullYear();
+    if (new URLSearchParams(location.search).get('sent') === '1') {
+      document.getElementById('toast').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
