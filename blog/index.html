@@ -33,8 +33,7 @@
     </ul>
   </div>
 </body>
-</html>    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/blog?ref=${BRANCH}`);
-    if (!res.ok) { document.getElementById('posts').innerHTML = '<p>Nothing here yet.</p>'; return; }
+</html>    if (!res.ok) { document.getElementById('posts').innerHTML = '<p>Nothing here yet.</p>'; return; }
     const files = (await res.json()).filter(f => f.name.endsWith('.md'));
     if (!files.length) { document.getElementById('posts').innerHTML = '<p>Nothing here yet.</p>'; return; }
     const container = document.getElementById('posts');
