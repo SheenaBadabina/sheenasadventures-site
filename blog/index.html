@@ -1,40 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blog • Sheena’s Adventures</title>
-  <link rel="stylesheet" href="/static/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog — Sheena’s Adventures</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background:#fff; color:#111; }
+    .wrap { max-width: 860px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: 34px; margin: 0 0 8px; }
+    p.lead { margin: 0; color:#555; }
+    ul.posts { list-style: none; padding: 0; margin: 28px 0 0; }
+    ul.posts li { border:1px solid #eee; border-radius:14px; padding:18px 20px; margin-bottom:14px; }
+    ul.posts a { text-decoration: none; color:#0b5cab; display:block; }
+    ul.posts h2 { font-size:22px; margin:0 0 6px; color:#0b5cab; }
+    .meta { font-size: 13px; color:#666; }
+    .desc { margin:8px 0 0; color:#333; }
+  </style>
 </head>
 <body>
-<header class="site-header">
-  <a href="/" class="brand">Sheena’s Adventures</a>
-  <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
-  <nav class="site-nav">
-    <a href="/">Home</a>
-    <a href="/work-with-me.html">Work With Me</a>
-    <a href="/adventures.html">Adventures</a>
-    <a href="/about.html">About</a>
-    <a href="/contact.html">Contact</a>
-  </nav>
-</header>
+  <div class="wrap">
+    <h1>Blog</h1>
+    <p class="lead">Field notes and behind-the-scenes from Sheena’s Adventures.</p>
 
-<main class="container">
-  <h1>Blog</h1>
-  <div id="posts" class="grid"></div>
-  <p class="muted">Posts are simple Markdown files in your repo’s <code>/blog</code> folder. Create new ones from the Admin page.</p>
-</main>
-
-<footer>
-  <p>© <span id="y"></span> Sheena’s Adventures</p>
-</footer>
-<script>
-  const OWNER = "YOUR_GITHUB_USERNAME";
-  const REPO = "YOUR_REPO_NAME";
-  const BRANCH = "main";
-
-  document.getElementById('y').textContent = new Date().getFullYear();
-
+    <ul class="posts">
+      <li>
+        <a href="/blog/meet-the-desert-dreamer.html">
+          <h2>Meet the Desert Dreamer</h2>
+          <div class="meta">September 12, 2025</div>
+          <p class="desc">The real story behind Sheena’s Adventures—passion, grit, and life in the Utah desert.</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
   async function listPosts() {
     const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/blog?ref=${BRANCH}`);
     if (!res.ok) { document.getElementById('posts').innerHTML = '<p>Nothing here yet.</p>'; return; }
