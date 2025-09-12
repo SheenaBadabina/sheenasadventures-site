@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin • Sheena’s Adventures</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Admin</h1>
+    <p>Quick links to manage content via GitHub. (A full WYSIWYG CMS can be added later.)</p>
+
+    <div class="grid">
+      <article class="card">
+        <h2>New Blog Post</h2>
+        <p>Blog posts live in <code>/blog</code>. Name files like <code>YYYY-MM-DD-title.md</code>.</p>
+        <p><a id="newPost" class="btn" target="_blank" rel="noopener">Create Post</a></p>
+      </article>
+
+      <article class="card">
+        <h2>Manage Blog Folder</h2>
+        <p>See all posts and edit them.</p>
+        <p><a id="blogFolder" class="btn secondary" target="_blank" rel="noopener">Open /blog</a></p>
+      </article>
+
+      <article class="card">
+        <h2>Upload Images</h2>
+        <p>Place images in <code>/static/uploads</code> and reference them in posts.</p>
+        <p><a id="uploads" class="text-link" target="_blank" rel="noopener">Open /static/uploads</a></p>
+      </article>
+    </div>
+  </main>
+
+  <script>
+    const OWNER = 'YOUR_GITHUB_USERNAME';
+    const REPO = 'YOUR_REPO_NAME';
+    const BRANCH = 'main';
+
+    document.getElementById('newPost').href = `https://github.com/${OWNER}/${REPO}/new/${BRANCH}/blog`;
+    document.getElementById('blogFolder').href = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}/blog`;
+    document.getElementById('uploads').href = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}/static/uploads`;
+  </script>
+</body>
+</html>

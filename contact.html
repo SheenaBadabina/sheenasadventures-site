@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact • Sheena’s Adventures</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a href="/" class="brand">Sheena’s Adventures</a>
+  <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
+  <nav class="site-nav">
+    <a href="/">Home</a>
+    <a href="/work-with-me.html">Work With Me</a>
+    <a href="/adventures.html">Adventures</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about.html">About</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1>Contact</h1>
+  <p>Got a question or media request? Say hello.</p>
+  <form class="form" method="post" action="/contact-submit">
+    <label>Your Name <input required name="name" /></label>
+    <label>Email <input required type="email" name="email" /></label>
+    <label>Message <textarea required name="message" rows="5"></textarea></label>
+    <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
+    <button class="btn" type="submit">Send</button>
+    <p class="muted">This sends directly to my inbox.</p>
+  </form>
+  <div id="toast" class="card" style="display:none;margin-top:16px">Thanks! Your message was sent.</div>
+</main>
+
+<footer>
+  <p>© <span id="y"></span> Sheena’s Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a></p>
+</footer>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+  if (new URLSearchParams(location.search).get('sent')==='1') {
+    document.getElementById('toast').style.display='block';
+  }
+</script>
+</body>
+</html>
