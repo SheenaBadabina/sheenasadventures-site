@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<!-- v2025-09-13-01: clean single-copy page -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,6 +18,7 @@
     .btn{display:inline-block; background:var(--teal); color:#061015; padding:10px 16px; border-radius:999px; font-weight:600}
     .btn:hover{background:#19d3bf}
     .muted{color:var(--muted)} hr{border:0; border-top:1px solid var(--border); margin:24px 0}
+
     /* Header / Nav */
     .site-header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(8px); background:rgba(11,14,17,.8); border-bottom:1px solid var(--border)}
     .brand{display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.2px}
@@ -30,6 +32,7 @@
     .hamb span::before{top:-6px}.hamb span::after{top:6px}
     #menu{display:none}
     @media (min-width:860px){ .hamb{display:none} #menu{display:flex !important} }
+
     /* Article */
     article{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:22px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
     h1{font-size:clamp(28px,5.6vw,46px); line-height:1.1; margin:4px 0 10px}
@@ -38,6 +41,7 @@
     .lead{font-size:18px; color:#d2e7f7}
     .kicker{color:#a8fff1; font-weight:700; letter-spacing:.3px}
     .top-actions{display:flex; gap:12px; flex-wrap:wrap; margin:14px 0 6px}
+
     /* Footer */
     .site-footer{border-top:1px solid var(--border); color:var(--muted); font-size:14px; margin-top:36px}
     .site-footer a{color:#93e1d9}
@@ -71,7 +75,7 @@
       <p class="lead"><em>When passion meets dust, magic happens</em></p>
       <hr>
 
-      <!-- BLOG CONTENT START (single clean copy) -->
+      <!-- BEGIN BLOG CONTENT (single copy) -->
       <p>The alarm screams at 4:47 AM, but I'm already awake. </p>
       <p>My boots are by the door, caked with yesterday's adventure. My truck keys jingle like wind chimes in the pre-dawn darkness. And somewhere out there, beyond the sleeping suburbs and the last streetlight, the Utah desert is waiting with secrets older than human memory.</p>
       <p><strong>This is my life. This is my calling. This is Sheena's Adventures.</strong></p>
@@ -127,7 +131,7 @@
 
       <hr>
       <p><strong>Ready for your own desert adventure?</strong> Share your story with me via <a href="/contact.html">the contact page</a> or say hi on <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a>.</p>
-      <!-- BLOG CONTENT END -->
+      <!-- END BLOG CONTENT -->
     </article>
 
     <div class="top-actions" style="margin-top:18px">
@@ -156,345 +160,6 @@
       }
       const y=document.getElementById('y'); if(y) y.textContent=new Date().getFullYear();
     })();
-  </script>
-</body>
-</html>    .hamb{display:inline-flex; padding:10px; border:1px solid var(--border); border-radius:10px; background:var(--card)}
-    .hamb span{width:18px; height:2px; background:#cfe7f5; display:block; position:relative}
-    .hamb span::before,.hamb span::after{content:""; position:absolute; left:0; width:18px; height:2px; background:#cfe7f5}
-    .hamb span::before{top:-6px}.hamb span::after{top:6px}
-    #menu{display:none}
-    @media (min-width:860px){
-      .hamb{display:none}
-      #menu{display:flex !important}
-    }
-
-    /* Article */
-    article{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:22px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    h1{font-size:clamp(28px,5.6vw,46px); line-height:1.1; margin:4px 0 10px}
-    h2{font-size:clamp(22px,3.8vw,28px); line-height:1.25; margin:28px 0 8px}
-    h3{font-size:clamp(18px,3.4vw,22px); margin:20px 0 6px}
-    p{margin:12px 0}
-    .lead{font-size:18px; color:#d2e7f7}
-    .kicker{color:#a8fff1; font-weight:700; letter-spacing:.3px}
-    .top-actions{display:flex; gap:12px; flex-wrap:wrap; margin:14px 0 6px}
-
-    /* Footer */
-    .site-footer{border-top:1px solid var(--border); color:var(--muted); font-size:14px; margin-top:36px}
-    .site-footer a{color:#93e1d9}
-  </style>
-</head>
-<body>
-
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:12px">
-      <a class="brand" href="/"><span class="dot"></span><span>Sheena’s Adventures</span></a>
-
-      <button id="hamb" class="hamb" aria-label="Open menu" aria-controls="menu" aria-expanded="false">
-        <span></span>
-      </button>
-
-      <nav id="menu" class="nav" aria-label="Primary">
-        <a href="/">Home</a>
-        <a href="/blog/" class="active">Blog</a>
-        <a href="/work-with-me.html">Work With Me</a>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <div class="top-actions">
-      <a class="btn" href="/blog/">&larr; Back to Blog</a>
-      <a class="btn" href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">Watch on YouTube</a>
-    </div>
-
-    <article>
-      <p class="kicker">Meet the Desert Dreamer</p>
-      <h1><span style="color:var(--teal)">Meet the Desert Dreamer:</span> The Real Story Behind Sheena's Adventures</h1>
-      <p class="lead"><em>When passion meets dust, magic happens</em></p>
-      <hr>
-
-      <!-- BLOG CONTENT START (your writing) -->
-      <p>The alarm screams at 4:47 AM, but I'm already awake. </p>
-      <p>My boots are by the door, caked with yesterday's adventure. My truck keys jingle like wind chimes in the pre-dawn darkness. And somewhere out there, beyond the sleeping suburbs and the last streetlight, the Utah desert is waiting with secrets older than human memory.</p>
-      <p><strong>This is my life. This is my calling. This is Sheena's Adventures.</strong></p>
-
-      <h2>🏜️ Born from Red Rock and Rebellion</h2>
-      <p>They say you can't choose where you're born, but the desert? The desert <strong>chooses you</strong>.</p>
-      <p>I'm Sheena—desert girl, rockhound, one-woman film crew, and probably the only person you'll meet who gets genuinely excited about 115-degree heat and roads that don't exist on any GPS. Born and raised in Utah, I didn't just grow up <em>near</em> the desert—I grew up <strong>in conversation</strong> with it.</p>
-      <p>While other kids collected Pokemon cards, I was collecting chunks of jasper. While they played video games, I was learning to read geological maps like treasure charts. The wide-open landscapes of this state aren't just my backyard—they're my <strong>sanctuary</strong>, my <strong>inspiration</strong>, and my <strong>endless source of adventure</strong>.</p>
-      <p>Every canyon holds a story. Every rock formation whispers secrets. And me? I'm just the desert girl crazy enough to listen.</p>
-
-      <h2>⛏️ More Than Rocks: It's About Revolution</h2>
-      <p>Here's what most people don't understand about rockhounding: <strong>it's not about the rocks</strong>.</p>
-      <p>Don't get me wrong—finding that perfect piece of selenite near Aurora, stumbling across chalcedony that catches the light like frozen lightning, discovering opalized wood that's literally <strong>tree turned to gemstone</strong>—that stuff will make your heart race faster than any rollercoaster.</p>
-      <p>But the real magic? It happens in the spaces between discoveries.</p>
-      <p>It's the moment when you're three miles down a dusty backroad that your truck probably shouldn't handle, and you realize you're exactly where you're supposed to be. It's witnessing a family of coyotes padding across ancient sandstone, their wild eyes reflecting the same freedom you feel in your chest. It's chasing thunderstorms across endless sky, knowing that some of the best adventures happen when weather gets <strong>wild</strong>.</p>
-      <p><em>This isn't just a hobby—it's a <strong>rebellion</strong> against the ordinary.</em></p>
-
-      <h2>🎬 One Woman, Infinite Possibilities</h2>
-      <p>Picture this: It's 2 AM, and I'm hunched over my editing setup, color-correcting footage from yesterday's adventure while simultaneously researching tomorrow's geological target. My 9-to-5 is barely a memory, my coffee is definitely too cold, but my eyes are <strong>blazing</strong> with possibility.</p>
-      <p><strong>Welcome to the glamorous life of a one-woman YouTube empire.</strong></p>
-      <p>I am the camera crew adjusting shots while dodging desert thorns. I am the director framing perfect moments while sweat drips onto my lens. I am the producer planning logistics while my truck overheats on roads that barely qualify as suggestions. And later, when the desert dust settles, I am the editor transforming raw adventure into cinematic gold.</p>
-      <p>Exhausting? <strong>Absolutely.</strong><br>Worth every sleepless night? <strong>You bet your favorite rock hammer it is.</strong></p>
-      <p>Because here's the thing about building something from nothing: every late night edit, every failed GPS coordinate, every moment when you want to quit—<strong>that's where the real treasure is found</strong>. Not in the ground, but in the <strong>grit</strong>.</p>
-
-      <h2>🤖 AI: My Creative Co-Pilot in the Digital Desert</h2>
-      <p>While others fear the future, I'm <strong>embracing</strong> it with open arms and muddy boots.</p>
-      <p>AI isn't replacing the magic of discovery—it's <strong>amplifying</strong> it. This technology has become my creative co-pilot, helping me weave past and present together in ways that make prehistoric Utah feel <strong>alive</strong> again. From cinematic storytelling that makes viewers feel the desert wind, to re-imagining landscapes as they existed millions of years ago, AI helps me push the boundaries of what one person can create.</p>
-      <p>Every algorithm I master gives me more time for what matters most: <strong>feeling the desert, finding the stories, living the adventure</strong>.<br>Technology doesn't diminish the human element—it <strong>unleashes</strong> it.</p>
-
-      <h2>🌟 The Adventures So Far: A Greatest Hits Collection</h2>
-      <p>The desert has been generous with her gifts:</p>
-      <ul>
-        <li><strong>Selenite hunting near Aurora</strong> — crystals like frozen lightning, each a fallen star shard.</li>
-        <li><strong>Chalcedony and agate hunting</strong> — translucent treasures that hold light like captured sunsets.</li>
-        <li><strong>Yellow Cat Road opalized wood</strong> — ancient trees transformed into gemstone.</li>
-        <li><strong>Coyote encounters</strong> — morning coffee with wild eyes and untamed spirits.</li>
-        <li><strong>Thunderstorm chasing</strong> — because the best adventures love dramatic skies.</li>
-      </ul>
-      <p>Each outing writes another chapter. Each video captures another piece of my heart. Each adventure proves that <strong>curiosity is the most powerful treasure-hunting tool</strong> you can carry.</p>
-
-      <h2>💎 The Real Treasure: Building Something Beautiful</h2>
-      <p>At its core, Sheena's Adventures isn't about rocks or dirt roads or even YouTube success. <strong>It's about proving what's possible when passion meets persistence.</strong></p>
-      <p>It's about showing that one person—one desert girl with big dreams and bigger determination—can build something <strong>spectacular</strong>. It's about curiosity that refuses to be contained by conventional boundaries. It's about resilience that gets stronger with every failed GPS coordinate. It's about the <strong>joy</strong> that comes from doing exactly what sets your soul on fire, even when (especially when) it seems impossible.</p>
-      <p>Every video is a love letter to the Utah outdoors. Every adventure is proof that the best treasures aren't just found—they're <strong>earned</strong>. Every late-night editing session is an investment in something bigger than myself: <strong>a community of adventurers</strong> who believe that wonder still exists in this world.</p>
-
-      <h2>🚗 The Journey Never Ends</h2>
-      <p>The desert taught me its most important lesson: <strong>it's all about the journey, not the destination</strong>.</p>
-      <p>Those dusty backroads that lead nowhere on paper? They lead <strong>everywhere</strong> in reality. Those rocks that others call worthless? They're <strong>priceless</strong> to anyone who understands their story. Those adventures that seem impossible for one person to document? They're exactly the kind of <strong>impossible</strong> the world needs more of.</p>
-      <p>So whether you're a fellow rockhound, a desert dreamer, an entrepreneur fighting to build something beautiful, or just someone who believes that adventure is always one horizon away—<strong>you're part of this story now</strong>.</p>
-      <p>Grab your boots. Trust your instincts. Follow the GPS until it gives up, then keep going anyway.</p>
-      <p><strong>The desert is calling, and I can't wait to show you what we'll discover together.</strong></p>
-      <p><em>Because in the end, we're all just kids collecting treasures—some of us are just brave enough to never stop looking.</em></p>
-
-      <hr>
-      <p><strong>Ready for your own desert adventure?</strong> Share your story with me via <a href="/contact.html">the contact page</a> or say hi on <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a>.</p>
-    </article>
-
-    <div class="top-actions" style="margin-top:18px">
-      <a class="btn" href="/blog/">&larr; Back to Blog</a>
-      <a class="btn" href="/work-with-me.html">Work With Me</a>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container" style="display:flex; justify-content:space-between; gap:12px; padding:18px 20px">
-      <span>© <span id="y"></span> Sheena’s Adventures</span>
-      <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a>
-    </div>
-  </footer>
-
-  <script>
-    (function(){
-      const btn=document.getElementById('hamb');
-      const menu=document.getElementById('menu');
-      if(btn&&menu){
-        btn.addEventListener('click',()=>{
-          const open = menu.style.display === 'flex';
-          menu.style.display = open ? 'none' : 'flex';
-          btn.setAttribute('aria-expanded', String(!open));
-        });
-      }
-      const y=document.getElementById('y'); if(y) y.textContent=new Date().getFullYear();
-    })();
-  </script>
-</body>
-</html>      <!-- BLOG CONTENT START (exactly what you provided) -->
-      <p>The alarm screams at 4:47 AM, but I'm already awake. </p>
-      <p>My boots are by the door, caked with yesterday's adventure. My truck keys jingle like wind chimes in the pre-dawn darkness. And somewhere out there, beyond the sleeping suburbs and the last streetlight, the Utah desert is waiting with secrets older than human memory.</p>
-      <p><strong>This is my life. This is my calling. This is Sheena's Adventures.</strong></p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>🏜️ Born from Red Rock and Rebellion</strong></h2>
-      <p>They say you can't choose where you're born, but the desert? The desert <strong>chooses you</strong>.</p>
-      <p>I'm Sheena—desert girl, rockhound, one-woman film crew, and probably the only person you'll meet who gets genuinely excited about 115-degree heat and roads that don't exist on any GPS. Born and raised in Utah, I didn't just grow up <em>near</em> the desert—I grew up <strong>in conversation</strong> with it.</p>
-      <p>While other kids collected Pokemon cards, I was collecting chunks of jasper. While they played video games, I was learning to read geological maps like treasure charts. The wide-open landscapes of this state aren't just my backyard—they're my <strong>sanctuary</strong>, my <strong>inspiration</strong>, and my <strong>endless source of adventure</strong>.</p>
-      <p>Every canyon holds a story. Every rock formation whispers secrets. And me? I'm just the desert girl crazy enough to listen.</p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>⛏️ More Than Rocks: It's About Revolution</strong></h2>
-      <p>Here's what most people don't understand about rockhounding: <strong>it's not about the rocks</strong>.</p>
-      <p>Don't get me wrong—finding that perfect piece of selenite near Aurora, stumbling across chalcedony that catches the light like frozen lightning, discovering opalized wood that's literally <strong>tree turned to gemstone</strong>—that stuff will make your heart race faster than any rollercoaster.</p>
-      <p>But the real magic? It happens in the spaces between discoveries.</p>
-      <p>It's the moment when you're three miles down a dusty backroad that your truck probably shouldn't handle, and you realize you're exactly where you're supposed to be. It's witnessing a family of coyotes padding across ancient sandstone, their wild eyes reflecting the same freedom you feel in your chest. It's chasing thunderstorms across endless sky, knowing that some of the best adventures happen when weather gets <strong>wild</strong>.</p>
-      <p><em>This isn't just a hobby—it's a <strong>rebellion</strong> against the ordinary.</em></p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>🎬 One Woman, Infinite Possibilities</strong></h2>
-      <p>Picture this: It's 2 AM, and I'm hunched over my editing setup, color-correcting footage from yesterday's adventure while simultaneously researching tomorrow's geological target. My 9-to-5 is barely a memory, my coffee is definitely too cold, but my eyes are <strong>blazing</strong> with possibility.</p>
-      <p><strong>Welcome to the glamorous life of a one-woman YouTube empire.</strong></p>
-      <p>I am the camera crew adjusting shots while dodging desert thorns. I am the director framing perfect moments while sweat drips onto my lens. I am the producer planning logistics while my truck overheats on roads that barely qualify as suggestions. And later, when the desert dust settles, I am the editor transforming raw adventure into cinematic gold.</p>
-      <p>Exhausting? <strong>Absolutely.</strong><br />Worth every sleepless night? <strong>You bet your favorite rock hammer it is.</strong></p>
-      <p>Because here's the thing about building something from nothing: every late night edit, every failed GPS coordinate, every moment when you want to quit—<strong>that's where the real treasure is found</strong>. Not in the ground, but in the <strong>grit</strong>.</p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>🤖 AI: My Creative Co-Pilot in the Digital Desert</strong></h2>
-      <p>While others fear the future, I'm <strong>embracing</strong> it with open arms and muddy boots.</p>
-      <p>AI isn't replacing the magic of discovery—it's <strong>amplifying</strong> it. This technology has become my creative co-pilot, helping me weave past and present together in ways that make prehistoric Utah feel <strong>alive</strong> again. From cinematic storytelling that makes viewers feel the desert wind, to re-imagining landscapes as they existed millions of years ago, AI helps me push the boundaries of what one person can create.</p>
-      <p>Every algorithm I master gives me more time for what matters most: <strong>feeling the desert, finding the stories, living the adventure</strong>.</p>
-      <p>Technology doesn't diminish the human element—it <strong>unleashes</strong> it.</p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>🌟 The Adventures So Far: A Greatest Hits Collection</strong></h2>
-      <p>The desert has been generous with her gifts:</p>
-      <p><strong>Selenite hunting near Aurora</strong>—where crystals grow like frozen lightning in the earth, and every discovery feels like finding pieces of fallen stars.</p>
-      <p><strong>Chalcedony and agate hunting</strong>—chasing translucent treasures that hold light like captured sunsets, each specimen a tiny masterpiece painted by geological time.</p>
-      <p><strong>Yellow Cat Road opalized wood</strong>—discovering trees turned to gemstone, ancient forests transformed into something so beautiful it makes you believe in magic.</p>
-      <p><strong>Coyote encounters</strong>—sharing morning coffee with wild eyes and untamed spirits, reminded that we're all just visitors in this vast, sacred space.</p>
-      <p><strong>Thunderstorm chasing</strong>—because sometimes the best adventures happen when the sky decides to put on a show that makes every Hollywood production look amateur.</p>
-      <p>Each outing writes another chapter. Each video captures another piece of my heart. Each adventure proves that <strong>curiosity is the most powerful treasure-hunting tool</strong> you can carry.</p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>💎 The Real Treasure: Building Something Beautiful</strong></h2>
-      <p>At its core, Sheena's Adventures isn't about rocks or dirt roads or even YouTube success.</p>
-      <p><strong>It's about proving what's possible when passion meets persistence.</strong></p>
-      <p>It's about showing that one person—one desert girl with big dreams and bigger determination—can build something <strong>spectacular</strong>. It's about curiosity that refuses to be contained by conventional boundaries. It's about resilience that gets stronger with every failed GPS coordinate. It's about the <strong>joy</strong> that comes from doing exactly what sets your soul on fire, even when (especially when) it seems impossible.</p>
-      <p>Every video is a love letter to the Utah outdoors. Every adventure is proof that the best treasures aren't just found—they're <strong>earned</strong>. Every late-night editing session is an investment in something bigger than myself: <strong>a community of adventurers</strong> who believe that wonder still exists in this world.</p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>🚗 The Journey Never Ends</strong></h2>
-      <p>The desert taught me its most important lesson: <strong>it's all about the journey, not the destination</strong>.</p>
-      <p>Those dusty backroads that lead nowhere on paper? They lead <strong>everywhere</strong> in reality. Those rocks that others call worthless? They're <strong>priceless</strong> to anyone who understands their story. Those adventures that seem impossible for one person to document? They're exactly the kind of <strong>impossible</strong> the world needs more of.</p>
-      <p>So whether you're a fellow rockhound, a desert dreamer, an entrepreneur fighting to build something beautiful, or just someone who believes that adventure is always one horizon away—<strong>you're part of this story now</strong>.</p>
-      <p>Grab your boots. Trust your instincts. Follow the GPS until it gives up, then keep going anyway.</p>
-      <p><strong>The desert is calling, and I can't wait to show you what we'll discover together.</strong></p>
-      <p><em>Because in the end, we're all just kids collecting treasures—some of us are just brave enough to never stop looking.</em></p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <p><strong>Ready for your own desert adventure? Drop a comment and tell me: what treasure are you seeking? The comments section is our digital campfire—pull up a rock and share your story. And hey, if you're ever out there and see a dusty woman with too many cameras talking to geological formations, that's just me living my best life. Come say hi—the desert's big enough for all of us dreamers.</strong></p>
-      <p><em>Adventure is waiting. The only question is: are you brave enough to answer?</em> 🏜️⛏️✨</p>
-      <!-- BLOG CONTENT END -->
-
-      <!-- Comments -->
-      <hr style="border:0; border-top:1px solid #1b2126; margin:2rem 0;" />
-      <section id="comments">
-        <h2>Comments</h2>
-        <!-- Giscus: replace the data-* placeholders with values from giscus.app -->
-        <script src="https://giscus.app/client.js"
-          data-repo="SheenaBadabina/sheenasadventures-site"
-          data-repo-id="REPLACE_WITH_REPO_ID"
-          data-category="General"
-          data-category-id="REPLACE_WITH_CATEGORY_ID"
-          data-mapping="pathname"
-          data-strict="1"
-          data-reactions-enabled="1"
-          data-emit-metadata="0"
-          data-input-position="bottom"
-          data-theme="light"
-          data-lang="en"
-          crossorigin="anonymous"
-          async>
-        </script>
-        <noscript><p class="muted">Comments require JavaScript.</p></noscript>
-      </section>
-
-      <p style="margin-top:1.25rem;">
-        <a href="/blog/" class="btn secondary">← Back to Blog</a>
-      </p>
-    </article>
-  </main>
-
-  <footer class="footer">
-    <div class="container center">
-      <small>© <span id="y"></span> Sheena’s Adventures</small>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>      <!-- BLOG CONTENT START (exactly what you provided) -->
-      <p>The alarm screams at 4:47 AM, but I'm already awake. </p>
-      <p>My boots are by the door, caked with yesterday's adventure. My truck keys jingle like wind chimes in the pre-dawn darkness. And somewhere out there, beyond the sleeping suburbs and the last streetlight, the Utah desert is waiting with secrets older than human memory.</p>
-      <p><strong>This is my life. This is my calling. This is Sheena's Adventures.</strong></p>
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-      <h2><strong>🏜️ Born from Red Rock and Rebellion</strong></h2>
-      <p>They say you can't choose where you're born, but the desert? The desert <strong>chooses you</strong>.</p>
-      <p>I'm Sheena—desert girl, rockhound, one-woman film crew, and probably the only person you'll meet who gets genuinely excited about 115-degree heat and roads that don't exist on any GPS. Born and raised in Utah, I didn't just grow up <em>near</em> the desert—I grew up <strong>in conversation</strong> with it.</p>
-      <p>While other kids collected Pokemon cards, I was collecting chunks of jasper. While they played video games, I was learning to read geological maps like treasure charts. The wide-open landscapes of this state aren't just my backyard—they're my <strong>sanctuary</strong>, my <strong>inspiration</strong>, and my <strong>endless source of adventure</strong>.</p>
-      <p>Every canyon holds a story. Every rock formation whispers secrets. And me? I'm just the desert      <p>The alarm screams at 4:47 AM, but I'm already awake.</p>
-      <p>My boots are by the door, caked with yesterday's adventure. My truck keys jingle like wind chimes in the pre-dawn darkness. And somewhere out there, beyond the sleeping suburbs and the last streetlight, the Utah desert is waiting with secrets older than human memory.</p>
-      <p><strong>This is my life. This is my calling. This is Sheena's Adventures.</strong></p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>🏜️ Born from Red Rock and Rebellion</strong></h2>
-      <p>They say you can't choose where you're born, but the desert? The desert <strong>chooses you</strong>.</p>
-      <p>I'm Sheena—desert girl, rockhound, one-woman film crew, and probably the only person you'll meet who gets genuinely excited about 115-degree heat and roads that don't exist on any GPS. Born and raised in Utah, I didn't just grow up <em>near</em> the desert—I grew up <strong>in conversation</strong> with it.</p>
-      <p>While other kids collected Pokemon cards, I was collecting chunks of jasper. While they played video games, I was learning to read geological maps like treasure charts. The wide-open landscapes of this state aren't just my backyard—they're my <strong>sanctuary</strong>, my <strong>inspiration</strong>, and my <strong>endless source of adventure</strong>.</p>
-      <p>Every canyon holds a story. Every rock formation whispers secrets. And me? I'm just the desert girl crazy enough to listen.</p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>⛏️ More Than Rocks: It's About Revolution</strong></h2>
-      <p>Here's what most people don't understand about rockhounding: <strong>it's not about the rocks</strong>.</p>
-      <p>Don't get me wrong—finding that perfect piece of selenite near Aurora, stumbling across chalcedony that catches the light like frozen lightning, discovering opalized wood that's literally <strong>tree turned to gemstone</strong>—that stuff will make your heart race faster than any rollercoaster.</p>
-      <p>But the real magic? It happens in the spaces between discoveries.</p>
-      <p>It's the moment when you're three miles down a dusty backroad that your truck probably shouldn't handle, and you realize you're exactly where you're supposed to be. It's witnessing a family of coyotes padding across ancient sandstone, their wild eyes reflecting the same freedom you feel in your chest. It's chasing thunderstorms across endless sky, knowing that some of the best adventures happen when weather gets <strong>wild</strong>.</p>
-      <p><em>This isn't just a hobby—it's a <strong>rebellion</strong> against the ordinary.</em></p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>🎬 One Woman, Infinite Possibilities</strong></h2>
-      <p>Picture this: It's 2 AM, and I'm hunched over my editing setup, color-correcting footage from yesterday's adventure while simultaneously researching tomorrow's geological target. My 9-to-5 is barely a memory, my coffee is definitely too cold, but my eyes are <strong>blazing</strong> with possibility.</p>
-      <p><strong>Welcome to the glamorous life of a one-woman YouTube empire.</strong></p>
-      <p>I am the camera crew adjusting shots while dodging desert thorns. I am the director framing perfect moments while sweat drips onto my lens. I am the producer planning logistics while my truck overheats on roads that barely qualify as suggestions. And later, when the desert dust settles, I am the editor transforming raw adventure into cinematic gold.</p>
-      <p>Exhausting? <strong>Absolutely.</strong><br />Worth every sleepless night? <strong>You bet your favorite rock hammer it is.</strong></p>
-      <p>Because here's the thing about building something from nothing: every late night edit, every failed GPS coordinate, every moment when you want to quit—<strong>that's where the real treasure is found</strong>. Not in the ground, but in the <strong>grit</strong>.</p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>🤖 AI: My Creative Co-Pilot in the Digital Desert</strong></h2>
-      <p>While others fear the future, I'm <strong>embracing</strong> it with open arms and muddy boots.</p>
-      <p>AI isn't replacing the magic of discovery—it's <strong>amplifying</strong> it. This technology has become my creative co-pilot, helping me weave past and present together in ways that make prehistoric Utah feel <strong>alive</strong> again. From cinematic storytelling that makes viewers feel the desert wind, to re-imagining landscapes as they existed millions of years ago, AI helps me push the boundaries of what one person can create.</p>
-      <p>Every algorithm I master gives me more time for what matters most: <strong>feeling the desert, finding the stories, living the adventure</strong>.</p>
-      <p>Technology doesn't diminish the human element—it <strong>unleashes</strong> it.</p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>🌟 The Adventures So Far: A Greatest Hits Collection</strong></h2>
-      <p>The desert has been generous with her gifts:</p>
-      <p><strong>Selenite hunting near Aurora</strong>—where crystals grow like frozen lightning in the earth, and every discovery feels like finding pieces of fallen stars.</p>
-      <p><strong>Chalcedony and agate hunting</strong>—chasing translucent treasures that hold light like captured sunsets, each specimen a tiny masterpiece painted by geological time.</p>
-      <p><strong>Yellow Cat Road opalized wood</strong>—discovering trees turned to gemstone, ancient forests transformed into something so beautiful it makes you believe in magic.</p>
-      <p><strong>Coyote encounters</strong>—sharing morning coffee with wild eyes and untamed spirits, reminded that we're all just visitors in this vast, sacred space.</p>
-      <p><strong>Thunderstorm chasing</strong>—because sometimes the best adventures happen when the sky decides to put on a show that makes every Hollywood production look amateur.</p>
-      <p>Each outing writes another chapter. Each video captures another piece of my heart. Each adventure proves that <strong>curiosity is the most powerful treasure-hunting tool</strong> you can carry.</p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>💎 The Real Treasure: Building Something Beautiful</strong></h2>
-      <p>At its core, Sheena's Adventures isn't about rocks or dirt roads or even YouTube success.</p>
-      <p><strong>It's about proving what's possible when passion meets persistence.</strong></p>
-      <p>It's about showing that one person—one desert girl with big dreams and bigger determination—can build something <strong>spectacular</strong>. It's about curiosity that refuses to be contained by conventional boundaries. It's about resilience that gets stronger with every failed GPS coordinate. It's about the <strong>joy</strong> that comes from doing exactly what sets your soul on fire, even when (especially when) it seems impossible.</p>
-      <p>Every video is a love letter to the Utah outdoors. Every adventure is proof that the best treasures aren't just found—they're <strong>earned</strong>. Every late-night editing session is an investment in something bigger than myself: <strong>a community of adventurers</strong> who believe that wonder still exists in this world.</p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <h2><strong>🚗 The Journey Never Ends</strong></h2>
-      <p>The desert taught me its most important lesson: <strong>it's all about the journey, not the destination</strong>.</p>
-      <p>Those dusty backroads that lead nowhere on paper? They lead <strong>everywhere</strong> in reality. Those rocks that others call worthless? They're <strong>priceless</strong> to anyone who understands their story. Those adventures that seem impossible for one person to document? They're exactly the kind of <strong>impossible</strong> the world needs more of.</p>
-      <p>So whether you're a fellow rockhound, a desert dreamer, an entrepreneur fighting to build something beautiful, or just someone who believes that adventure is always one horizon away—<strong>you're part of this story now</strong>.</p>
-      <p>Grab your boots. Trust your instincts. Follow the GPS until it gives up, then keep going anyway.</p>
-      <p><strong>The desert is calling, and I can't wait to show you what we'll discover together.</strong></p>
-      <p><em>Because in the end, we're all just kids collecting treasures—some of us are just brave enough to never stop looking.</em></p>
-
-      <hr style="border:0; border-top:1px solid #1b2126; margin:1.25rem 0;" />
-
-      <p><strong>Ready for your own desert adventure? Drop a comment and tell me: what treasure are you seeking? The comments section is our digital campfire—pull up a rock and share your story. And hey, if you're ever out there and see a dusty woman with too many cameras talking to geological formations, that's just me living my best life. Come say hi—the desert's big enough for all of us dreamers.</strong></p>
-      <p><em>Adventure is waiting. The only question is: are you brave enough to answer?</em> 🏜️⛏️✨</p>
-
-      <p style="margin-top:1.25rem;">
-        <a href="/blog/" class="btn secondary">← Back to Blog</a>
-      </p>
-    </article>
-  </main>
-
-  <footer class="footer">
-    <div class="container center">
-      <small>© <span id="y"></span> Sheena’s Adventures</small>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
-```0
