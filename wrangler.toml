@@ -1,0 +1,10 @@
+name = "buildervibescriptonline"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
+
+# Use your real KV namespace IDs here (from Cloudflare KV → each namespace page)
+kv_namespaces = [
+  { binding = "VIBESCRIPT_SETTINGS", id = "PASTE_YOUR_SETTINGS_NAMESPACE_ID" },
+  { binding = "VIBESCRIPT_PROJECTS", id = "PASTE_YOUR_PROJECTS_NAMESPACE_ID" }
+]
