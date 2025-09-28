@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -6,6 +7,13 @@
   <title>Adventures Blog • Sheena’s Adventures</title>
   <meta name="description" content="Stories, finds, and field wisdom from the Utah desert." />
   <link rel="stylesheet" href="/static/styles.css" />
+  <style>
+    /* Light touch only—uses site theme. Ensures tidy spacing on small screens. */
+    .blog-list { max-width: 960px; margin: 0 auto; padding: 1rem; }
+    .card h2 { margin-bottom: .25rem; }
+    .card p { margin: .5rem 0 0; }
+    .read-link { display: inline-block; margin-top: .75rem; }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -18,37 +26,31 @@
       <a href="/about.html">About</a>
       <a href="/contact.html">Contact</a>
     </nav>
-  </header>
-
-  <main class="hero">
-    <h1>Blog</h1>
-    <p>Utah rockhounding stories, field lessons, and finds.</p>
-  </main>
-
-  <section class="grid" aria-label="Blog posts">
+  </header>  <main class="hero">
+    <h1>Adventures Blog</h1>
+    <p>Stories, finds, and field wisdom from the Utah desert.</p>
+  </main>  <section class="grid blog-list" aria-label="Posts">
+    <!-- Post 1: Opalized Wood -->
     <article class="card">
-      <h2><a class="text-link" href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Opalized Wood on Yellow Cat Road</a></h2>
-      <p>When trees become treasures: field ID, hard-won lessons, and honoring natural beauty.</p>
-      <p><a class="text-link" href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Read →</a></p>
-    </article>
+      <h2><a href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Opalized Wood on Yellow Cat Road</a></h2>
+      <p>When trees become treasures: field ID, hard‑won lessons, and honoring natural beauty.</p>
+      <p><a class="text-link read-link" href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Read →</a></p>
+    </article><!-- Post 2: Meet the Dreamer -->
+<article class="card">
+  <h2><a href="/blog/meet-the-desert-dreamer.html">Meet the Desert Dreamer</a></h2>
+  <p>The real story behind Sheena’s Adventures and why I chase horizons.</p>
+  <p><a class="text-link read-link" href="/blog/meet-the-desert-dreamer.html">Read →</a></p>
+</article>
 
-    <article class="card">
-      <h2><a class="text-link" href="/blog/meet-the-dreamer.html">Meet the Desert Dreamer</a></h2>
-      <p>The real story behind Sheena’s Adventures and why I chase horizons.</p>
-      <p><a class="text-link" href="/blog/meet-the-dreamer.html">Read →</a></p>
-    </article>
+<!-- Post 3: Utah Desert Field Guide -->
+<article class="card">
+  <h2><a href="/blog/utah-desert-field-guide.html">Utah Desert Field Guide</a></h2>
+  <p>Field notes, safety, and how to spot the good stuff across Utah’s wild country.</p>
+  <p><a class="text-link read-link" href="/blog/utah-desert-field-guide.html">Read →</a></p>
+</article>
 
-    <article class="card">
-      <h2><a class="text-link" href="/blog/selenite-hunting-aurora.html">Selenite Hunting near Aurora, Utah</a></h2>
-      <p>Field notes, safety, and how to spot the good stuff.</p>
-      <p><a class="text-link" href="/blog/selenite-hunting-aurora.html">Read →</a></p>
-    </article>
-  </section>
-
-  <footer>
-    <p>© <span id="y"></span> Sheena’s Adventures • 
-       <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • 
-       <a href="/contact.html">Contact</a></p>
+  </section>  <footer>
+    <p>© <span id="y"></span> Sheena’s Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
   </footer>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
