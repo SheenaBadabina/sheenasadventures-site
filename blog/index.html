@@ -4,9 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Adventures Blog • Sheena's Adventures</title>
+  <!-- Inherit site theme -->
   <link rel="stylesheet" href="/static/css/style.css" />
+  <meta name="description" content="Stories, finds, and field wisdom from the Utah desert." />
 </head>
 <body>
+  <!-- Site header (theme) -->
   <header class="site-header">
     <div class="container">
       <a class="logo" href="/">Sheena's Adventures</a>
@@ -20,18 +23,18 @@
     </div>
   </header>
 
-  <main class="container blog-index" id="main">
+  <main id="main" class="container blog-index">
     <h1>Adventures Blog</h1>
     <p class="subtitle">Stories, finds, and field wisdom from the Utah desert.</p>
-    <ul id="post-list" class="post-list"></ul>
-    <template id="post-item-template">
-      <li class="post-item">
-        <a class="post-link"></a>
-        <p class="post-meta"></p>
-      </li>
-    </template>
+
+    <ul class="post-list">
+      <li><a href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Opalized Wood on Yellow Cat Road: When Trees Become Treasures</a></li>
+      <li><a href="/blog/meet-the-dreamer.html">Meet the Dreamer</a></li>
+      <li><a href="/blog/selenite-hunting-aurora.html">Selenite Hunting near Aurora, Utah</a></li>
+    </ul>
   </main>
 
+  <!-- Site footer (theme) -->
   <footer class="site-footer">
     <div class="container">
       <p>© <span id="year"></span> Sheena's Adventures. All rights reserved.</p>
@@ -43,88 +46,8 @@
   </footer>
 
   <script>
+    // Auto-update year
     document.getElementById('year').textContent = new Date().getFullYear();
-    const listEl = document.getElementById('post-list');
-    const tpl = document.getElementById('post-item-template');
-    const OWNER = 'SheenaBadabina';
-    const REPO = 'sheenasadventures-site';
-    const BRANCH = 'main';
-    const DIR = 'blog';
-
-    const isPostFile = (name) => {
-      const lower = name.toLowerCase();
-      return /(\\.html|\\.md|\\.markdown)$/.test(lower) && lower !== 'index.html';
-    };
-
-    const toSitePath = (name) => {
-      const base = name.replace(/\\.(md|markdown|html)$/i, '');
-      return `/blog/${base}.html`;
-    };
-
-    const parseDate = (name) => {
-      const m = name.match(/(\\d{4})-(\\d{2})-(\\d{2})/);
-      return m ? new Date(`${m[1]}-${m[2]}-${m[3]}T12:00:00Z`) : null;
-    };
-
-    const humanDate = (d) => d ? d.toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric'}) : '';
-
-    const fallbackTitle = (name) =>
-      name.replace(/\\.(md|markdown|html)$/i, '')
-          .replace(/^\\d{4}-\\d{2}-\\d{2}-?/, '')
-          .replace(/[-_]+/g, ' ')
-          .trim();
-
-    async function deriveTitle(item) {
-      try {
-        const res = await fetch(item.download_url, { cache: 'no-store' });
-        const text = await res.text();
-        if (/\\.md|\\.markdown$/i.test(item.name)) {
-          const m1 = text.match(/^title:\\s*\"?(.+?)\"?/mi);
-          if (m1) return m1[1].trim();
-          const m2 = text.match(/^#\\s+(.+)$/m);
-          if (m2) return m2[1].trim();
-        } else if (/\\.html$/i.test(item.name)) {
-          const m1 = text.match(/<h1[^>]*>([\\s\\S]*?)<\\/h1>/i);
-          if (m1) return m1[1].replace(/<[^>]+>/g,'').trim();
-          const m2 = text.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);
-          if (m2) return m2[1].trim();
-        }
-      } catch (_) {}
-      return fallbackTitle(item.name);
-    }
-
-    async function buildIndex() {
-      const api = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${DIR}?ref=${BRANCH}`;
-      const res = await fetch(api, { cache: 'no-store' });
-      const items = Array.isArray(await res.json()) ? await res.json() : [];
-      const posts = items.filter(x => x.type === 'file' && isPostFile(x.name));
-
-      const enriched = await Promise.all(posts.map(async (p) => ({
-        name: p.name,
-        url: toSitePath(p.name),
-        date: parseDate(p.name),
-        title: await deriveTitle(p)
-      })));
-
-      enriched.sort((a,b) => (b.date?.getTime()||0) - (a.date?.getTime()||0));
-
-      listEl.innerHTML = '';
-      for (const post of enriched) {
-        const node = tpl.content.cloneNode(true);
-        node.querySelector('.post-link').href = post.url;
-        node.querySelector('.post-link').textContent = post.title;
-        node.querySelector('.post-meta').textContent = humanDate(post.date);
-        listEl.appendChild(node);
-      }
-
-      if (!enriched.length) {
-        const li = document.createElement('li');
-        li.textContent = 'No posts found yet.';
-        listEl.appendChild(li);
-      }
-    }
-
-    buildIndex();
   </script>
 </body>
 </html>
