@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Have me build your website — fast, clean, and cinematic. Tell me what you need and I’ll design, author, and ship it." />
+  <title>Have Me Build Your Website • Sheena’s Adventures</title>
+
+  <!-- Global theme -->
+  <link rel="stylesheet" href="/static/styles.css" />
+
+  <!-- Page-local layout (keeps global header/nav rules intact) -->
+  <style>
+    /* Layout safety + consistent sizing */
+    *,*::before,*::after{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    :root{
+      --teal:#00bfa5;
+      --bg:#0b0f12;
+      --surface:#0f1419;
+      --text:#d9e1e8;
+      --muted:#92a1ad;
+      --ring:#00ffcc;
+    }
+    body{ background:var(--bg); color:var(--text); }
+    main{ padding-top:84px; }
+
+    /* Constrain page content on mobile */
+    .page-wrap{ width:100%; max-width:980px; margin:0 auto; padding:0 14px; }
+
+    .hero{
+      text-align:center;
+      padding:2rem 0 1rem;
+      background:linear-gradient(180deg, rgba(0,191,165,.08), transparent 60%);
+    }
+    .hero h1{ margin:.5rem 0 0; font-size:1.9rem; color:var(--teal); }
+    .hero p{ margin:.4rem auto 0; max-width:720px; color:var(--muted); padding:0 10px; }
+
+    /* Portrait with animated “code ring” */
+    .portrait-wrap{
+      --ring-w: 8px;                 /* ring thickness */
+      width:196px; height:196px;     /* includes ring area */
+      margin:0 auto 1rem;
+      position:relative;
+      display:grid; place-items:center;
+      filter:drop-shadow(0 6px 24px rgba(0,191,165,.25));
+    }
+    .portrait{
+      width:calc(100% - 2*var(--ring-w));
+      height:calc(100% - 2*var(--ring-w));
+      object-fit:cover; border-radius:50%;
+      border:2px solid var(--teal); background:#000;
+    }
+    .code-ring{
+      pointer-events:none;
+      position:absolute; inset:0; border-radius:50%;
+      background:
+        conic-gradient(from 0deg, rgba(0,0,0,0) 0deg, rgba(0,255,204,.5) 40deg, rgba(0,0,0,0) 80deg),
+        radial-gradient(closest-side, rgba(0,255,204,.14), rgba(0,0,0,0) 70%);
+      animation: ring-spin 6s linear infinite;
+      -webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w) + 0.5px));
+              mask: radial-gradient(closest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w) + 0.5px));
+    }
+    @keyframes ring-spin{ to{ transform:rotate(360deg);} }
+
+    /* Card/form shell */
+    .card{
+      margin:1.25rem auto 3rem;
+      background:var(--surface);
+      border-radius:14px;
+      padding:16px;
+      box-shadow:0 12px 36px rgba(0,0,0,.35);
+    }
+    @media (min-width:720px){ .card{ padding:22px; } }
+
+    .section-title{ color:var(--teal); margin:1.25rem 0 .5rem; }
+
+    form{ display:grid; gap:1rem; }
+    .row{ display:grid; gap:.75rem; }
+    @media(min-width:720px){
+      .row-2{ grid-template-columns:1fr 1fr; }
+      .row-3{ grid-template-columns:repeat(3,1fr); }
+    }
+
+    label{ display:block; font-weight:600; }
+    .help{ font-size:.9rem; color:var(--muted); }
+
+    input[type="text"],
+    input[type="email"],
+    select, textarea{
+      width:100%;
+      max-width:100%;
+      padding:.8rem .9rem;
+      color:var(--text);
+      background:#0b1116;
+      border:1px solid rgba(0,191,165,.35);
+      border-radius:10px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+    }
+    textarea{ min-height:140px; resize:vertical; }
+    input,select,textarea{ overflow:hidden; text-overflow:ellipsis; }
+
+    /* Clean option pills */
+    .options{ display:grid; gap:.6rem; }
+    .grid-2{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .grid-3{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+    @media(max-width:640px){
+      .grid-3{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+    }
+
+    .option{
+      display:flex; align-items:center; gap:.55rem;
+      background:#0b1116; border:1px solid rgba(0,191,165,.28);
+      border-radius:10px; padding:.65rem .7rem;
+      transition:transform .06s ease, border-color .15s ease, box-shadow .15s ease;
+      min-height:44px;
+      word-break:break-word;
+    }
+    .option:has(input:checked){
+      border-color:var(--teal);
+      box-shadow:0 0 0 2px rgba(0,191,165,.15), 0 8px 18px rgba(0,191,165,.12) inset;
+    }
+    .option input{ accent-color:var(--teal); width:18px; height:18px; flex:0 0 auto; }
+
+    .btn{
+      display:inline-block; background:var(--teal); color:#03201c;
+      padding:.9rem 1.35rem; border-radius:10px; font-weight:700; text-decoration:none;
+      box-shadow:0 0 14px rgba(0,191,165,.35);
+    }
+    .btn:hover{ filter:brightness(.95); }
+
+    .toast{
+      display:none; margin:0 auto 1rem; max-width:980px; text-align:center;
+      background:rgba(0,191,165,.16); border:1px solid var(--teal);
+      color:#00ffcc; padding:.85rem 1rem; border-radius:10px; font-weight:600;
+    }
+    .budget-note{ margin-top:.35rem; color:var(--muted); font-size:.92rem; }
+  </style>
+</head>
+<body>
+  <!-- Global header -->
+  <header class="site-header">
+    <a href="/" class="brand">Sheena’s Adventures</a>
+    <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
+    <nav class="site-nav" data-collapsible>
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/adventures.html">Adventures</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-wrap">
+      <section class="hero">
+        <div class="portrait-wrap" aria-hidden="true">
+          <img class="portrait" src="/assets/sheena-nerdy-programmer-copper-code-1000x1000.png" alt="Sheena — nerdy coder portrait in copper with gold code" />
+          <div class="code-ring"></div>
+        </div>
+        <h1>Have Me Build Your Website</h1>
+        <p>Tell me what you need — I’ll design, write, and ship a fast, cinematic site with the same polish as Sheena’s Adventures.</p>
+      </section>
+
+      <div class="toast" id="toast">Thanks! Your request was sent.</div>
+
+      <section class="card">
+        <!-- Backend route for this form -->
+        <form action="/functions/website-build-submit" method="POST" novalidate>
+          <!-- Contact -->
+          <h2 class="section-title">Basics</h2>
+          <div class="row row-2">
+            <div>
+              <label for="name">Your name</label>
+              <input id="name" name="name" type="text" required placeholder="Your name" />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required placeholder="you@example.com" />
+            </div>
+          </div>
+
+          <!-- Domain -->
+          <div class="row">
+            <label>Do you already have a domain?</label>
+            <div class="options grid-3" role="group" aria-label="Have a domain?">
+              <label class="option"><input type="radio" name="haveDomain" value="yes" />Yes</label>
+              <label class="option"><input type="radio" name="haveDomain" value="no" />No</label>
+              <label class="option"><input type="radio" name="haveDomain" value="unsure" checked />Unsure</label>
+            </div>
+            <div id="domainField" style="display:none;">
+              <label for="domain">Your domain</label>
+              <input id="domain" name="domain" type="text" placeholder="example.com" />
+            </div>
+          </div>
+
+          <!-- Type of site -->
+          <h2 class="section-title">Project Type</h2>
+          <div class="options grid-3" role="group" aria-label="Type of site">
+            <label class="option"><input type="checkbox" name="siteType" value="Portfolio" />Portfolio</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Personal/Author" />Personal / Author</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Small business" />Small business</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Nonprofit" />Nonprofit</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Blog" />Blog</label>
+            <label class="option"><input type="checkbox" name="siteType" value="E-commerce" />E-commerce</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Booking" />Booking</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Landing page" />Landing page</label>
+            <label class="option"><input type="checkbox" name="siteType" value="Other" />Other</label>
+          </div>
+          <div>
+            <label for="siteOther">If “Other,” what did you have in mind?</label>
+            <input id="siteOther" name="siteOther" type="text" placeholder="Describe your idea" />
+          </div>
+
+          <!-- Pages / Budget -->
+          <div class="row row-2">
+            <div>
+              <label for="pages">How many pages?</label>
+              <select id="pages" name="pages">
+                <option>1</option>
+                <option>2–5</option>
+                <option>6–10</option>
+                <option>11–20</option>
+                <option>20+</option>
+              </select>
+            </div>
+            <div>
+              <label for="budget">Estimated budget</label>
+              <select id="budget" name="budget" required>
+                <option value="$500–$1,000">$500–$1,000</option>
+                <option value="$1,000–$2,500">$1,000–$2,500</option>
+                <option value="$2,500–$5,000">$2,500–$5,000</option>
+                <option value="$5,000+">$5,000+</option>
+                <option value="Custom / TBD">Custom / TBD</option>
+              </select>
+              <div class="budget-note">Projects start at <strong>$500 minimum</strong>.</div>
+            </div>
+          </div>
+
+          <!-- Features -->
+          <h2 class="section-title">Features</h2>
+          <div class="options grid-3" role="group" aria-label="Features">
+            <label class="option"><input type="checkbox" name="features" value="Contact form" />Contact form</label>
+            <label class="option"><input type="checkbox" name="features" value="Email newsletter" />Email newsletter</label>
+            <label class="option"><input type="checkbox" name="features" value="Audio/Podcast" />Audio / Podcast</label>
+            <label class="option"><input type="checkbox" name="features" value="Video embeds" />Video embeds</label>
+            <label class="option"><input type="checkbox" name="features" value="Gallery" />Gallery</label>
+            <label class="option"><input type="checkbox" name="features" value="Map" />Map</label>
+            <label class="option"><input type="checkbox" name="features" value="FAQ" />FAQ</label>
+            <label class="option"><input type="checkbox" name="features" value="Legal pages" />Legal pages</label>
+            <label class="option"><input type="checkbox" name="features" value="Other" />Other</label>
+          </div>
+          <div>
+            <label for="featuresOther">If “Other,” list any special features</label>
+            <input id="featuresOther" name="featuresOther" type="text" placeholder="CMS, memberships, search, etc." />
+          </div>
+
+          <!-- Content / Images -->
+          <div class="row row-2">
+            <div>
+              <label>Content readiness</label>
+              <div class="options" role="group" aria-label="Content readiness">
+                <label class="option"><input type="radio" name="content" value="I have my copy" />I have my copy</label>
+                <label class="option"><input type="radio" name="content" value="Need help writing" />Need help writing</label>
+                <label class="option"><input type="radio" name="content" value="A mix" checked />A mix</label>
+              </div>
+            </div>
+            <div>
+              <label>Images &amp; artwork</label>
+              <div class="options" role="group" aria-label="Images and artwork">
+                <label class="option"><input type="radio" name="images" value="I have images" />I have images</label>
+                <label class="option"><input type="radio" name="images" value="Please generate images" />Please generate images</label>
+                <label class="option"><input type="radio" name="images" value="A mix" checked />A mix</label>
+              </div>
+              <div class="help">No uploads here — once we’re a go, you can email assets directly.</div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div>
+            <label for="summary">Project summary</label>
+            <textarea id="summary" name="summary" required placeholder="Tell me about your site, audience, goals, vibe, and any deadlines."></textarea>
+          </div>
+
+          <!-- Turnstile -->
+          <div class="help">One quick check to keep out bots:</div>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAB0vOSqh9kDdb7s_"></div>
+
+          <div><button class="btn" type="submit">Send Request</button></div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      © <span id="y"></span> Sheena’s Adventures •
+      <a href="/work-with-me.html">Work With Me</a> •
+      <a href="/contact.html">Contact</a>
+    </p>
+  </footer>
+
+  <!-- Turnstile script -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <script>
+    // footer year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // show domain field only when "yes"
+    const radios = document.querySelectorAll('input[name="haveDomain"]');
+    const domainField = document.getElementById('domainField');
+    function updateDomain(){
+      domainField.style.display = [...radios].some(r => r.checked && r.value === 'yes') ? 'block' : 'none';
+    }
+    radios.forEach(r => r.addEventListener('change', updateDomain));
+    updateDomain();
+
+    // toast on ?sent=1
+    if (new URLSearchParams(location.search).get('sent') === '1'){
+      const t = document.getElementById('toast'); t.style.display = 'block';
+      setTimeout(()=> t.style.display='none', 5500);
+    }
+  </script>
+</body>
+                                                                                                    </html>
