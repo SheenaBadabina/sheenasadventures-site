@@ -1,57 +1,124 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Adventures Blog • Sheena’s Adventures</title>
-  <meta name="description" content="Stories, finds, and field wisdom from the Utah desert." />
-  <link rel="stylesheet" href="/static/styles.css" />
+  <title>Blog • Sheena’s Adventures</title>
+  <meta name="description" content="Latest trips, discoveries, and field notes from Sheena’s Adventures across the Utah desert." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Site-wide stylesheet per StyleGuide.md -->
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sheena’s Adventures Blog" />
+  <meta property="og:description" content="Pigeon Blood Agate, Opalized Wood at Yellow Cat Road, Utah Desert Field Guide, and more." />
+  <meta property="og:url" content="https://sheenas-adventures.pages.dev/blog/index.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <style>
-    /* Light touch only—uses site theme. Ensures tidy spacing on small screens. */
-    .blog-list { max-width: 960px; margin: 0 auto; padding: 1rem; }
-    .card h2 { margin-bottom: .25rem; }
-    .card p { margin: .5rem 0 0; }
-    .read-link { display: inline-block; margin-top: .75rem; }
+    /* Light helpers that defer to site.css tokens */
+    .wrap { max-width: 72ch; margin: 0 auto; padding: 1rem; }
+    .page-title { font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.2; margin: 1rem 0 .25rem; }
+    .meta { color: var(--text-muted, #667085); font-size: .95rem; }
+    .list { display: grid; gap: 1rem; margin: 1.25rem 0 2.5rem; }
+    .card {
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 14px;
+      padding: 1rem;
+      background: var(--surface, #fff);
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .card h2 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin: 0 0 .35rem; }
+    .card a { text-decoration: none; }
+    .card p { margin: .25rem 0 0; }
+    .pill { display:inline-block; font-size:.8rem; padding:.2rem .5rem; border-radius:999px; background:var(--pill-bg,#f1f5f9); color:var(--pill-fg,#334155); }
+    @media (min-width: 720px) { .list { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <a href="/" class="brand">Sheena’s Adventures</a>
-    <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
-    <nav class="site-nav">
-      <a href="/work-with-me.html">Work With Me</a>
-      <a href="/adventures.html">Adventures</a>
-      <a href="/blog/" aria-current="page">Blog</a>
-      <a href="/about.html">About</a>
-      <a href="/contact.html">Contact</a>
-    </nav>
-  </header>  <main class="hero">
-    <h1>Adventures Blog</h1>
-    <p>Stories, finds, and field wisdom from the Utah desert.</p>
-  </main>  <section class="grid blog-list" aria-label="Posts">
-    <!-- Post 1: Opalized Wood -->
-    <article class="card">
-      <h2><a href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Opalized Wood on Yellow Cat Road</a></h2>
-      <p>When trees become treasures: field ID, hard‑won lessons, and honoring natural beauty.</p>
-      <p><a class="text-link read-link" href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Read →</a></p>
-    </article><!-- Post 2: Meet the Dreamer -->
-<article class="card">
-  <h2><a href="/blog/meet-the-desert-dreamer.html">Meet the Desert Dreamer</a></h2>
-  <p>The real story behind Sheena’s Adventures and why I chase horizons.</p>
-  <p><a class="text-link read-link" href="/blog/meet-the-desert-dreamer.html">Read →</a></p>
-</article>
+  <header class="site-header" role="banner">
+    <nav class="site-nav" aria-label="Main"></nav>
+  </header>
 
-<!-- Post 3: Utah Desert Field Guide -->
-<article class="card">
-  <h2><a href="/blog/utah-desert-field-guide.html">Utah Desert Field Guide</a></h2>
-  <p>Field notes, safety, and how to spot the good stuff across Utah’s wild country.</p>
-  <p><a class="text-link read-link" href="/blog/utah-desert-field-guide.html">Read →</a></p>
-</article>
+  <main class="wrap" id="content" role="main">
+    <h1 class="page-title">Sheena’s Adventures Blog</h1>
+    <p class="meta">Newest posts first. Older “relic” posts are preserved for the archive.</p>
 
-  </section>  <footer>
-    <p>© <span id="y"></span> Sheena’s Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
-  </footer>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+    <section id="blog-list" class="list" aria-label="Blog posts"></section>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid var(--border,#e5e7eb)" />
+
+    <section aria-label="About">
+      <p class="meta">
+        Some posts load their body from <code>/assets/prose/*.txt</code> to keep the HTML lean and fast.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo"></footer>
+
+  <!-- Data: newest -> oldest -->
+  <script id="posts-data" type="application/json">
+  [
+    {
+      "title": "Pigeon Blood Agate and the Breakdown That Broke Me",
+      "href": "/blog/pigeon-blood-agate.html",
+      "date": "2025-10-12",
+      "tag": "New",
+      "summary": "Hunting vivid red, betroidal agate near Moab; the truck dies, a desert rescue on a flatbed through a dry wash, pottery sherds in the dust, and the first outing with a new 4K camera + gimbal."
+    },
+    {
+      "title": "Opalized Wood on Yellow Cat Road",
+      "href": "/blog/2025-09-28-opalized-wood-yellow-cat-road.html",
+      "date": "2025-09-28",
+      "summary": "A return to Yellow Cat Road: purple agates, opalized wood, wide skies, and a brush with an old uranium claim site."
+    },
+    {
+      "title": "Utah Desert Field Guide",
+      "href": "/blog/utah-desert-field-guide.html",
+      "date": "2025-09-01",
+      "summary": "A living reference for plants, rocks, weather, navigation, and safety—built from miles of boots-on-sand experience."
+    },
+    {
+      "title": "Meet the Desert Dreamer",
+      "href": "/blog/meet-the-desert-dreamer.html",
+      "date": "2025-08-15",
+      "summary": "Origin story vibes: why I chase color locked in stone and storms brewing on the horizon."
+    }
+  ]
+  </script>
+
+  <script>
+    (function renderIndex() {
+      const mount = document.getElementById('blog-list');
+      const dataEl = document.getElementById('posts-data');
+      let posts = [];
+      try { posts = JSON.parse(dataEl.textContent.trim()); } catch (_) { posts = []; }
+
+      mount.innerHTML = posts.map(p => `
+        <article class="card" itemscope itemtype="https://schema.org/BlogPosting">
+          <header>
+            <h2 itemprop="headline">
+              <a href="${p.href}" itemprop="url">${escapeHtml(p.title)}</a>
+            </h2>
+            <p class="meta">
+              <time datetime="${p.date}" itemprop="datePublished">${formatDate(p.date)}</time>
+              ${p.tag ? ` <span class="pill" aria-label="Post tag">${escapeHtml(p.tag)}</span>` : ``}
+            </p>
+          </header>
+          ${p.summary ? `<p itemprop="description">${escapeHtml(p.summary)}</p>` : ``}
+        </article>
+      `).join('');
+
+      function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+      function formatDate(iso){
+        if(!iso) return '';
+        const d = new Date(iso);
+        const opts = { year:'numeric', month:'long', day:'numeric' };
+        return isNaN(d) ? iso : d.toLocaleDateString(undefined, opts);
+      }
+    })();
+  </script>
 </body>
 </html>
