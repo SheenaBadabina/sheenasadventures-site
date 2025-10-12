@@ -1,0 +1,2 @@
+This is a placeholder file to initialize the /assets/prose directory.
+Future .txt files for blog articles or narrative content will live here.
