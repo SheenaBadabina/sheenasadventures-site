@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Pigeon Blood Agate and the Breakdown That Broke Me • Sheena’s Adventures</title>
+  <meta name="description" content="Pigeon Blood Agate near Moab, a breakdown in the desert, a long rescue, and the beauty that still shows up when everything goes wrong." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preload" href="/assets/prose/2025-10-12-pigeon-blood-agate.txt" as="fetch" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Pigeon Blood Agate and the Breakdown That Broke Me" />
+  <meta property="og:description" content="A Moab-area hunt for Pigeon Blood Agate, a truck failure, a desert rescue, pottery sherds, and finding beauty in the mess." />
+  <meta property="og:url" content="https://sheenas-adventures.pages.dev/blogs/pigeon-blood-agate.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <nav class="site-nav" aria-label="Main"></nav>
+  </header>
+
+  <main id="content" class="page page-blog" role="main">
+    <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
+      <header class="post-header">
+        <h1 class="post-title" itemprop="headline">Pigeon Blood Agate and the Breakdown That Broke Me</h1>
+        <p class="post-meta">
+          <time itemprop="datePublished" datetime="2025-10-12">October 12, 2025</time>
+          <span aria-hidden="true">•</span>
+          <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <span itemprop="name">Sheena</span>
+          </span>
+        </p>
+      </header>
+
+      <section id="post-body" class="post-body prose" itemprop="articleBody">
+        <noscript>Please enable JavaScript to view this post.</noscript>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo"></footer>
+
+  <script>
+    (async function loadProse() {
+      const target = document.getElementById('post-body');
+      const src = '/assets/prose/2025-10-12-pigeon-blood-agate.txt';
+
+      try {
+        const res = await fetch(src, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+        const raw = await res.text();
+
+        const blocks = raw
+          .replace(/\r\n/g, '\n')
+          .trim()
+          .split(/\n\s*\n/g);
+
+        const html = blocks
+          .map(p => `<p>${escapeHtml(p).replace(/\n/g, '<br>')}</p>`)
+          .join('\n');
+
+        target.innerHTML = html;
+      } catch (err) {
+        console.error(err);
+        target.innerHTML = `
+          <p>Sorry, I couldn’t load this post right now.</p>
+          <p><small>Looking for: <code>${src}</code></small></p>
+        `;
+      }
+
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+    })();
+  </script>
+</body>
+</html>
