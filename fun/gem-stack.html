@@ -42,8 +42,11 @@
       <h1 class="game-title">Desert Drop — Gem Stack</h1>
 
       <div class="controls primary">
-        <button class="btn" data-game="play" aria-label="Start Game">Play</button>
-        <button class="btn secondary" data-audio="mute" aria-pressed="false" aria-label="Toggle Sound">Mute</button>
+        <button class="btn" data-game="play" aria-label="Start Game">▶️ Play</button>
+        <button class="btn secondary" data-game="pause" aria-label="Pause Game" style="display:none;">⏸️ Pause</button>
+        <button class="btn secondary" data-game="restart" aria-label="Restart Game" style="display:none;">🔄 Restart</button>
+        <button class="btn secondary" data-audio="mute" aria-pressed="false" aria-label="Toggle Sound">🔇 Mute</button>
+        <button class="btn secondary" data-game="fullscreen" aria-label="Toggle Fullscreen">⛶ Fullscreen</button>
       </div>
 
       <div class="hud" role="group" aria-label="Game Status">
@@ -69,7 +72,7 @@
 
     <section class="howto">
       <details>
-        <summary>How to Play</summary>
+        <summary>▶ How to Play</summary>
         <div class="howto-body">
           <p>Reorder the falling column and slide it into place. Match three or more identical gems in a line—horizontal, vertical, or diagonal—to clear them. Cascades can chain for bonus points. Levels increase every 10 clears and speed up the game.</p>
           <ul>
@@ -77,7 +80,8 @@
             <li><strong>Rotate:</strong> ⬆️ or ↻</li>
             <li><strong>Soft Drop:</strong> ⬇️</li>
             <li><strong>Hard Drop:</strong> Space / ⤓</li>
-            <li><strong>Mute:</strong> Mute button</li>
+            <li><strong>Pause:</strong> P key or Pause button</li>
+            <li><strong>Mute:</strong> M key or Mute button</li>
           </ul>
         </div>
       </details>
@@ -94,4 +98,4 @@
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
-  </html>
+</html>
