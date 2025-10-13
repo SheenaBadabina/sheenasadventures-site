@@ -1,0 +1,215 @@
+/* ==========================================================================
+   Sheena’s Adventures — Desert Drop: Gem Stack
+   File: /fun/gem-stack.css
+   Purpose: Mobile-first layout, controls, HUD, and polish for the game page
+   Notes:
+   - Colors inherit from /static/styles.css tokens where available.
+   - Works standalone if tokens are missing by defining safe fallbacks below.
+   ========================================================================== */
+
+/* --- Color tokens (fallbacks; your global styles may already define these) --- */
+:root {
+  --color-accent: #00BFA5;
+  --color-bg: #0B0F12;
+  --color-surface: #0F1419;
+  --color-text: #D9E1E8;
+  --color-muted: #92A1AD;
+  --ring: var(--color-accent);
+}
+
+/* --- Base reset for the game area --- */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.game-wrap {
+  max-width: 960px;
+  margin-inline: auto;
+  padding: 16px;
+}
+
+/* --- Header strip on the game page --- */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block: 8px 12px;
+}
+
+.game-title {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  font-size: clamp(1.125rem, 2.6vw, 1.5rem);
+  color: var(--color-text);
+}
+
+/* --- Toolbar buttons (Play / How / Mute) --- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px; /* mobile tap target */
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #22303a;
+  background: #121821;
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 120ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.btn:hover {
+  background: #151d27;
+  border-color: #2a3a46;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* --- Canvas shell keeps a stable 16:9 area; canvas scales to fit --- */
+.canvas-shell {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: linear-gradient(180deg, #121821 0%, #0B0F12 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+#gameCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Optional splash overlay (shown/hidden by JS) */
+#splash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,20,25,0.9), rgba(11,15,18,0.9));
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* --- HUD (Score / Level / Best) --- */
+.hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.hud .pill {
+  background: var(--color-surface);
+  border: 1px solid #22303a;
+  color: var(--color-text);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* --- On-screen mobile controls --- */
+.controls {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.controls .btn {
+  min-height: 56px; /* slightly larger for sustained play */
+  font-size: 1.05rem;
+}
+
+/* Icon-only variant (if/when you swap text glyphs for background icons) */
+.btn.icon {
+  padding: 0;
+  min-width: 56px;
+}
+
+/* --- How-to section --- */
+#how {
+  margin-top: 16px;
+  background: var(--color-surface);
+  border: 1px solid #22303a;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--color-text);
+}
+
+#how h2 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.2px;
+}
+
+/* --- Accessibility helpers --- */
+.visually-hidden {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* --- Reduced motion: tone down transitions for sensitive users --- */
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .canvas-shell { scroll-behavior: auto; }
+}
+
+/* --- High-contrast mode hook (toggle via body[data-contrast="high"]) --- */
+body[data-contrast="high"] .btn {
+  border-color: #3a4b58;
+  background: #0d1218;
+}
+
+body[data-contrast="high"] .hud .pill {
+  border-color: #3a4b58;
+}
+
+/* --- Larger screens: scale spacing and controls --- */
+@media (min-width: 720px) {
+  .game-wrap { padding: 20px; }
+  .game-title { font-size: clamp(1.25rem, 2vw, 1.75rem); }
+  .controls .btn { min-height: 60px; font-size: 1.1rem; }
+  .hud .pill { min-width: 140px; }
+}
+
+/* --- Utility: tint helpers if you apply color to icon buttons via classes --- */
+.tint-accent { filter: drop-shadow(0 0 0.25rem rgba(0,191,165,0.45)); }
+.tint-warm   { filter: drop-shadow(0 0 0.25rem rgba(255,111,0,0.35)); }
+.tint-cool   { filter: drop-shadow(0 0 0.25rem rgba(0,150,255,0.35)); }
+
+/* --- Optional: subtle focus ring for keyboard users only --- */
+:focus:not(:focus-visible) { outline: none; }
