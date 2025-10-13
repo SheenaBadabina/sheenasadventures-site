@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Play Desert Drop — Gem Stack | Sheena’s Adventures</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Match gems, chase combos, and keep the desert glowing in Sheena’s mobile-first web game.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Play Desert Drop — Gem Stack">
+  <meta property="og:description" content="Match gems, chase combos, and keep the desert glowing.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sheenasadventures.com/fun/gem-stack.html">
+  <meta property="og:image" content="https://sheenasadventures.com/assets/images/sheenas-adventures-game-gem-stack-screenshot.png">
+
+  <!-- Icons / Theme -->
+  <meta name="theme-color" content="#0B0F12">
+
+  <!-- Global site styles & JS (hamburger, focus, etc.) -->
+  <link rel="stylesheet" href="/static/styles.css">
+  <script defer src="/static/js/site.js"></script>
+
+  <!-- Game-local styles & script -->
+  <link rel="stylesheet" href="/fun/gem-stack.css">
+  <script defer src="/fun/gem-stack.js"></script>
+
+  <!-- Preload critical game assets (filenames per GameBuild.md) -->
+  <link rel="preload" as="image" href="/assets/images/game/gem-sprites.png" imagesrcset="/assets/images/game/gem-sprites.png 1x">
+  <link rel="preload" as="image" href="/assets/images/game/ui-overlays.png" imagesrcset="/assets/images/game/ui-overlays.png 1x">
+  <link rel="preload" as="image" href="/assets/images/game/level-badges.png" imagesrcset="/assets/images/game/level-badges.png 1x">
+  <link rel="preload" as="audio" href="/assets/sounds/background-loop.mp3">
+  <link rel="preload" as="audio" href="/assets/sounds/gem-match.mp3">
+  <link rel="preload" as="audio" href="/assets/sounds/line-clear.mp3">
+  <link rel="preload" as="audio" href="/assets/sounds/level-up.mp3">
+  <link rel="preload" as="audio" href="/assets/sounds/game-over.mp3">
+
+  <style>
+    /* Minimal page-safe fallback so the canvas centers even before gem-stack.css loads */
+    .game-wrap{max-width:960px;margin:auto;padding:16px}
+    .game-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .game-title{font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:700}
+    .canvas-shell{position:relative;aspect-ratio:16/9;background:linear-gradient(#0f1419,#0b0f12);border-radius:12px;overflow:hidden}
+    .canvas-shell canvas{width:100%;height:100%;display:block}
+    .hud{display:flex;justify-content:space-between;gap:12px;margin-top:12px}
+    .hud .pill{background:#0f1419;border:1px solid #22303a;border-radius:999px;padding:.4rem .75rem;font-weight:600}
+    .controls{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;border-radius:12px;border:1px solid #22303a;background:#121821}
+    .btn:focus-visible{outline:2px solid var(--ring,#00BFA5);outline-offset:2px}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .visually-hidden{position:absolute!important;clip:rect(1px,1px,1px,1px);padding:0;border:0;height:1px;width:1px;overflow:hidden;white-space:nowrap}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="brand">Sheena’s Adventures</a>
+    <button class="hamburger" aria-label="Menu">☰</button>
+    <nav class="site-nav" data-collapsible>
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/adventures.html">Adventures</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="game-wrap">
+    <div class="game-header">
+      <h1 class="game-title">Desert Drop — Gem Stack</h1>
+      <div class="toolbar" role="group" aria-label="Quick actions">
+        <button class="btn" data-game="play" aria-label="Play">Play</button>
+        <button class="btn" data-game="how" aria-controls="how" aria-expanded="false">How to Play</button>
+        <button class="btn" data-audio="mute" aria-pressed="false">Mute</button>
+      </div>
+    </div>
+
+    <!-- Game Canvas -->
+    <section class="canvas-shell" aria-label="Game area">
+      <canvas id="gameCanvas" width="1280" height="720" aria-label="Gem Stack Canvas"></canvas>
+
+      <!-- Screen-reader live region for score updates -->
+      <p id="sr-live" class="visually-hidden" aria-live="polite"></p>
+
+      <!-- Optional splash/loading overlay (handled by gem-stack.js) -->
+      <div id="splash" class="visually-hidden" aria-hidden="true">Loading…</div>
+    </section>
+
+    <!-- HUD -->
+    <div class="hud" aria-label="Game status">
+      <div class="pill">Score: <span id="score">000000</span></div>
+      <div class="pill">Level: <span id="level">1</span></div>
+      <div class="pill">Best: <span id="best">000000</span></div>
+    </div>
+
+    <!-- On-screen touch controls (icons drawn from ui-overlays.png by JS) -->
+    <div class="controls" aria-label="On-screen controls">
+      <button class="btn" data-action="left" aria-label="Move left">◀</button>
+      <button class="btn" data-action="rotate" aria-label="Rotate column">⟳</button>
+      <button class="btn" data-action="right" aria-label="Move right">▶</button>
+      <button class="btn" data-action="soft" aria-label="Soft drop">⬇</button>
+      <button class="btn" data-action="hard" aria-label="Hard drop">⏬</button>
+    </div>
+
+    <!-- How to Play -->
+    <section id="how" hidden>
+      <h2>How to Play</h2>
+      <p>Reorder and drop the three-gem column to make lines of three or more matching colors. Lines clear and cascade; chain clears for big combos. The speed increases as you level up. Fill the stack to the top and it’s game over.</p>
+      <ul>
+        <li><strong>Mobile:</strong> use the on-screen buttons.</li>
+        <li><strong>Desktop:</strong> ← → to move, ↑ to rotate, ↓ to soft drop, Space for hard drop, P to pause, M to mute.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="y"></span> Sheena’s Adventures •
+      <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> •
+      <a href="/contact.html">Contact</a>
+    </p>
+  </footer>
+
+  <script>
+    // Tiny helper to toggle the “How to Play” section without relying on gem-stack.js
+    (function(){
+      const howBtn = document.querySelector('[data-game="how"]');
+      const how = document.getElementById('how');
+      if(howBtn && how){
+        howBtn.addEventListener('click', ()=>{
+          const open = how.hasAttribute('hidden') ? false : true;
+          if(open){ how.setAttribute('hidden',''); howBtn.setAttribute('aria-expanded','false'); }
+          else { how.removeAttribute('hidden'); howBtn.setAttribute('aria-expanded','true'); }
+        });
+      }
+      // Year
+      const y = document.getElementById('y'); if(y){ y.textContent = new Date().getFullYear(); }
+    })();
+  </script>
+  <noscript>
+    <p style="padding:1rem;text-align:center">This game requires JavaScript.</p>
+  </noscript>
+</body>
+  </html>
