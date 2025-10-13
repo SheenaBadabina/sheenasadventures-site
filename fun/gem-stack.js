@@ -25,11 +25,10 @@ const $ = (sel) => document.querySelector(sel);
 
 const el = {
   canvas: $("#gameCanvas"),
-  play:   $('[data-game="play"]'),
-  pause:  $('[data-game="pause"]'),
-  restart: $('[data-game="restart"]'),
-  fullscreen: $('[data-game="fullscreen"]'),
-  mute:   $('[data-audio="mute"]'),
+  play:   $("#playBtn"),
+  pause:  $("#pauseBtn"),
+  restart: $("#restartBtn"),
+  mute:   $("#muteBtn"),
   score:  $('[data-ui="score"]'),
   level:  $('[data-ui="level"]'),
   best:   $('[data-ui="best"]'),
@@ -70,57 +69,6 @@ const storage = {
   get best() { return +(localStorage.getItem("gem:best") || 0); },
   set best(v){ localStorage.setItem("gem:best", String(v)); }
 };
-
-/* ========== Fullscreen Management ========== */
-let isFullscreen = false;
-
-function enterFullscreen() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen().catch(err => {
-      console.log("Fullscreen error:", err);
-    });
-  } else if (elem.webkitRequestFullscreen) {
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    elem.msRequestFullscreen();
-  }
-}
-
-function exitFullscreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
-  }
-}
-
-function toggleFullscreen() {
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    enterFullscreen();
-  } else {
-    exitFullscreen();
-  }
-}
-
-// Listen for fullscreen changes
-document.addEventListener('fullscreenchange', () => {
-  isFullscreen = !!document.fullscreenElement;
-  if (el.fullscreen) {
-    el.fullscreen.textContent = isFullscreen ? "⛶ Exit Full" : "⛶ Fullscreen";
-  }
-  resizeCanvas();
-});
-
-document.addEventListener('webkitfullscreenchange', () => {
-  isFullscreen = !!document.webkitFullscreenElement;
-  if (el.fullscreen) {
-    el.fullscreen.textContent = isFullscreen ? "⛶ Exit Full" : "⛶ Fullscreen";
-  }
-  resizeCanvas();
-});
 
 /* ========== Audio ========== */
 class GameAudio {
@@ -520,9 +468,17 @@ const Game = {
 
 /* ========== Button Visibility ========== */
 function updateButtonVisibility() {
-  if (el.play) el.play.style.display = Game.running && !Game.over ? "none" : "inline-flex";
-  if (el.pause) el.pause.style.display = Game.running && !Game.over ? "inline-flex" : "none";
-  if (el.restart) el.restart.style.display = Game.running || Game.over ? "inline-flex" : "none";
+  // Show/hide buttons based on game state
+  if (el.play) el.play.style.display = (Game.running && !Game.over) ? "none" : "inline-flex";
+  if (el.pause) el.pause.style.display = (Game.running && !Game.over) ? "inline-flex" : "none";
+  if (el.restart) el.restart.style.display = (Game.running || Game.over) ? "inline-flex" : "none";
+  
+  // Add/remove playing class to body
+  if (Game.running && !Game.over) {
+    document.body.classList.add('playing');
+  } else {
+    document.body.classList.remove('playing');
+  }
 }
 
 /* ========== Input ========== */
@@ -531,7 +487,6 @@ function bindInputs() {
     el.play.addEventListener("click", () => {
       audio.userGestureStart();
       Game.reset();
-      enterFullscreen(); // Auto-fullscreen on play!
     });
   }
 
@@ -546,10 +501,6 @@ function bindInputs() {
       audio.userGestureStart();
       Game.reset();
     });
-  }
-
-  if (el.fullscreen) {
-    el.fullscreen.addEventListener("click", toggleFullscreen);
   }
 
   if (el.mute) {
@@ -583,7 +534,6 @@ function bindInputs() {
       case "P":          Game.togglePause(); break;
       case "m":
       case "M":          if (el.mute) el.mute.click(); break;
-      case "Escape":     if (isFullscreen) exitFullscreen(); break;
     }
   });
   
