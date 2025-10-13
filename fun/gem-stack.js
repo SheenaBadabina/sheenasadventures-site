@@ -1,13 +1,13 @@
 /*  Desert Drop — Gem Stack
-    Full working build (asset paths flattened to /assets)
+    POLISHED Production Build with Juice Effects
     ----------------------------------------------------- */
 
-/* ========== Asset paths (flat /assets) ========== */
+/* ========== Asset paths ========== */
 const ASSETS = {
   images: {
-    sprites: "/assets/gem-sprites.png",        // 3x3 grid, 768x768
-    badges:  "/assets/level-badges.png",       // 3x3 grid, 768x768
-    ui:      "/assets/ui-icons.png",           // 3x3 grid, 768x768 (not strictly required by JS)
+    sprites: "/assets/gem-sprites.png",
+    badges:  "/assets/level-badges.png",
+    ui:      "/assets/ui-icons.png",
     bg:      "/assets/background-sky-canyon.png"
   },
   audio: {
@@ -16,26 +16,25 @@ const ASSETS = {
     line:     "/assets/line-clear.mp3",
     lvl:      "/assets/level-up.mp3",
     over:     "/assets/game-over.mp3",
-    popOpt:   "/assets/pop.mp3" // optional; handled if missing
+    popOpt:   "/assets/pop.mp3"
   }
 };
 
-/* ========== DOM hookups (defensive: won't crash if absent) ========== */
+/* ========== DOM hookups ========== */
 const $ = (sel) => document.querySelector(sel);
 
 const el = {
   canvas: $("#gameCanvas"),
-  play:   document.querySelector('[data-game="play"]'),
-  mute:   document.querySelector('[data-audio="mute"]'),
-  score:  document.querySelector('[data-ui="score"]'),
-  level:  document.querySelector('[data-ui="level"]'),
-  best:   document.querySelector('[data-ui="best"]'),
-  // on-screen controls (optional)
-  left:   document.querySelector('[data-control="left"]'),
-  right:  document.querySelector('[data-control="right"]'),
-  down:   document.querySelector('[data-control="down"]'),
-  drop:   document.querySelector('[data-control="drop"]'),
-  rotate: document.querySelector('[data-control="rotate"]'),
+  play:   $('[data-game="play"]'),
+  mute:   $('[data-audio="mute"]'),
+  score:  $('[data-ui="score"]'),
+  level:  $('[data-ui="level"]'),
+  best:   $('[data-ui="best"]'),
+  left:   $('[data-control="left"]'),
+  right:  $('[data-control="right"]'),
+  down:   $('[data-control="down"]'),
+  drop:   $('[data-control="drop"]'),
+  rotate: $('[data-control="rotate"]'),
 };
 
 const ctx = el.canvas ? el.canvas.getContext("2d") : null;
@@ -43,26 +42,27 @@ const ctx = el.canvas ? el.canvas.getContext("2d") : null;
 /* ========== Game constants ========== */
 const GRID_COLS = 8;
 const GRID_ROWS = 16;
-const COLORS = 6;              // number of gem colors available at level 1 (will increase)
-const MAX_COLORS = 8;          // cap for higher levels
-const CELL_SPRITE_MAP = [0,1,2,3,4,5,6,7,8]; // indices into 3x3 sprite sheet; we’ll mod by available colors
-const SPRITE_SHEET_SIZE = 768;
-const SPRITE_CELL = 256;       // 768 / 3
-const GRAVITY_BASE = 0.7;      // seconds per step at level 1 (will speed up)
-const FAST_DROP_MULT = 0.15;   // soft drop speed multiplier
-const HARD_DROP_BONUS = 5;     // points per cell hard-dropped
+const COLORS = 6;
+const MAX_COLORS = 9;
+const CELL_SPRITE_MAP = [0,1,2,3,4,5,6,7,8];
+const SPRITE_SHEET_SIZE = 1024;
+const SPRITE_CELL = 1024 / 3;
+const GRAVITY_BASE = 0.7;
+const FAST_DROP_MULT = 0.15;
+const HARD_DROP_BONUS = 5;
 const MATCH_BASE = 100;
 const MATCH_EXTRA = 50;
-const CLEAR_PER_LEVEL = 10;    // clears required to level up
+const CLEAR_PER_LEVEL = 10;
 const SCORE_DIGITS = 6;
 
 /* ========== Helpers ========== */
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const randInt = (n) => (Math.random() * n) | 0;
+const rand = (min, max) => Math.random() * (max - min) + min;
 const pad = (n, d=6) => String(n).padStart(d, "0");
 const now = () => performance.now();
 
-/* ========== Storage (best score) ========== */
+/* ========== Storage ========== */
 const storage = {
   get best() { return +(localStorage.getItem("gem:best") || 0); },
   set best(v){ localStorage.setItem("gem:best", String(v)); }
@@ -83,10 +83,7 @@ class GameAudio {
       a.preload = "auto";
       a.volume = volume;
       a.addEventListener("canplaythrough", () => res({ key, audio:a }), { once:true });
-      a.addEventListener("error", () => {
-        // optional pop may 404 — just resolve with null
-        res({ key, audio: null });
-      }, { once:true });
+      a.addEventListener("error", () => res({ key, audio: null }), { once:true });
     });
 
     const items = await Promise.all([
@@ -95,7 +92,7 @@ class GameAudio {
       loadOne("line", ASSETS.audio.line, false,0.9),
       loadOne("lvl",  ASSETS.audio.lvl,  false,1.0),
       loadOne("over", ASSETS.audio.over, false,0.8),
-      loadOne("pop",  ASSETS.audio.popOpt,false,0.8) // optional
+      loadOne("pop",  ASSETS.audio.popOpt,false,0.8)
     ]);
 
     for (const { key, audio } of items) {
@@ -104,7 +101,6 @@ class GameAudio {
     }
   }
   userGestureStart() {
-    // must be called by Play button (user gesture) before autoplays
     if (this.bg && this.enabled) {
       this.bg.currentTime = 0;
       this.bg.play().catch(()=>{});
@@ -112,9 +108,8 @@ class GameAudio {
   }
   toggleMute() {
     this.enabled = !this.enabled;
-    const vol = this.enabled ? 1 : 0;
     if (this.bg) this.bg.volume = this.enabled ? 0.30 : 0;
-    for (const k in this.sounds) if (this.sounds[k]) this.sounds[k].volume = vol;
+    for (const k in this.sounds) if (this.sounds[k]) this.sounds[k].volume = this.enabled ? 0.9 : 0;
     return this.enabled;
   }
   play(name) {
@@ -130,7 +125,7 @@ class GameAudio {
 
 const audio = new GameAudio();
 
-/* ========== Assets (images) ========== */
+/* ========== Assets ========== */
 const images = {};
 function loadImage(src) {
   return new Promise((res, rej) => {
@@ -141,18 +136,81 @@ function loadImage(src) {
   });
 }
 
+/* ========== Visual Effects ========== */
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = rand(-2, 2);
+    this.vy = rand(-4, -1);
+    this.life = 1.0;
+    this.decay = rand(0.015, 0.025);
+    this.size = rand(2, 5);
+    this.color = `hsl(${rand(40, 60)}, 100%, ${rand(60, 80)}%)`;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.15; // gravity
+    this.life -= this.decay;
+    return this.life > 0;
+  }
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+const particles = [];
+
+function spawnParticles(px, py, count = 8) {
+  for (let i = 0; i < count; i++) {
+    particles.push(new Particle(px, py));
+  }
+}
+
+/* ========== Flash effect for matching gems ========== */
+const flashCells = new Set();
+let flashTimer = 0;
+const FLASH_DURATION = 0.1; // seconds
+
+/* ========== Screen shake ========== */
+let shakeAmount = 0;
+let shakeDecay = 0;
+
+function shake(intensity = 10) {
+  shakeAmount = intensity;
+  shakeDecay = 0.9;
+}
+
+/* ========== Chain display ========== */
+let chainDisplay = { active: false, text: "", time: 0, maxTime: 1.5 };
+
+function showChain(count) {
+  chainDisplay = {
+    active: true,
+    text: `${count}x CHAIN!`,
+    time: 0,
+    maxTime: 1.5
+  };
+}
+
 /* ========== Grid + Pieces ========== */
 class Grid {
   constructor(cols, rows) {
     this.cols = cols; this.rows = rows;
-    this.cells = new Array(rows).fill(0).map(()=>new Array(cols).fill(-1)); // -1 empty, else color index
+    this.cells = new Array(rows).fill(0).map(()=>new Array(cols).fill(-1));
   }
   inBounds(x,y){ return x>=0 && x<this.cols && y>=0 && y<this.rows; }
   get(x,y){ return this.inBounds(x,y) ? this.cells[y][x] : -2; }
   set(x,y,v){ if(this.inBounds(x,y)) this.cells[y][x]=v; }
   clone(){ const g = new Grid(this.cols,this.rows); g.cells = this.cells.map(r=>r.slice()); return g; }
   collapse() {
-    // gravity; return # cells moved for animation feel (and potential soft points)
     let moved = 0;
     for (let x=0;x<this.cols;x++){
       let write = this.rows-1;
@@ -170,7 +228,6 @@ class Grid {
     return moved;
   }
   findMatches() {
-    // returns a Set of coordinates "x,y" to clear; looks for >=3 in lines (4 dirs)
     const clear = new Set();
     const dirs = [[1,0],[0,1],[1,1],[1,-1]];
     for (let y=0;y<this.rows;y++){
@@ -191,23 +248,20 @@ class Grid {
 }
 
 class FallingColumn {
-  // vertical column of 3 gems; state includes top-left (x,y = grid coords of top gem)
   constructor(colorsAvail, cols) {
     this.order = [randInt(colorsAvail), randInt(colorsAvail), randInt(colorsAvail)];
     this.x = clamp((cols/2)|0, 1, cols-2);
-    this.y = -2; // start above board
+    this.y = -2;
   }
   rotate() {
-    // reorder vertically (cycle down)
     const [a,b,c] = this.order;
     this.order = [c,a,b];
   }
   move(dx, grid) {
     const nx = clamp(this.x + dx, 0, grid.cols-1);
-    // check collision at current y..y+2
     for (let i=0;i<3;i++){
       const x = nx, y = this.y + i;
-      if (y>=0 && grid.get(x,y) !== -1) return; // blocked
+      if (y>=0 && grid.get(x,y) !== -1) return;
     }
     this.x = nx;
   }
@@ -215,17 +269,34 @@ class FallingColumn {
     for (let i=2;i>=0;i--){
       const y = this.y + i + 1;
       const x = this.x;
-      if (y < 0) continue; // above board is fine
+      if (y < 0) continue;
       if (y >= grid.rows || grid.get(x,y) !== -1) return false;
     }
     return true;
   }
   step() { this.y++; }
   lockToGrid(grid) {
-    // place the three gems; if above board → game over will be checked outside
     for (let i=0;i<3;i++){
       const y = this.y + i;
       if (y >= 0) grid.set(this.x, y, this.order[i]);
+    }
+  }
+  // Ghost preview: find where this column will land
+  getGhostY(grid) {
+    let testY = this.y;
+    while (true) {
+      let canFall = true;
+      for (let i = 2; i >= 0; i--) {
+        const y = testY + i + 1;
+        const x = this.x;
+        if (y < 0) continue;
+        if (y >= grid.rows || grid.get(x, y) !== -1) {
+          canFall = false;
+          break;
+        }
+      }
+      if (!canFall) return testY;
+      testY++;
     }
   }
 }
@@ -244,6 +315,9 @@ const Game = {
   level: 1,
   clearsThisLevel: 0,
   colorsAvail: COLORS,
+  flashingCells: null, // Stores cells to clear after flash
+  flashTime: 0,
+  chainCount: 0,
 
   reset() {
     this.running = true;
@@ -257,6 +331,13 @@ const Game = {
     this.level = 1;
     this.clearsThisLevel = 0;
     this.colorsAvail = COLORS;
+    this.flashingCells = null;
+    this.flashTime = 0;
+    particles.length = 0;
+    flashCells.clear();
+    flashTimer = 0;
+    chainDisplay.active = false;
+    shakeAmount = 0;
     drawAll();
     updateHUD();
   },
@@ -264,49 +345,95 @@ const Game = {
   tick(dt) {
     if (!this.running || this.over) return;
 
+    // Handle flash timing
+    if (this.flashingCells) {
+      flashTimer += dt / 1000;
+      if (flashTimer >= FLASH_DURATION) {
+        // Clear the flashing cells
+        this.flashingCells.forEach(key => {
+          const [x, y] = key.split(",").map(Number);
+          this.grid.set(x, y, -1);
+          flashCells.delete(key);
+        });
+        this.grid.collapse();
+        
+        // Check for new matches (cascade)
+        const nextMatches = this.grid.findMatches();
+        if (nextMatches.size > 0) {
+          // Cascade detected - show chain!
+          if (!this.chainCount) this.chainCount = 1;
+          this.chainCount++;
+          showChain(this.chainCount);
+          
+          // Set up next flash
+          this.flashingCells = nextMatches;
+          flashTimer = 0;
+          nextMatches.forEach(key => {
+            flashCells.add(key);
+            const [x, y] = key.split(",").map(Number);
+            const ox = ((CANVAS_W - CELL * GRID_COLS) / 2) | 0;
+            const oy = ((CANVAS_H - CELL * GRID_ROWS) / 2) | 0;
+            spawnParticles(ox + x * CELL + CELL / 2, oy + y * CELL + CELL / 2, 6);
+          });
+          // Update score for cascade
+          const cleared = nextMatches.size;
+          const extra = Math.max(0, cleared - 3);
+          this.score += MATCH_BASE + extra * MATCH_EXTRA;
+          this.score += Math.floor(this.score * 0.10); // Chain bonus
+          audio.play(cleared >= 4 ? "line" : "match");
+          updateHUD();
+        } else {
+          // No more matches, spawn next piece
+          this.flashingCells = null;
+          this.chainCount = 0;
+          flashTimer = 0;
+          this.current = new FallingColumn(this.colorsAvail, this.grid.cols);
+        }
+        return;
+      }
+      return; // Don't fall while flashing
+    }
+
     const stepTime = this.fallDelay * 1000 * (this.softDrop ? FAST_DROP_MULT : 1);
     if (dt >= stepTime) {
-      // try fall
       if (this.current.canFall(this.grid)) {
         this.current.step();
       } else {
-        // lock; if any part above top row → game over
         this.current.lockToGrid(this.grid);
         if (this.current.y < 0) {
           this.gameOver();
           return;
         }
-        // resolve clears + cascades
-        let totalCleared = 0;
-        let chains = 0;
-        while (true) {
-          const toClear = this.grid.findMatches();
-          if (toClear.size === 0) break;
-          // count+clear
+        
+        // Check for matches
+        const toClear = this.grid.findMatches();
+        if (toClear.size > 0) {
+          // Start flash
+          this.flashingCells = toClear;
+          this.chainCount = 0; // Reset chain counter
+          flashTimer = 0;
+          
+          // Flash effect and particles
           toClear.forEach(key => {
-            const [x,y] = key.split(",").map(Number);
-            this.grid.set(x,y,-1);
+            flashCells.add(key);
+            const [x, y] = key.split(",").map(Number);
+            const ox = ((CANVAS_W - CELL * GRID_COLS) / 2) | 0;
+            const oy = ((CANVAS_H - CELL * GRID_ROWS) / 2) | 0;
+            spawnParticles(ox + x * CELL + CELL / 2, oy + y * CELL + CELL / 2, 6);
           });
+          
           const cleared = toClear.size;
-          totalCleared += cleared;
-          chains++;
-          // scoring
           const extra = Math.max(0, cleared - 3);
           this.score += MATCH_BASE + extra * MATCH_EXTRA;
-          if (chains > 1) {
-            // light combo bonus: 10% per chain after first
-            this.score += Math.floor(this.score * 0.10);
-          }
-          audio.play(cleared >= 4 ? "line" : "match");
-          // gravity collapse
-          this.grid.collapse();
-        }
-        if (totalCleared > 0) {
           this.clearsThisLevel += 1;
+          
           if (this.clearsThisLevel >= CLEAR_PER_LEVEL) this.levelUp();
+          audio.play(cleared >= 4 ? "line" : "match");
+          updateHUD();
+        } else {
+          // No matches, spawn next piece immediately
+          this.current = new FallingColumn(this.colorsAvail, this.grid.cols);
         }
-        // spawn next
-        this.current = new FallingColumn(this.colorsAvail, this.grid.cols);
       }
       this.lastTick = now();
     }
@@ -315,10 +442,8 @@ const Game = {
   levelUp() {
     this.level++;
     this.clearsThisLevel = 0;
-    // speed up (clamp so it never gets silly-fast)
     this.fallDelay = Math.max(0.18, this.fallDelay * 0.90);
-    // gradually add colors up to MAX_COLORS
-    this.colorsAvail = clamp(COLORS + Math.floor((this.level-1)/2), COLORS, MAX_COLORS);
+    this.colorsAvail = clamp(COLORS + Math.floor((this.level - 1) / 2), COLORS, MAX_COLORS);
     audio.play("lvl");
     updateHUD();
   },
@@ -326,22 +451,20 @@ const Game = {
   gameOver() {
     this.over = true;
     this.running = false;
+    shake(20); // Big shake on game over
     audio.play("over");
     audio.stopAll();
-    // update best
     if (this.score > this.best) {
       this.best = this.score;
       storage.best = this.best;
     }
     updateHUD();
-    // small pop if available
     audio.play("pop");
   }
 };
 
 /* ========== Input ========== */
 function bindInputs() {
-  // Buttons
   if (el.play) {
     el.play.addEventListener("click", () => {
       audio.userGestureStart();
@@ -354,15 +477,15 @@ function bindInputs() {
       el.mute.setAttribute("aria-pressed", on ? "false" : "true");
     });
   }
-  // Touch controls (optional)
   el.left  && el.left.addEventListener("click",  () => tryMove(-1));
   el.right && el.right.addEventListener("click", () => tryMove(1));
   el.down  && el.down.addEventListener("mousedown", () => Game.softDrop = true);
   el.down  && el.down.addEventListener("mouseup",   () => Game.softDrop = false);
+  el.down  && el.down.addEventListener("touchstart", () => Game.softDrop = true);
+  el.down  && el.down.addEventListener("touchend",   () => Game.softDrop = false);
   el.rotate&& el.rotate.addEventListener("click", () => tryRotate());
   el.drop  && el.drop.addEventListener("click",   () => hardDrop());
 
-  // Keyboard
   window.addEventListener("keydown", (e) => {
     if (!Game.running || Game.over) return;
     switch (e.key) {
@@ -377,25 +500,26 @@ function bindInputs() {
     if (e.key === "ArrowDown") Game.softDrop = false;
   });
 }
+
 function tryMove(dx) {
   if (!Game.current) return;
   Game.current.move(dx, Game.grid);
 }
+
 function tryRotate() {
   if (!Game.current) return;
-  // simple rotate always allowed if space free; check collision
   const test = [...Game.current.order];
   Game.current.rotate();
-  // if rotate causes collision with solid cell, revert
-  for (let i=0;i<3;i++){
+  for (let i = 0; i < 3; i++) {
     const y = Game.current.y + i;
     const x = Game.current.x;
-    if (y>=0 && Game.grid.get(x,y) !== -1) {
+    if (y >= 0 && Game.grid.get(x, y) !== -1) {
       Game.current.order = test;
       return;
     }
   }
 }
+
 function hardDrop() {
   if (!Game.current) return;
   let cells = 0;
@@ -403,98 +527,165 @@ function hardDrop() {
     Game.current.step();
     cells++;
   }
-  if (cells>0) Game.score += HARD_DROP_BONUS * cells;
+  if (cells > 0) Game.score += HARD_DROP_BONUS * cells;
   updateHUD();
 }
 
 /* ========== Rendering ========== */
 let CANVAS_W = 640, CANVAS_H = 960, CELL;
+
 function resizeCanvas() {
   if (!el.canvas) return;
   const maxW = el.canvas.clientWidth || window.innerWidth;
   const maxH = el.canvas.clientHeight || window.innerHeight * 0.6;
-  // keep 9:16-ish aspect but fit parent
   const targetW = Math.min(maxW, 720);
   const targetH = Math.min(maxH, Math.floor(targetW * 1.5));
-  el.canvas.width = CANVAS_W = targetW|0;
-  el.canvas.height= CANVAS_H = targetH|0;
-  CELL = Math.floor(Math.min(CANVAS_W/GRID_COLS, CANVAS_H/GRID_ROWS));
+  el.canvas.width = CANVAS_W = targetW | 0;
+  el.canvas.height = CANVAS_H = targetH | 0;
+  CELL = Math.floor(Math.min(CANVAS_W / GRID_COLS, CANVAS_H / GRID_ROWS));
   drawAll();
 }
 
 function drawAll() {
   if (!ctx) return;
-  // background
+
+  ctx.save();
+  
+  // Apply shake
+  if (shakeAmount > 0) {
+    ctx.translate(
+      rand(-shakeAmount, shakeAmount),
+      rand(-shakeAmount, shakeAmount)
+    );
+    shakeAmount *= shakeDecay;
+    if (shakeAmount < 0.1) shakeAmount = 0;
+  }
+
+  // Background
   if (images.bg) {
-    // cover
     const iw = images.bg.width, ih = images.bg.height;
-    const s = Math.max(CANVAS_W/iw, CANVAS_H/ih);
-    const sw = iw*s, sh = ih*s;
-    ctx.drawImage(images.bg, (CANVAS_W-sw)/2, (CANVAS_H-sh)/2, sw, sh);
+    const s = Math.max(CANVAS_W / iw, CANVAS_H / ih);
+    const sw = iw * s, sh = ih * s;
+    ctx.drawImage(images.bg, (CANVAS_W - sw) / 2, (CANVAS_H - sh) / 2, sw, sh);
   } else {
     ctx.fillStyle = "#0F1419";
-    ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+    ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
   }
 
-  // board letterbox
-  const ox = ((CANVAS_W - CELL*GRID_COLS)/2)|0;
-  const oy = ((CANVAS_H - CELL*GRID_ROWS)/2)|0;
+  // Board
+  const ox = ((CANVAS_W - CELL * GRID_COLS) / 2) | 0;
+  const oy = ((CANVAS_H - CELL * GRID_ROWS) / 2) | 0;
 
-  // grid background
   ctx.fillStyle = "rgba(0,0,0,0.25)";
-  ctx.fillRect(ox, oy, CELL*GRID_COLS, CELL*GRID_ROWS);
+  ctx.fillRect(ox, oy, CELL * GRID_COLS, CELL * GRID_ROWS);
 
-  // draw placed gems
-  for (let y=0;y<GRID_ROWS;y++){
-    for (let x=0;x<GRID_COLS;x++){
-      const c = Game.grid.get(x,y);
-      if (c >= 0) drawGem(ox + x*CELL, oy + y*CELL, CELL, c);
+  // Ghost preview
+  if (Game.current && Game.running && !Game.over) {
+    const ghostY = Game.current.getGhostY(Game.grid);
+    if (ghostY !== Game.current.y) {
+      ctx.globalAlpha = 0.2;
+      for (let i = 0; i < 3; i++) {
+        const y = ghostY + i;
+        if (y < 0) continue;
+        drawGem(ox + Game.current.x * CELL, oy + y * CELL, CELL, Game.current.order[i]);
+      }
+      ctx.globalAlpha = 1.0;
     }
   }
 
-  // draw falling column
-  if (Game.current) {
-    for (let i=0;i<3;i++){
+  // Placed gems
+  for (let y = 0; y < GRID_ROWS; y++) {
+    for (let x = 0; x < GRID_COLS; x++) {
+      const c = Game.grid.get(x, y);
+      if (c >= 0) {
+        const key = `${x},${y}`;
+        if (flashCells.has(key)) {
+          // Flash white
+          ctx.save();
+          ctx.globalAlpha = 0.8;
+          ctx.fillStyle = "white";
+          ctx.fillRect(ox + x * CELL, oy + y * CELL, CELL, CELL);
+          ctx.restore();
+        } else {
+          drawGem(ox + x * CELL, oy + y * CELL, CELL, c);
+        }
+      }
+    }
+  }
+
+  // Falling column
+  if (Game.current && Game.running && !Game.over) {
+    for (let i = 0; i < 3; i++) {
       const y = Game.current.y + i;
       if (y < 0) continue;
-      drawGem(ox + Game.current.x*CELL, oy + y*CELL, CELL, Game.current.order[i]);
+      drawGem(ox + Game.current.x * CELL, oy + y * CELL, CELL, Game.current.order[i]);
     }
   }
 
-  // grid overlay lines
+  // Grid lines
   ctx.strokeStyle = "rgba(255,255,255,0.04)";
   ctx.lineWidth = 1;
-  for (let x=0;x<=GRID_COLS;x++){
+  for (let x = 0; x <= GRID_COLS; x++) {
     ctx.beginPath();
-    ctx.moveTo(ox + x*CELL + 0.5, oy + 0.5);
-    ctx.lineTo(ox + x*CELL + 0.5, oy + GRID_ROWS*CELL + 0.5);
+    ctx.moveTo(ox + x * CELL + 0.5, oy + 0.5);
+    ctx.lineTo(ox + x * CELL + 0.5, oy + GRID_ROWS * CELL + 0.5);
     ctx.stroke();
   }
-  for (let y=0;y<=GRID_ROWS;y++){
+  for (let y = 0; y <= GRID_ROWS; y++) {
     ctx.beginPath();
-    ctx.moveTo(ox + 0.5, oy + y*CELL + 0.5);
-    ctx.lineTo(ox + GRID_COLS*CELL + 0.5, oy + y*CELL + 0.5);
+    ctx.moveTo(ox + 0.5, oy + y * CELL + 0.5);
+    ctx.lineTo(ox + GRID_COLS * CELL + 0.5, oy + y * CELL + 0.5);
     ctx.stroke();
+  }
+
+  ctx.restore();
+
+  // Particles (drawn after restore so shake doesn't affect them)
+  for (let i = particles.length - 1; i >= 0; i--) {
+    if (!particles[i].update()) {
+      particles.splice(i, 1);
+    } else {
+      particles[i].draw(ctx);
+    }
+  }
+
+  // Chain display
+  if (chainDisplay.active) {
+    chainDisplay.time += 0.016; // ~60fps
+    const progress = chainDisplay.time / chainDisplay.maxTime;
+    if (progress >= 1) {
+      chainDisplay.active = false;
+    } else {
+      ctx.save();
+      ctx.globalAlpha = 1 - progress;
+      ctx.fillStyle = "#FFD700";
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 3;
+      ctx.font = "bold 32px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const y = CANVAS_H * 0.3 - progress * 30;
+      ctx.strokeText(chainDisplay.text, CANVAS_W / 2, y);
+      ctx.fillText(chainDisplay.text, CANVAS_W / 2, y);
+      ctx.restore();
+    }
   }
 }
 
 function drawGem(px, py, size, colorIndex) {
-  // sprite sheet is 3x3; choose frame via index % 9 to stay in range
   const idx = CELL_SPRITE_MAP[colorIndex % CELL_SPRITE_MAP.length];
   const sx = (idx % 3) * SPRITE_CELL;
   const sy = Math.floor(idx / 3) * SPRITE_CELL;
 
-  // fit with small padding so it looks nice
   const pad = Math.floor(size * 0.08);
-  const w = size - pad*2, h = size - pad*2;
+  const w = size - pad * 2, h = size - pad * 2;
 
   if (images.sprites) {
-    ctx.drawImage(images.sprites, sx, sy, SPRITE_CELL, SPRITE_CELL, px+pad, py+pad, w, h);
+    ctx.drawImage(images.sprites, sx, sy, SPRITE_CELL, SPRITE_CELL, px + pad, py + pad, w, h);
   } else {
-    // fallback: colored squares
-    const palette = ["#3bd06a","#ff5a4e","#7a5cff","#4fc3ff","#ff4747","#3dd4d8","#ffc934","#6adb62","#41a1ff"];
+    const palette = ["#3bd06a", "#ff5a4e", "#7a5cff", "#4fc3ff", "#ff4747", "#3dd4d8", "#ffc934", "#6adb62", "#41a1ff"];
     ctx.fillStyle = palette[colorIndex % palette.length];
-    ctx.fillRect(px+pad, py+pad, w, h);
+    ctx.fillRect(px + pad, py + pad, w, h);
   }
 }
 
@@ -502,7 +693,7 @@ function drawGem(px, py, size, colorIndex) {
 function updateHUD() {
   if (el.score) el.score.textContent = pad(Game.score, SCORE_DIGITS);
   if (el.level) el.level.textContent = String(Game.level);
-  if (el.best)  el.best.textContent  = pad(Math.max(Game.best, storage.best), SCORE_DIGITS);
+  if (el.best) el.best.textContent = pad(Math.max(Game.best, storage.best), SCORE_DIGITS);
 }
 
 /* ========== Main loop ========== */
@@ -519,23 +710,21 @@ function loop(t) {
 async function boot() {
   if (!ctx) return;
 
-  // Load images + audio (do not block UI; show immediately)
   try {
     const [sprites, badges, ui, bg] = await Promise.all([
-      loadImage(ASSETS.images.sprites).catch(()=>null),
-      loadImage(ASSETS.images.badges).catch(()=>null),
-      loadImage(ASSETS.images.ui).catch(()=>null),
-      loadImage(ASSETS.images.bg).catch(()=>null),
+      loadImage(ASSETS.images.sprites).catch(() => null),
+      loadImage(ASSETS.images.badges).catch(() => null),
+      loadImage(ASSETS.images.ui).catch(() => null),
+      loadImage(ASSETS.images.bg).catch(() => null),
     ]);
     images.sprites = sprites;
     images.badges = badges;
     images.ui = ui;
     images.bg = bg;
-  } catch {}
+  } catch { }
 
   await audio.load();
 
-  // sizing + loop
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
   bindInputs();
@@ -544,4 +733,3 @@ async function boot() {
 }
 
 document.addEventListener("DOMContentLoaded", boot);
-```0
