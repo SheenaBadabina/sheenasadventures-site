@@ -6,15 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Authentic Utah adventures. Real rockhounding. Real stories. Follow Sheena into the desert.">
   <link rel="icon" type="image/png" href="/assets/sheenas-adventures-favicon.png">
-  <link rel="preload" as="image" href="/assets/sheenas-adventures-game-gem-stack-thumb.png">
+  <link rel="preload" as="image" href="/assets/sheenas-adventures-banner-summer-sunset-utah.png">
   <link rel="stylesheet" href="/static/styles.css">
   <style>
-    /* Page-specific glue only. Global styles live in /static/styles.css */
+    /* Page glue only. Global CSS remains in /static/styles.css */
     .site-header{display:flex;align-items:center;justify-content:space-between;padding:16px;max-width:960px;margin:0 auto}
     .brand{font-weight:700;text-decoration:none;color:var(--color-text);font-size:1.125rem}
     .hamburger{background:transparent;border:1px solid var(--color-surface);border-radius:10px;padding:.5rem .75rem;color:var(--color-text)}
     .site-nav a{margin-left:12px;text-decoration:none;color:var(--color-text)}
-    .hero{max-width:960px;margin:24px auto;padding:32px;border-radius:12px;background:linear-gradient(180deg,#14202a 0%,#0F1419 100%);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .hero{position:relative;max-width:960px;margin:24px auto;padding:16px;border-radius:12px;background:var(--color-surface);overflow:hidden}
+    .hero .content{position:relative;z-index:2;padding:16px}
+    .hero-banner{position:absolute;inset:0;z-index:1}
+    .hero-banner img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(1.05)}
     .hero h1{margin:0 0 .5rem 0}
     .btn{display:inline-block;margin:.5rem .5rem 0 0;padding:.7rem 1rem;border-radius:10px;background:var(--color-accent);color:#062b26;font-weight:700;text-decoration:none}
     .btn.secondary{background:transparent;border:1px solid var(--color-accent);color:var(--color-text)}
@@ -25,45 +28,51 @@
     .card .pad{padding:16px}
     .text-link{display:inline-block;margin-top:.5rem;color:var(--color-accent)}
     .site-footer{max-width:960px;margin:40px auto;padding:16px;text-align:center;color:var(--color-muted)}
-    .latest .meta{color:var(--color-muted);font-size:.9rem}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .meta{color:var(--color-muted);font-size:.9rem}
   </style>
 
   <!-- Open Graph -->
   <meta property="og:title" content="Sheena’s Adventures — Authentic Utah Adventures">
   <meta property="og:description" content="Real rockhounding, real stories, and a new mini game: Desert Drop — Gem Stack.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="/assets/game-screenshot-placeholder.png">
+  <meta property="og:image" content="/assets/sheenas-adventures-game-gem-stack-screenshot.png">
   <meta property="og:url" content="https://sheenasadventures.com/">
 </head>
 <body>
   <header class="site-header">
     <a href="/" class="brand">Sheena’s Adventures</a>
-    <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('open')">☰</button>
+    <button class="hamburger" aria-label="Menu" aria-expanded="false">☰</button>
     <nav class="site-nav" data-collapsible>
       <a href="/work-with-me.html">Work With Me</a>
       <a href="/adventures.html">Adventures</a>
-      <a href="/blog/">Blog</a>
+      <a href="/blog/" aria-current="page">Blog</a>
       <a href="/about.html">About</a>
       <a href="/contact.html">Contact</a>
     </nav>
   </header>
 
   <main>
-    <!-- HERO -->
-    <section class="hero">
-      <h1>Authentic Utah adventures. Real rockhounding. Real stories.</h1>
-      <p>Field education, filmmaking, and a side-quest mini game — all from the desert.</p>
-      <p>
-        <a class="btn" href="/work-with-me.html">Work With Me</a>
-        <a class="btn secondary" href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">Watch on YouTube</a>
-        <a class="btn" href="/fun/gem-stack.html">Play Gem Stack</a>
-      </p>
+    <!-- HERO with seasonal banner -->
+    <section class="hero" aria-label="Seasonal banner and primary actions">
+      <figure class="hero-banner" aria-hidden="true">
+        <!-- Default src is just a first-visit hint; JS will swap seasonally -->
+        <img id="bannerHero" src="/assets/sheenas-adventures-banner-summer-sunset-utah.png" alt="" />
+      </figure>
+      <div class="content">
+        <h1>Authentic Utah adventures. Real rockhounding. Real stories.</h1>
+        <p>Brand-safe filmmaking from the desert.</p>
+        <p>
+          <a class="btn" href="/work-with-me.html">Sponsor an Adventure</a>
+          <a class="btn secondary" href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">Watch on YouTube</a>
+          <a class="btn" href="/fun/gem-stack.html">Play Gem Stack</a>
+        </p>
+      </div>
     </section>
 
     <!-- FEATURE GRID: Latest Blog + Game CTA -->
     <section class="grid">
-      <!-- Latest Blog (JSON-driven) -->
+      <!-- Latest Blog (smart-scraped) -->
       <article class="card latest" aria-labelledby="latestHeading">
         <h2 id="latestHeading" class="sr-only">Latest Blog</h2>
         <div id="latestBlog">
@@ -75,7 +84,7 @@
 
       <!-- Game CTA -->
       <a class="card" href="/fun/gem-stack.html" aria-label="Play Desert Drop — Gem Stack">
-        <img src="/assets/sheenas-adventures-game-gem-stack-thumb.png" alt="Sheena’s Adventures — Gem Stack, Play Game">
+        <img src="/assets/sheenas-adventures-game-gem-stack-thumb.png" alt="Sheena’s Adventures — Gem Stack promo">
         <div class="pad">
           <h3>Desert Drop — Gem Stack</h3>
           <p>Match gems, stack combos, and keep the desert glowing. Quick, mobile-friendly, and addicting.</p>
@@ -84,26 +93,11 @@
       </a>
     </section>
 
-    <!-- Optional Screenshot / Placeholder -->
+    <!-- Optional Screenshot (placeholder ok) -->
     <section class="card" style="max-width:960px;margin:20px auto;">
-      <img src="/assets/game-screenshot-placeholder.png" alt="Placeholder screenshot of the Gem Stack game">
+      <img src="/assets/sheenas-adventures-game-gem-stack-screenshot.png" alt="Gem Stack gameplay screenshot (placeholder)">
       <div class="pad">
         <p class="meta">We’ll swap in a real screenshot once the first playable build is captured.</p>
-      </div>
-    </section>
-
-    <!-- Newsletter (simple, non-blocking stub; wire backend later) -->
-    <section class="card" style="max-width:960px;margin:20px auto;">
-      <div class="pad">
-        <h2>Join the Newsletter</h2>
-        <p>Field notes, new videos, rockhounding tips — delivered occasionally.</p>
-        <form action="/functions/subscribe" method="post">
-          <label>
-            <span class="sr-only">Email</span>
-            <input type="email" name="email" required placeholder="you@example.com" style="padding:.8rem;border-radius:10px;border:1px solid #1c2530;background:#10161c;color:var(--color-text);width:min(420px,100%)">
-          </label>
-          <button class="btn" type="submit">Subscribe</button>
-        </form>
       </div>
     </section>
   </main>
@@ -115,34 +109,6 @@
     </p>
   </footer>
 
-  <script>
-    // Year in footer
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // Latest Blog (JSON-driven). Uses /assets/posts.json (flat path).
-    (async () => {
-      const el = document.getElementById('latestBlog');
-      try {
-        const res = await fetch('/assets/posts.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const posts = await res.json();
-        const p = posts && posts.length ? posts[0] : null;
-        if (!p) throw new Error('No posts found');
-        el.innerHTML = `
-          <a class="card" href="${p.link}">
-            <img src="${p.image}" alt="${(p.title || 'Latest blog').replace(/"/g,'&quot;')}" loading="lazy">
-            <div class="pad">
-              <h3>${p.title}</h3>
-              <p>${p.description || ''}</p>
-              <p class="meta"><time datetime="${p.date || ''}">${p.date || ''}</time></p>
-              <span class="text-link">Read now →</span>
-            </div>
-          </a>`;
-      } catch (e) {
-        el.innerHTML = `<div class="pad"><p class="meta">Could not load the latest blog.</p></div>`;
-      }
-    })();
-  </script>
   <script src="/static/js/site.js" defer></script>
 </body>
 </html>
