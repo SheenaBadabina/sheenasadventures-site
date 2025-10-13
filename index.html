@@ -1,209 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sheena’s Adventures</title>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="/static/css/style.css" />
-  <script defer src="/static/js/site.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      background-color: #0b0b0b;
-      font-family: 'Inter', sans-serif;
-      color: #eaeaea;
-      overflow-x: hidden;
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1.5rem;
-      z-index: 1000;
-    }
-
-    header img {
-      height: 48px;
-    }
-
-    nav ul {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav a {
-      color: #00d0b0;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #00ffd5;
-    }
-
-    .hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .hero img {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-      animation: slow-pan 30s infinite alternate ease-in-out;
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-      z-index: -1;
-    }
-
-    @keyframes slow-pan {
-      0% { transform: scale(1) translate(0, 0); }
-      100% { transform: scale(1.1) translate(10px, 10px); }
-    }
-
-    .hero h1 {
-      font-size: 2.5rem;
-      color: #fff;
-      text-shadow: 0 0 20px rgba(0,0,0,0.6);
-      margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      color: #d0d0d0;
-    }
-
-    .hero-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .hero-buttons a {
-      display: inline-block;
-      padding: 0.8rem 2rem;
-      border-radius: 6px;
-      font-weight: 600;
-      background: #00d0b0;
-      color: #000;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .hero-buttons a:hover {
-      background: #00ffd5;
-      transform: translateY(-2px);
-    }
-
-    /* Sparkle animation */
-    .sparkle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0;
-      animation: sparkle 6s infinite;
-    }
-
-    @keyframes sparkle {
-      0%, 100% { opacity: 0; transform: translateY(0); }
-      50% { opacity: 1; transform: translateY(-10px); }
-    }
-
-    footer {
-      background: #111;
-      color: #aaa;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      border-top: 1px solid #222;
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 1.8rem; }
-      .hero p { font-size: 1rem; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="/assets/sheenas-adventures-logo.png" alt="Sheena’s Adventures Logo" />
-    <nav>
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/blog/index.html">Blog</a></li>
-        <li><a href="/work-with-me.html">Work With Me</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <img src="/assets/desert-sunset.jpg" alt="Utah Desert Background" />
-    <div class="overlay"></div>
-
-    <div class="hero-content">
-      <h1>Authentic Utah Adventures</h1>
-      <p>Real rockhounding. Real stories. Brand-safe filmmaking from the desert.</p>
-
-      <div class="hero-buttons">
-        <a href="/work-with-me.html">Sponsor an Adventure</a>
-        <a href="https://www.youtube.com/@SheenasAdventures" target="_blank">Watch on YouTube</a>
-        <a href="/fun/gemstack.html">Play Gem Stack</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sheena’s Adventures | Authentic Utah Adventures</title>
+    <meta
+      name="description"
+      content="Real rockhounding. Real stories. Brand-safe filmmaking from the Utah desert."
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script defer src="/static/js/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="/" class="brand">
+          <img
+            src="/assets/logo-sheena.png"
+            alt="Sheena’s Adventures Logo"
+            class="logo"
+          />
+          <span class="brand-text">Sheena’s Adventures</span>
+        </a>
+        <nav class="site-nav">
+          <a href="/index.html">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="/work-with-me.html">Work With Me</a>
+          <a href="/about.html">About</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+        <button id="menuToggle" aria-label="Menu">☰</button>
       </div>
-    </div>
+    </header>
 
-    <!-- Sparkles -->
-    <div class="sparkle" style="top:10%;left:20%;animation-delay:0s"></div>
-    <div class="sparkle" style="top:50%;left:70%;animation-delay:2s"></div>
-    <div class="sparkle" style="top:80%;left:40%;animation-delay:4s"></div>
-  </section>
+    <main>
+      <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>Authentic Utah Adventures</h1>
+          <p>
+            Real rockhounding. Real stories.<br />Brand-safe filmmaking from the
+            desert.
+          </p>
+          <div class="cta-buttons">
+            <a href="/work-with-me.html" class="btn accent">Sponsor an Adventure</a>
+            <a
+              href="https://www.youtube.com/@SheenasAdventures"
+              target="_blank"
+              rel="noopener"
+              class="btn accent-outline"
+              >Watch on YouTube</a
+            >
+            <a href="/game.html" class="btn accent">Play Gem Stack</a>
+          </div>
+        </div>
+      </section>
 
-  <main>
-    <section id="latest-blog" style="padding:3rem 1.5rem;text-align:center;">
-      <h2>From the Blog</h2>
-      <div id="blog-preview">Loading latest blog...</div>
-    </section>
+      <section id="latestBlog" class="blog-preview">
+        <h2>From the Blog</h2>
+        <div id="blogContent" class="blog-content">Loading latest blog...</div>
+      </section>
 
-    <section id="gallery" style="padding:3rem 1.5rem;text-align:center;">
-      <h2>Gallery</h2>
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;">
-        <img src="/assets/sheena-portrait.jpg" alt="Sheena Portrait" style="width:220px;border-radius:12px;" />
-        <img src="/assets/yellowcat-field.jpg" alt="Field Adventure" style="width:220px;border-radius:12px;" />
-        <img src="/assets/aurora-bench.jpg" alt="Aurora Bench" style="width:220px;border-radius:12px;" />
-      </div>
-    </section>
-  </main>
+      <section id="gallery" class="gallery">
+        <h2>Gallery</h2>
+        <div class="gallery-grid">
+          <figure>
+            <img src="/assets/sheena-portrait.png" alt="Sheena Portrait" />
+            <figcaption>Sheena Portrait</figcaption>
+          </figure>
+          <figure>
+            <img src="/assets/field-adventure.png" alt="Field Adventure" />
+            <figcaption>Field Adventure</figcaption>
+          </figure>
+          <figure>
+            <img src="/assets/aurora-bench.png" alt="Aurora Bench" />
+            <figcaption>Aurora Bench</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
 
-  <footer>
-    <p>&copy; 2025 Sheena’s Adventures | All Rights Reserved</p>
-  </footer>
-</body>
+    <footer class="site-footer">
+      <p>© 2025 Sheena’s Adventures | All Rights Reserved</p>
+    </footer>
+
+    <script>
+      // Sticky header scroll effect
+      const header = document.querySelector(".site-header");
+      window.addEventListener("scroll", () => {
+        header.classList.toggle("scrolled", window.scrollY > 20);
+      });
+
+      // Mobile nav toggle
+      document
+        .getElementById("menuToggle")
+        .addEventListener("click", () => header.classList.toggle("open"));
+
+      // Fetch latest blog (HTML-first system)
+      async function loadLatestBlog() {
+        try {
+          const res = await fetch("/blog/index.html");
+          const html = await res.text();
+          const temp = document.createElement("div");
+          temp.innerHTML = html;
+          const firstCard = temp.querySelector(".story-card");
+          const blogContainer = document.getElementById("blogContent");
+          blogContainer.innerHTML = firstCard
+            ? firstCard.outerHTML
+            : "<p>No blogs found.</p>";
+        } catch (err) {
+          document.getElementById("blogContent").textContent =
+            "Failed to load blog.";
+        }
+      }
+      loadLatestBlog();
+    </script>
+  </body>
 </html>
