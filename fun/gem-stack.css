@@ -1,13 +1,8 @@
 /* ==========================================================================
-   Sheena’s Adventures — Desert Drop: Gem Stack
-   File: /fun/gem-stack.css
-   Purpose: Mobile-first layout, controls, HUD, and polish for the game page
-   Notes:
-   - Colors inherit from /static/styles.css tokens where available.
-   - Works standalone if tokens are missing by defining safe fallbacks below.
+   Desert Drop — Gem Stack | Polished Production CSS
    ========================================================================== */
 
-/* --- Color tokens (fallbacks; your global styles may already define these) --- */
+/* --- Color tokens --- */
 :root {
   --color-accent: #00BFA5;
   --color-bg: #0B0F12;
@@ -17,7 +12,7 @@
   --ring: var(--color-accent);
 }
 
-/* --- Base reset for the game area --- */
+/* --- Base --- */
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -31,11 +26,10 @@ body {
   padding: 16px;
 }
 
-/* --- Header strip on the game page --- */
+/* --- Header --- */
 .game-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
   margin-block: 8px 12px;
 }
@@ -45,10 +39,11 @@ body {
   letter-spacing: 0.2px;
   font-size: clamp(1.125rem, 2.6vw, 1.5rem);
   color: var(--color-text);
+  margin: 0;
 }
 
-/* --- Toolbar buttons (Play / How / Mute) --- */
-.toolbar {
+/* --- Buttons --- */
+.controls.primary {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -58,7 +53,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px; /* mobile tap target */
+  min-height: 48px;
   padding: 0.65rem 0.9rem;
   border-radius: 12px;
   border: 1px solid #22303a;
@@ -76,7 +71,7 @@ body {
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: translateY(1px) scale(0.98);
 }
 
 .btn:focus-visible {
@@ -84,11 +79,21 @@ body {
   outline-offset: 2px;
 }
 
-/* --- Canvas shell keeps a stable 16:9 area; canvas scales to fit --- */
+.btn.secondary {
+  background: #0d1218;
+  border-color: #1a252f;
+}
+
+/* --- Canvas --- */
+.game-stage {
+  margin-top: 16px;
+}
+
 .canvas-shell {
   position: relative;
-  aspect-ratio: 16 / 9;
   width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
   background: linear-gradient(180deg, #121821 0%, #0B0F12 100%);
   border-radius: 12px;
   overflow: hidden;
@@ -101,19 +106,7 @@ body {
   display: block;
 }
 
-/* Optional splash overlay (shown/hidden by JS) */
-#splash {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(15,20,25,0.9), rgba(11,15,18,0.9));
-  color: var(--color-text);
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-/* --- HUD (Score / Level / Best) --- */
+/* --- HUD --- */
 .hud {
   display: flex;
   justify-content: space-between;
@@ -132,30 +125,64 @@ body {
   letter-spacing: 0.2px;
   min-width: 120px;
   text-align: center;
+  font-size: 0.9rem;
 }
 
-/* --- On-screen mobile controls --- */
-.controls {
+/* --- On-screen controls --- */
+.controls.on-screen {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 12px;
-}
-
-.controls .btn {
-  min-height: 56px; /* slightly larger for sustained play */
-  font-size: 1.05rem;
-}
-
-/* Icon-only variant (if/when you swap text glyphs for background icons) */
-.btn.icon {
-  padding: 0;
-  min-width: 56px;
-}
-
-/* --- How-to section --- */
-#how {
   margin-top: 16px;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.ctrl {
+  min-height: 56px;
+  min-width: 56px;
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid #22303a;
+  background: #121821;
+  color: var(--color-text);
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease, background 160ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.ctrl:hover {
+  background: #151d27;
+  border-color: #2a3a46;
+}
+
+.ctrl:active {
+  transform: translateY(2px) scale(0.96);
+  background: #0d1218;
+}
+
+.ctrl:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Position drop buttons centered on second row */
+.ctrl:nth-child(4) {
+  grid-column: 1 / 2;
+}
+
+.ctrl:nth-child(5) {
+  grid-column: 3 / 4;
+}
+
+/* --- How to play --- */
+.howto {
+  margin-top: 20px;
   background: var(--color-surface);
   border: 1px solid #22303a;
   border-radius: 12px;
@@ -163,33 +190,78 @@ body {
   color: var(--color-text);
 }
 
-#how h2 {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  font-size: 1.1rem;
-  letter-spacing: 0.2px;
+.howto summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 4px 0;
+  user-select: none;
 }
 
-/* --- Accessibility helpers --- */
-.visually-hidden {
-  position: absolute !important;
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 0;
-  border: 0;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  white-space: nowrap;
+.howto summary:hover {
+  color: var(--color-accent);
 }
 
-/* --- Reduced motion: tone down transitions for sensitive users --- */
+.howto-body {
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+.howto-body ul {
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+.howto-body li {
+  margin-bottom: 6px;
+}
+
+/* --- Accessibility --- */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .btn { transition: none; }
-  .canvas-shell { scroll-behavior: auto; }
+  .btn,
+  .ctrl {
+    transition: none;
+  }
 }
 
-/* --- High-contrast mode hook (toggle via body[data-contrast="high"]) --- */
-body[data-contrast="high"] .btn {
+/* --- Desktop optimizations --- */
+@media (min-width: 720px) {
+  .game-wrap {
+    padding: 20px;
+  }
+
+  .game-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .game-title {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  .hud .pill {
+    min-width: 140px;
+    font-size: 1rem;
+  }
+
+  /* Hide touch controls on desktop - use keyboard instead */
+  .controls.on-screen {
+    display: none;
+  }
+
+  .canvas-shell {
+    max-width: 600px;
+  }
+}
+
+/* --- High contrast mode --- */
+body[data-contrast="high"] .btn,
+body[data-contrast="high"] .ctrl {
   border-color: #3a4b58;
   background: #0d1218;
 }
@@ -197,19 +269,3 @@ body[data-contrast="high"] .btn {
 body[data-contrast="high"] .hud .pill {
   border-color: #3a4b58;
 }
-
-/* --- Larger screens: scale spacing and controls --- */
-@media (min-width: 720px) {
-  .game-wrap { padding: 20px; }
-  .game-title { font-size: clamp(1.25rem, 2vw, 1.75rem); }
-  .controls .btn { min-height: 60px; font-size: 1.1rem; }
-  .hud .pill { min-width: 140px; }
-}
-
-/* --- Utility: tint helpers if you apply color to icon buttons via classes --- */
-.tint-accent { filter: drop-shadow(0 0 0.25rem rgba(0,191,165,0.45)); }
-.tint-warm   { filter: drop-shadow(0 0 0.25rem rgba(255,111,0,0.35)); }
-.tint-cool   { filter: drop-shadow(0 0 0.25rem rgba(0,150,255,0.35)); }
-
-/* --- Optional: subtle focus ring for keyboard users only --- */
-:focus:not(:focus-visible) { outline: none; }
