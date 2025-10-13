@@ -665,14 +665,14 @@ section {
 }
 
 .blog-read-btn {
-  background: var(--color-accent);
-  color: #0B0F12;
-  text-decoration: none;
+  background: var(--color-accent) !important;
+  color: #0B0F12 !important;
+  text-decoration: none !important;
   font-weight: 700;
   font-size: 0.95rem;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
@@ -681,9 +681,10 @@ section {
 }
 
 .blog-read-btn:hover {
-  background: var(--color-accent-hover);
+  background: var(--color-accent-hover) !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,191,165,0.35);
+  color: #0B0F12 !important;
 }
 
 .blog-card-link {
@@ -720,4 +721,4 @@ section {
 /* Ensure footer stays at bottom */
 .page-blog .site-footer {
   margin-top: auto;
-     }
+   }
