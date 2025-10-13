@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Blog — Sheena’s Adventures</title>
-    <meta name="description" content="Titles-only index of Sheena’s Adventures blog posts." />
+    <title>Blog — Sheena's Adventures</title>
+    <meta name="description" content="Titles-only index of Sheena's Adventures blog posts." />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/sheenas-adventures-favicon-logo.png" />
@@ -18,45 +18,80 @@
     <script src="/static/js/site.js" defer></script>
   </head>
 
-  <!-- Note: banner/background is handled by your CSS (no inline styles here). -->
   <body class="page-blog">
-    <!-- Header: logo top-right, links to home -->
-    <header class="site-header" aria-label="Site header">
-      <a class="site-logo" href="/" aria-label="Sheena’s Adventures — Home">
-        <img
-          src="/assets/logosheenas-adventures-logo-bubble-braids.png"
-          alt="Sheena’s Adventures"
-          decoding="async"
-          fetchpriority="high"
-        />
-      </a>
+    <!-- Header: logo and navigation -->
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="/" class="brand">
+          <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena's Adventures logo" height="48" width="48" />
+        </a>
+        <button class="hamburger" aria-label="Menu">☰</button>
+        <nav class="site-nav" data-collapsible>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="/work-with-me.html">Work With Me</a>
+          <a href="/about.html">About</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </div>
     </header>
 
-    <main id="content" class="site-main" tabindex="-1">
-      <h1 class="page-title">Blog</h1>
+    <main id="content" class="site-main blog-main">
+      <div class="blog-header">
+        <h1 class="page-title">Blog</h1>
+        <p class="blog-subtitle">Stories from the Utah desert, rockhounding adventures, and field guides</p>
+      </div>
 
-      <!-- Titles-only list (newest/featured first). 
-           Your global JS reads the FIRST item here when building the site-wide “Latest Blog” teaser. -->
-      <nav class="blog-index" aria-label="Blog posts">
-        <ul class="blog-list">
-          <li class="blog-item">
-            <a class="blog-link" href="/blog/pigeon-blood-agate.html">Pigeon Blood Agate</a>
-          </li>
-          <li class="blog-item">
-            <a class="blog-link" href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Opalized Wood — Yellow Cat Road</a>
-          </li>
-          <li class="blog-item">
-            <a class="blog-link" href="/blog/utah-desert-field-guide.html">Utah Desert Field Guide</a>
-          </li>
-          <li class="blog-item">
-            <a class="blog-link" href="/blog/meet-the-desert-dreamer.html">Meet the Desert Dreamer</a>
-          </li>
-        </ul>
-      </nav>
+      <!-- Blog posts grid -->
+      <div class="blog-grid">
+        <article class="blog-card">
+          <a href="/blog/pigeon-blood-agate.html" class="blog-card-link">
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Pigeon Blood Agate</h2>
+              <p class="blog-card-meta">Latest Post</p>
+            </div>
+            <span class="blog-card-arrow">→</span>
+          </a>
+        </article>
+
+        <article class="blog-card">
+          <a href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html" class="blog-card-link">
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Opalized Wood — Yellow Cat Road</h2>
+              <p class="blog-card-meta">Recent</p>
+            </div>
+            <span class="blog-card-arrow">→</span>
+          </a>
+        </article>
+
+        <article class="blog-card">
+          <a href="/blog/utah-desert-field-guide.html" class="blog-card-link">
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Utah Desert Field Guide</h2>
+              <p class="blog-card-meta">Guide</p>
+            </div>
+            <span class="blog-card-arrow">→</span>
+          </a>
+        </article>
+
+        <article class="blog-card">
+          <a href="/blog/meet-the-desert-dreamer.html" class="blog-card-link">
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Meet the Desert Dreamer</h2>
+              <p class="blog-card-meta">About</p>
+            </div>
+            <span class="blog-card-arrow">→</span>
+          </a>
+        </article>
+      </div>
     </main>
 
-    <footer class="site-footer" aria-label="Site footer">
-      <small>&copy; <span data-js="year">2025</span> Sheena’s Adventures</small>
+    <footer class="site-footer">
+      <p>
+        © <span id="y">2025</span> Sheena's Adventures •
+        <a href="/terms.html">Terms of Use</a> •
+        <a href="/privacy.html">Privacy Policy</a>
+      </p>
     </footer>
   </body>
 </html>
