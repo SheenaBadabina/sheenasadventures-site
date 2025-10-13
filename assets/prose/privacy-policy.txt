@@ -1,0 +1,106 @@
+# Privacy Policy
+
+**Last Updated: October 12, 2025**
+
+Welcome to Sheena's Adventures. Your privacy matters, and this policy explains how we handle information when you visit our website at https://sheenasadventures.com.
+
+## The Short Version
+
+We collect minimal information — mainly what you choose to share through our contact and sponsorship forms. We don't sell your data, we don't track you across the internet, and we're committed to keeping things simple and transparent.
+
+## Information We Collect
+
+### Information You Provide
+
+When you reach out through our contact form or sponsorship inquiry form, you voluntarily provide information such as:
+
+- Your name
+- Email address
+- Message content
+- Any additional details you choose to include
+
+This information is sent to us via email using Resend and Cloudflare Workers. We use it solely to respond to your inquiry and maintain a record of our correspondence.
+
+### Automatically Collected Information
+
+Like most websites, we collect basic technical information when you visit:
+
+- Your IP address
+- Browser type and version
+- Device information
+- Pages you visit and time spent on the site
+- Referring website (where you came from)
+
+We may use **Google Analytics** to understand how visitors use our site. This helps us improve content and user experience. Google Analytics uses cookies to collect anonymous usage data.
+
+We may also use **Cloudflare Turnstile**, a privacy-friendly tool that helps prevent spam and abuse on our forms. Turnstile operates without tracking you across websites.
+
+### Cookies and Tracking Technologies
+
+We use minimal cookies for essential site functionality and analytics. You can disable cookies in your browser settings, though this may affect certain features.
+
+We do not use advertising cookies or track you across other websites.
+
+## How We Use Your Information
+
+We use the information we collect to:
+
+- Respond to your messages and inquiries
+- Process sponsorship requests
+- Improve website content and functionality
+- Understand visitor interests and site performance
+- Prevent spam and abuse
+- Maintain basic security
+
+We never sell, rent, or share your personal information with third parties for marketing purposes.
+
+## Third-Party Services
+
+We work with trusted service providers to operate this website:
+
+- **Resend**: Email delivery service for contact form submissions
+- **Cloudflare**: Content delivery, security, and Workers infrastructure
+- **Google Analytics**: Website traffic and usage analysis (if enabled)
+
+These services may collect and process data according to their own privacy policies. We choose partners that respect user privacy.
+
+## External Links
+
+Our website may contain links to other sites — photography resources, geology references, Utah tourism pages, and more. We're not responsible for the privacy practices of these external sites. When you click away from Sheena's Adventures, their policies apply.
+
+## Data Security
+
+We take reasonable precautions to protect your information using industry-standard security measures. However, no internet transmission is completely secure, and we cannot guarantee absolute security.
+
+## Your Rights
+
+You have the right to:
+
+- Request information about what data we hold about you
+- Ask us to delete your information
+- Opt out of analytics tracking (via browser settings)
+- Stop receiving communications from us at any time
+
+To exercise these rights, email us at the contact address on our website.
+
+## Children's Privacy
+
+Sheena's Adventures is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us with information, please contact us so we can delete it.
+
+## Changes to This Policy
+
+We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We'll post the updated version on this page with a new "Last Updated" date.
+
+Significant changes will be noted prominently on the site.
+
+## Future Features
+
+As Sheena's Adventures grows, we may add features like a newsletter signup, online store, or community forums. If we do, we'll update this policy and clearly explain what information these features collect.
+
+## Contact Us
+
+Questions about this Privacy Policy or how we handle your information? Reach out through the contact form on our website, and we'll get back to you.
+
+---
+
+This policy is written in plain language because we believe transparency shouldn't require a law degree. Thanks for trusting Sheena's Adventures with your information.
