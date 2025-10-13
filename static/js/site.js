@@ -97,18 +97,39 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 
       const html = await res.text();
       
-      // Try to match the NEW blog card structure
-      let match = html.match(/<article[^>]*class=["'][^"']*blog-card[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>[\s\S]*?<\/article>/i);
+      // Match the FIRST blog card in the NEW structure
+      const match = html.match(/<article[^>]*class=["'][^"']*blog-card[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*class=["']blog-read-btn["'][^>]*>[\s\S]*?<\/article>/i);
       
-      // Fallback: try old structure if new one doesn't exist
       if (!match) {
-        match = html.match(/<li[^>]*class=["'][^"']*blog-item[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>[\s\S]*?<\/li>/i);
+        // Fallback: try to find just the href and title from blog-card structure
+        const cardMatch = html.match(/<article[^>]*class=["'][^"']*blog-card[^"']*["'][^>]*>([\s\S]*?)<\/article>/i);
+        if (cardMatch) {
+          const cardContent = cardMatch[1];
+          const titleMatch = cardContent.match(/<h2[^>]*class=["'][^"']*blog-card-title[^"']*["'][^>]*>([\s\S]*?)<\/h2>/i);
+          const linkMatch = cardContent.match(/<a[^>]+href=["']([^"']+)["']/i);
+          
+          if (titleMatch && linkMatch) {
+            const title = titleMatch[1].trim();
+            const url = linkMatch[1];
+            
+            mount.innerHTML = `
+              <a href="${url}" class="story-card" style="text-decoration: none; color: inherit; display: block;">
+                <h3 style="margin: 1.5rem 1.5rem 0.75rem; font-size: 1.4rem; font-weight: 700; color: var(--color-text);">${title}</h3>
+                <p style="margin: 0 1.5rem 1rem; color: var(--color-muted);">Latest blog post</p>
+                <span class="text-link" style="margin: 0 1.5rem 1.5rem; display: inline-block;">Read More →</span>
+              </a>
+            `;
+            return;
+          }
+        }
+        throw new Error('No blog post found');
       }
       
-      if (!match) throw new Error('No blog post found');
-      
       const url = match[1];
-      const title = match[2].replace(/<[^>]*>/g, '').trim();
+      
+      // Extract title from the matched content
+      const titleMatch = match[0].match(/<h2[^>]*class=["'][^"']*blog-card-title[^"']*["'][^>]*>([\s\S]*?)<\/h2>/i);
+      const title = titleMatch ? titleMatch[1].trim() : 'Latest Post';
       
       // Create a nice card display
       mount.innerHTML = `
