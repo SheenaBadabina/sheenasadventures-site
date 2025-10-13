@@ -9,17 +9,18 @@
   <link rel="preload" as="image" href="/assets/sheenas-adventures-banner-summer-sunset-utah.png">
   <link rel="stylesheet" href="/static/styles.css">
   <style>
-    /* Page glue only. Global CSS remains in /static/styles.css */
+    /* Page glue only; globals remain in /static/styles.css */
     .site-header{display:flex;align-items:center;justify-content:space-between;padding:16px;max-width:960px;margin:0 auto}
     .brand{font-weight:700;text-decoration:none;color:var(--color-text);font-size:1.125rem}
     .hamburger{background:transparent;border:1px solid var(--color-surface);border-radius:10px;padding:.5rem .75rem;color:var(--color-text)}
     .site-nav a{margin-left:12px;text-decoration:none;color:var(--color-text)}
     .hero{position:relative;max-width:960px;margin:24px auto;padding:16px;border-radius:12px;background:var(--color-surface);overflow:hidden}
-    .hero .content{position:relative;z-index:2;padding:16px}
+    .hero .content{position:relative;z-index:3;padding:16px}
     .hero-banner{position:absolute;inset:0;z-index:1}
     .hero-banner img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(1.05)}
+    .fx-canvas{position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:screen;opacity:.75}
     .hero h1{margin:0 0 .5rem 0}
-    .btn{display:inline-block;margin:.5rem .5rem 0 0;padding:.7rem 1rem;border-radius:10px;background:var(--color-accent);color:#062b26;font-weight:700;text-decoration:none}
+    .btn{display:inline-block;margin:.5rem .5rem 0 0;padding:.7rem 1rem;border-radius:10px;background:var(--color-accent);color:#062b26;font-weight:700;text-decoration:none;position:relative;overflow:hidden}
     .btn.secondary{background:transparent;border:1px solid var(--color-accent);color:var(--color-text)}
     .grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:960px;margin:24px auto}
     @media (min-width:720px){.grid{grid-template-columns:1fr 1fr}}
@@ -53,13 +54,13 @@
   </header>
 
   <main>
-    <!-- HERO with seasonal banner -->
+    <!-- HERO with seasonal banner + dust particles -->
     <section class="hero" aria-label="Seasonal banner and primary actions">
       <figure class="hero-banner" aria-hidden="true">
-        <!-- Default src is just a first-visit hint; JS will swap seasonally -->
         <img id="bannerHero" src="/assets/sheenas-adventures-banner-summer-sunset-utah.png" alt="" />
       </figure>
-      <div class="content">
+      <canvas id="sandParticles" class="fx-canvas" aria-hidden="true"></canvas>
+      <div class="content reveal">
         <h1>Authentic Utah adventures. Real rockhounding. Real stories.</h1>
         <p>Brand-safe filmmaking from the desert.</p>
         <p>
@@ -73,7 +74,7 @@
     <!-- FEATURE GRID: Latest Blog + Game CTA -->
     <section class="grid">
       <!-- Latest Blog (smart-scraped) -->
-      <article class="card latest" aria-labelledby="latestHeading">
+      <article class="card latest reveal" aria-labelledby="latestHeading">
         <h2 id="latestHeading" class="sr-only">Latest Blog</h2>
         <div id="latestBlog">
           <div class="pad">
@@ -83,7 +84,7 @@
       </article>
 
       <!-- Game CTA -->
-      <a class="card" href="/fun/gem-stack.html" aria-label="Play Desert Drop — Gem Stack">
+      <a class="card reveal" href="/fun/gem-stack.html" aria-label="Play Desert Drop — Gem Stack">
         <img src="/assets/sheenas-adventures-game-gem-stack-thumb.png" alt="Sheena’s Adventures — Gem Stack promo">
         <div class="pad">
           <h3>Desert Drop — Gem Stack</h3>
@@ -94,7 +95,7 @@
     </section>
 
     <!-- Optional Screenshot (placeholder ok) -->
-    <section class="card" style="max-width:960px;margin:20px auto;">
+    <section class="card reveal" style="max-width:960px;margin:20px auto;">
       <img src="/assets/sheenas-adventures-game-gem-stack-screenshot.png" alt="Gem Stack gameplay screenshot (placeholder)">
       <div class="pad">
         <p class="meta">We’ll swap in a real screenshot once the first playable build is captured.</p>
