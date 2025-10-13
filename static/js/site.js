@@ -1,184 +1,107 @@
-/* /static/js/site.js
-   Global site script for Sheena’s Adventures
-   - Mobile hamburger + focus handling
-   - “Latest Blog” auto-fetch from /blog/index.html (DB&WH smart-latest pattern)
-   - Logo triple-click easter egg → /fun/gem-stack.html
-   - Optional logo shimmer (respect prefers-reduced-motion)
-   - Footer year injection
+/* static/js/site.js
+   Global UI behaviors for sheenasadventures.com
+   - Mobile menu toggle
+   - Smart Latest Blog (scrape first card from /blog/)
+   - Easter egg: triple-click brand -> /fun/gem-stack.html
 */
 
-/* ========== Helpers ========== */
-const $  = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+(function () {
+  // ---------------------------
+  // Helpers
+  // ---------------------------
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-/* ========== Footer Year ========== */
-(function setYear() {
-  const el = $('#y');
-  if (el) el.textContent = new Date().getFullYear();
-})();
-
-/* ========== Hamburger Menu & Focus Mgmt ========== */
-(function mobileNav() {
+  // ---------------------------
+  // Mobile menu toggle
+  // ---------------------------
   const body = document.body;
-  const btn  = $('.hamburger');
-  const nav  = $('.site-nav[data-collapsible]');
-  if (!btn || !nav) return;
+  const hamburger = $('.hamburger');
+  const nav = $('.site-nav');
 
-  const openClass = 'open';
+  if (hamburger && nav) {
+    const toggleMenu = () => {
+      body.classList.toggle('open');
+      const open = body.classList.contains('open');
+      hamburger.setAttribute('aria-expanded', String(open));
+      if (open) nav.querySelector('a')?.focus();
+    };
 
-  const focusableSelectors = [
-    'a[href]', 'button:not([disabled])', 'input:not([disabled])',
-    '[tabindex]:not([tabindex="-1"])', 'select:not([disabled])'
-  ].join(',');
-
-  function openMenu() {
-    body.classList.add(openClass);
-    body.style.overflow = 'hidden';
-    nav.setAttribute('aria-expanded', 'true');
-    const first = $(focusableSelectors, nav);
-    if (first) first.focus({ preventScroll: true });
-  }
-
-  function closeMenu() {
-    body.classList.remove(openClass);
-    body.style.overflow = '';
-    nav.setAttribute('aria-expanded', 'false');
-    btn.focus({ preventScroll: true });
-  }
-
-  function toggleMenu() {
-    if (body.classList.contains(openClass)) closeMenu();
-    else openMenu();
-  }
-
-  btn.addEventListener('click', toggleMenu);
-
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && body.classList.contains(openClass)) {
-      e.preventDefault();
-      closeMenu();
-    }
-  });
-
-  // Basic focus trap when open
-  document.addEventListener('keydown', (e) => {
-    if (!body.classList.contains(openClass) || e.key !== 'Tab') return;
-    const focusables = $$(focusableSelectors, nav);
-    if (!focusables.length) return;
-    const first = focusables[0];
-    const last  = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault(); first.focus();
-    }
-  });
-})();
-
-/* ========== Latest Blog: Smart Fetch from /blog/index.html ========== */
-/*
-  Pattern: fetch /blog/index.html, parse the FIRST <a class="card story-card">…</a>
-  Expected structure (from Style Guide):
-      <a class="card story-card" href="/blog/slug.html">
-        <img src="/assets/images/slug.png" alt="…" loading="lazy">
-        <h3>Title</h3>
-        <p>Teaser</p>
-      </a>
-*/
-(async function renderLatestBlog() {
-  const mount = $('#latestBlog');
-  if (!mount) return;
-  try {
-    const res = await fetch('/blog/index.html', { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const html = await res.text();
-
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const card = doc.querySelector('a.card.story-card');
-    if (!card) throw new Error('No story-card found on /blog/index.html');
-
-    const href = card.getAttribute('href') || '#';
-    const img  = card.querySelector('img');
-    const h3   = card.querySelector('h3');
-    const p    = card.querySelector('p');
-
-    const imgSrc = img?.getAttribute('src') || '/assets/logo-sheena.png';
-    const imgAlt = img?.getAttribute('alt') || (h3?.textContent?.trim() || 'Latest blog');
-    const title  = h3?.textContent?.trim() || 'Latest Blog';
-    const desc   = p?.textContent?.trim() || '';
-
-    mount.innerHTML = `
-      <a class="card story-card" href="${href}">
-        <img src="${imgSrc}" alt="${imgAlt}" loading="lazy">
-        <div class="pad">
-          <h3>${title}</h3>
-          <p>${desc}</p>
-          <span class="text-link">Read now →</span>
-        </div>
-      </a>
-    `;
-  } catch (err) {
-    mount.innerHTML = `<div class="pad"><p class="meta">Could not load the latest blog.</p></div>`;
-  }
-})();
-
-/* ========== Logo Triple-Click Easter Egg ========== */
-(function logoEasterEgg() {
-  const logo = document.querySelector('.brand');
-  if (!logo) return;
-  let clicks = 0;
-  let t;
-
-  function reset() { clicks = 0; clearTimeout(t); }
-
-  logo.addEventListener('click', () => {
-    clicks += 1;
-    clearTimeout(t);
-    if (clicks >= 3) {
-      reset();
-      window.location.href = '/fun/gem-stack.html';
-      return;
-    }
-    t = setTimeout(reset, 700); // triple within 700ms
-  });
-})();
-
-/* ========== Optional: Subtle Logo Shimmer (respects reduced motion) ========== */
-(function logoShimmer() {
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) return;
-  const logo = document.querySelector('.brand');
-  if (!logo) return;
-
-  // Create a lightweight shimmer using a background gradient sweep
-  let shimmering = false;
-  function runShimmer() {
-    if (shimmering) return;
-    shimmering = true;
-    logo.style.position = 'relative';
-    const span = document.createElement('span');
-    span.setAttribute('aria-hidden', 'true');
-    span.style.position = 'absolute';
-    span.style.top = 0;
-    span.style.left = '-150%';
-    span.style.width = '150%';
-    span.style.height = '100%';
-    span.style.pointerEvents = 'none';
-    span.style.background = 'linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.18) 20%, transparent 40%)';
-    span.style.transform = 'skewX(-10deg)';
-    span.style.filter = 'blur(0.5px)';
-    span.style.transition = 'left 900ms ease';
-    logo.appendChild(span);
-    requestAnimationFrame(() => {
-      span.style.left = '100%';
+    hamburger.addEventListener('click', toggleMenu);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && body.classList.contains('open')) {
+        body.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.focus();
+      }
     });
-    setTimeout(() => {
-      span.remove();
-      shimmering = false;
-    }, 1000);
+
+    // Close when clicking a nav link (mobile)
+    $$('.site-nav a').forEach(a =>
+      a.addEventListener('click', () => {
+        if (body.classList.contains('open')) {
+          body.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      })
+    );
   }
 
-  // Fire occasionally (not annoying)
-  setInterval(runShimmer, 15000 + Math.random() * 7000);
+  // ---------------------------
+  // Smart Latest Blog (no JSON)
+  // Reads first .card.story-card from /blog/index.html
+  // and mirrors it into #latestBlog
+  // ---------------------------
+  const latestHost = $('#latestBlog');
+  if (latestHost) {
+    fetch('/blog/index.html', { cache: 'no-store' })
+      .then(r => r.ok ? r.text() : Promise.reject(r.status))
+      .then(html => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const firstCard = doc.querySelector('.card.story-card');
+        if (!firstCard) throw new Error('No blog card found');
+
+        // Clone with its first image eager-loaded
+        const card = firstCard.cloneNode(true);
+        const img = card.querySelector('img');
+        if (img) {
+          img.loading = 'eager';
+          img.decoding = 'async';
+        }
+        latestHost.innerHTML = '';
+        latestHost.appendChild(card);
+      })
+      .catch(() => {
+        latestHost.innerHTML = '<p>Could not load the latest blog.</p>';
+      });
+  }
+
+  // ---------------------------
+  // Easter egg: triple-click brand -> game
+  // - 3 clicks within 600ms on .brand
+  // - Navigates to /fun/gem-stack.html?egg=1
+  // ---------------------------
+  const brand = $('.brand');
+  if (brand) {
+    let clicks = 0;
+    let timer = null;
+
+    const reset = () => { clicks = 0; clearTimeout(timer); timer = null; };
+
+    brand.addEventListener('click', (e) => {
+      clicks += 1;
+
+      if (clicks === 1) {
+        // start window
+        timer = setTimeout(reset, 600);
+      }
+
+      if (clicks === 3) {
+        reset();
+        // Respect regular link behavior if user long-presses or opens in new tab
+        e.preventDefault();
+        window.location.href = '/fun/gem-stack.html?egg=1';
+      }
+    });
+  }
 })();
