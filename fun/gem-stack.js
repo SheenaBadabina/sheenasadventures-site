@@ -1,5 +1,5 @@
 /*  Desert Drop — Gem Stack
-    POLISHED Production Build with Juice Effects
+    PHASE 1: Fullscreen + Pause/Restart
     ----------------------------------------------------- */
 
 /* ========== Asset paths ========== */
@@ -26,6 +26,9 @@ const $ = (sel) => document.querySelector(sel);
 const el = {
   canvas: $("#gameCanvas"),
   play:   $('[data-game="play"]'),
+  pause:  $('[data-game="pause"]'),
+  restart: $('[data-game="restart"]'),
+  fullscreen: $('[data-game="fullscreen"]'),
   mute:   $('[data-audio="mute"]'),
   score:  $('[data-ui="score"]'),
   level:  $('[data-ui="level"]'),
@@ -67,6 +70,57 @@ const storage = {
   get best() { return +(localStorage.getItem("gem:best") || 0); },
   set best(v){ localStorage.setItem("gem:best", String(v)); }
 };
+
+/* ========== Fullscreen Management ========== */
+let isFullscreen = false;
+
+function enterFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen().catch(err => {
+      console.log("Fullscreen error:", err);
+    });
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    enterFullscreen();
+  } else {
+    exitFullscreen();
+  }
+}
+
+// Listen for fullscreen changes
+document.addEventListener('fullscreenchange', () => {
+  isFullscreen = !!document.fullscreenElement;
+  if (el.fullscreen) {
+    el.fullscreen.textContent = isFullscreen ? "⛶ Exit Full" : "⛶ Fullscreen";
+  }
+  resizeCanvas();
+});
+
+document.addEventListener('webkitfullscreenchange', () => {
+  isFullscreen = !!document.webkitFullscreenElement;
+  if (el.fullscreen) {
+    el.fullscreen.textContent = isFullscreen ? "⛶ Exit Full" : "⛶ Fullscreen";
+  }
+  resizeCanvas();
+});
 
 /* ========== Audio ========== */
 class GameAudio {
@@ -151,7 +205,7 @@ class Particle {
   update() {
     this.x += this.vx;
     this.y += this.vy;
-    this.vy += 0.15; // gravity
+    this.vy += 0.15;
     this.life -= this.decay;
     return this.life > 0;
   }
@@ -174,10 +228,10 @@ function spawnParticles(px, py, count = 8) {
   }
 }
 
-/* ========== Flash effect for matching gems ========== */
+/* ========== Flash effect ========== */
 const flashCells = new Set();
 let flashTimer = 0;
-const FLASH_DURATION = 0.1; // seconds
+const FLASH_DURATION = 0.1;
 
 /* ========== Screen shake ========== */
 let shakeAmount = 0;
@@ -281,7 +335,6 @@ class FallingColumn {
       if (y >= 0) grid.set(this.x, y, this.order[i]);
     }
   }
-  // Ghost preview: find where this column will land
   getGhostY(grid) {
     let testY = this.y;
     while (true) {
@@ -304,6 +357,7 @@ class FallingColumn {
 /* ========== Game State ========== */
 const Game = {
   running: false,
+  paused: false,
   over: false,
   grid: new Grid(GRID_COLS, GRID_ROWS),
   current: null,
@@ -315,12 +369,13 @@ const Game = {
   level: 1,
   clearsThisLevel: 0,
   colorsAvail: COLORS,
-  flashingCells: null, // Stores cells to clear after flash
+  flashingCells: null,
   flashTime: 0,
   chainCount: 0,
 
   reset() {
     this.running = true;
+    this.paused = false;
     this.over = false;
     this.grid = new Grid(GRID_COLS, GRID_ROWS);
     this.current = new FallingColumn(this.colorsAvail, this.grid.cols);
@@ -333,23 +388,31 @@ const Game = {
     this.colorsAvail = COLORS;
     this.flashingCells = null;
     this.flashTime = 0;
+    this.chainCount = 0;
     particles.length = 0;
     flashCells.clear();
     flashTimer = 0;
     chainDisplay.active = false;
     shakeAmount = 0;
+    updateButtonVisibility();
     drawAll();
     updateHUD();
   },
 
-  tick(dt) {
+  togglePause() {
     if (!this.running || this.over) return;
+    this.paused = !this.paused;
+    if (el.pause) {
+      el.pause.textContent = this.paused ? "▶️ Resume" : "⏸️ Pause";
+    }
+  },
 
-    // Handle flash timing
+  tick(dt) {
+    if (!this.running || this.over || this.paused) return;
+
     if (this.flashingCells) {
       flashTimer += dt / 1000;
       if (flashTimer >= FLASH_DURATION) {
-        // Clear the flashing cells
         this.flashingCells.forEach(key => {
           const [x, y] = key.split(",").map(Number);
           this.grid.set(x, y, -1);
@@ -357,15 +420,12 @@ const Game = {
         });
         this.grid.collapse();
         
-        // Check for new matches (cascade)
         const nextMatches = this.grid.findMatches();
         if (nextMatches.size > 0) {
-          // Cascade detected - show chain!
           if (!this.chainCount) this.chainCount = 1;
           this.chainCount++;
           showChain(this.chainCount);
           
-          // Set up next flash
           this.flashingCells = nextMatches;
           flashTimer = 0;
           nextMatches.forEach(key => {
@@ -375,15 +435,13 @@ const Game = {
             const oy = ((CANVAS_H - CELL * GRID_ROWS) / 2) | 0;
             spawnParticles(ox + x * CELL + CELL / 2, oy + y * CELL + CELL / 2, 6);
           });
-          // Update score for cascade
           const cleared = nextMatches.size;
           const extra = Math.max(0, cleared - 3);
           this.score += MATCH_BASE + extra * MATCH_EXTRA;
-          this.score += Math.floor(this.score * 0.10); // Chain bonus
+          this.score += Math.floor(this.score * 0.10);
           audio.play(cleared >= 4 ? "line" : "match");
           updateHUD();
         } else {
-          // No more matches, spawn next piece
           this.flashingCells = null;
           this.chainCount = 0;
           flashTimer = 0;
@@ -391,7 +449,7 @@ const Game = {
         }
         return;
       }
-      return; // Don't fall while flashing
+      return;
     }
 
     const stepTime = this.fallDelay * 1000 * (this.softDrop ? FAST_DROP_MULT : 1);
@@ -405,15 +463,12 @@ const Game = {
           return;
         }
         
-        // Check for matches
         const toClear = this.grid.findMatches();
         if (toClear.size > 0) {
-          // Start flash
           this.flashingCells = toClear;
-          this.chainCount = 0; // Reset chain counter
+          this.chainCount = 0;
           flashTimer = 0;
           
-          // Flash effect and particles
           toClear.forEach(key => {
             flashCells.add(key);
             const [x, y] = key.split(",").map(Number);
@@ -431,7 +486,6 @@ const Game = {
           audio.play(cleared >= 4 ? "line" : "match");
           updateHUD();
         } else {
-          // No matches, spawn next piece immediately
           this.current = new FallingColumn(this.colorsAvail, this.grid.cols);
         }
       }
@@ -451,7 +505,7 @@ const Game = {
   gameOver() {
     this.over = true;
     this.running = false;
-    shake(20); // Big shake on game over
+    shake(20);
     audio.play("over");
     audio.stopAll();
     if (this.score > this.best) {
@@ -459,9 +513,17 @@ const Game = {
       storage.best = this.best;
     }
     updateHUD();
+    updateButtonVisibility();
     audio.play("pop");
   }
 };
+
+/* ========== Button Visibility ========== */
+function updateButtonVisibility() {
+  if (el.play) el.play.style.display = Game.running && !Game.over ? "none" : "inline-flex";
+  if (el.pause) el.pause.style.display = Game.running && !Game.over ? "inline-flex" : "none";
+  if (el.restart) el.restart.style.display = Game.running || Game.over ? "inline-flex" : "none";
+}
 
 /* ========== Input ========== */
 function bindInputs() {
@@ -469,33 +531,62 @@ function bindInputs() {
     el.play.addEventListener("click", () => {
       audio.userGestureStart();
       Game.reset();
+      enterFullscreen(); // Auto-fullscreen on play!
     });
   }
+
+  if (el.pause) {
+    el.pause.addEventListener("click", () => {
+      Game.togglePause();
+    });
+  }
+
+  if (el.restart) {
+    el.restart.addEventListener("click", () => {
+      audio.userGestureStart();
+      Game.reset();
+    });
+  }
+
+  if (el.fullscreen) {
+    el.fullscreen.addEventListener("click", toggleFullscreen);
+  }
+
   if (el.mute) {
     el.mute.addEventListener("click", () => {
       const on = audio.toggleMute();
+      el.mute.textContent = on ? "🔇 Mute" : "🔊 Unmute";
       el.mute.setAttribute("aria-pressed", on ? "false" : "true");
     });
   }
+
   el.left  && el.left.addEventListener("click",  () => tryMove(-1));
   el.right && el.right.addEventListener("click", () => tryMove(1));
   el.down  && el.down.addEventListener("mousedown", () => Game.softDrop = true);
   el.down  && el.down.addEventListener("mouseup",   () => Game.softDrop = false);
-  el.down  && el.down.addEventListener("touchstart", () => Game.softDrop = true);
-  el.down  && el.down.addEventListener("touchend",   () => Game.softDrop = false);
+  el.down  && el.down.addEventListener("touchstart", (e) => { e.preventDefault(); Game.softDrop = true; });
+  el.down  && el.down.addEventListener("touchend",   (e) => { e.preventDefault(); Game.softDrop = false; });
   el.rotate&& el.rotate.addEventListener("click", () => tryRotate());
   el.drop  && el.drop.addEventListener("click",   () => hardDrop());
 
   window.addEventListener("keydown", (e) => {
-    if (!Game.running || Game.over) return;
+    if (!Game.running) return;
+    if (Game.over) return;
+    
     switch (e.key) {
-      case "ArrowLeft":  tryMove(-1); break;
-      case "ArrowRight": tryMove(1); break;
-      case "ArrowDown":  Game.softDrop = true; break;
-      case " ":          e.preventDefault(); hardDrop(); break;
-      case "ArrowUp":    tryRotate(); break;
+      case "ArrowLeft":  if (!Game.paused) tryMove(-1); break;
+      case "ArrowRight": if (!Game.paused) tryMove(1); break;
+      case "ArrowDown":  if (!Game.paused) Game.softDrop = true; break;
+      case " ":          if (!Game.paused) { e.preventDefault(); hardDrop(); } break;
+      case "ArrowUp":    if (!Game.paused) tryRotate(); break;
+      case "p":
+      case "P":          Game.togglePause(); break;
+      case "m":
+      case "M":          if (el.mute) el.mute.click(); break;
+      case "Escape":     if (isFullscreen) exitFullscreen(); break;
     }
   });
+  
   window.addEventListener("keyup", (e) => {
     if (e.key === "ArrowDown") Game.softDrop = false;
   });
@@ -513,223 +604,3 @@ function tryRotate() {
   for (let i = 0; i < 3; i++) {
     const y = Game.current.y + i;
     const x = Game.current.x;
-    if (y >= 0 && Game.grid.get(x, y) !== -1) {
-      Game.current.order = test;
-      return;
-    }
-  }
-}
-
-function hardDrop() {
-  if (!Game.current) return;
-  let cells = 0;
-  while (Game.current.canFall(Game.grid)) {
-    Game.current.step();
-    cells++;
-  }
-  if (cells > 0) Game.score += HARD_DROP_BONUS * cells;
-  updateHUD();
-}
-
-/* ========== Rendering ========== */
-let CANVAS_W = 640, CANVAS_H = 960, CELL;
-
-function resizeCanvas() {
-  if (!el.canvas) return;
-  const maxW = el.canvas.clientWidth || window.innerWidth;
-  const maxH = el.canvas.clientHeight || window.innerHeight * 0.6;
-  const targetW = Math.min(maxW, 720);
-  const targetH = Math.min(maxH, Math.floor(targetW * 1.5));
-  el.canvas.width = CANVAS_W = targetW | 0;
-  el.canvas.height = CANVAS_H = targetH | 0;
-  CELL = Math.floor(Math.min(CANVAS_W / GRID_COLS, CANVAS_H / GRID_ROWS));
-  drawAll();
-}
-
-function drawAll() {
-  if (!ctx) return;
-
-  ctx.save();
-  
-  // Apply shake
-  if (shakeAmount > 0) {
-    ctx.translate(
-      rand(-shakeAmount, shakeAmount),
-      rand(-shakeAmount, shakeAmount)
-    );
-    shakeAmount *= shakeDecay;
-    if (shakeAmount < 0.1) shakeAmount = 0;
-  }
-
-  // Background
-  if (images.bg) {
-    const iw = images.bg.width, ih = images.bg.height;
-    const s = Math.max(CANVAS_W / iw, CANVAS_H / ih);
-    const sw = iw * s, sh = ih * s;
-    ctx.drawImage(images.bg, (CANVAS_W - sw) / 2, (CANVAS_H - sh) / 2, sw, sh);
-  } else {
-    ctx.fillStyle = "#0F1419";
-    ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-  }
-
-  // Board
-  const ox = ((CANVAS_W - CELL * GRID_COLS) / 2) | 0;
-  const oy = ((CANVAS_H - CELL * GRID_ROWS) / 2) | 0;
-
-  ctx.fillStyle = "rgba(0,0,0,0.25)";
-  ctx.fillRect(ox, oy, CELL * GRID_COLS, CELL * GRID_ROWS);
-
-  // Ghost preview
-  if (Game.current && Game.running && !Game.over) {
-    const ghostY = Game.current.getGhostY(Game.grid);
-    if (ghostY !== Game.current.y) {
-      ctx.globalAlpha = 0.2;
-      for (let i = 0; i < 3; i++) {
-        const y = ghostY + i;
-        if (y < 0) continue;
-        drawGem(ox + Game.current.x * CELL, oy + y * CELL, CELL, Game.current.order[i]);
-      }
-      ctx.globalAlpha = 1.0;
-    }
-  }
-
-  // Placed gems
-  for (let y = 0; y < GRID_ROWS; y++) {
-    for (let x = 0; x < GRID_COLS; x++) {
-      const c = Game.grid.get(x, y);
-      if (c >= 0) {
-        const key = `${x},${y}`;
-        if (flashCells.has(key)) {
-          // Flash white
-          ctx.save();
-          ctx.globalAlpha = 0.8;
-          ctx.fillStyle = "white";
-          ctx.fillRect(ox + x * CELL, oy + y * CELL, CELL, CELL);
-          ctx.restore();
-        } else {
-          drawGem(ox + x * CELL, oy + y * CELL, CELL, c);
-        }
-      }
-    }
-  }
-
-  // Falling column
-  if (Game.current && Game.running && !Game.over) {
-    for (let i = 0; i < 3; i++) {
-      const y = Game.current.y + i;
-      if (y < 0) continue;
-      drawGem(ox + Game.current.x * CELL, oy + y * CELL, CELL, Game.current.order[i]);
-    }
-  }
-
-  // Grid lines
-  ctx.strokeStyle = "rgba(255,255,255,0.04)";
-  ctx.lineWidth = 1;
-  for (let x = 0; x <= GRID_COLS; x++) {
-    ctx.beginPath();
-    ctx.moveTo(ox + x * CELL + 0.5, oy + 0.5);
-    ctx.lineTo(ox + x * CELL + 0.5, oy + GRID_ROWS * CELL + 0.5);
-    ctx.stroke();
-  }
-  for (let y = 0; y <= GRID_ROWS; y++) {
-    ctx.beginPath();
-    ctx.moveTo(ox + 0.5, oy + y * CELL + 0.5);
-    ctx.lineTo(ox + GRID_COLS * CELL + 0.5, oy + y * CELL + 0.5);
-    ctx.stroke();
-  }
-
-  ctx.restore();
-
-  // Particles (drawn after restore so shake doesn't affect them)
-  for (let i = particles.length - 1; i >= 0; i--) {
-    if (!particles[i].update()) {
-      particles.splice(i, 1);
-    } else {
-      particles[i].draw(ctx);
-    }
-  }
-
-  // Chain display
-  if (chainDisplay.active) {
-    chainDisplay.time += 0.016; // ~60fps
-    const progress = chainDisplay.time / chainDisplay.maxTime;
-    if (progress >= 1) {
-      chainDisplay.active = false;
-    } else {
-      ctx.save();
-      ctx.globalAlpha = 1 - progress;
-      ctx.fillStyle = "#FFD700";
-      ctx.strokeStyle = "#000";
-      ctx.lineWidth = 3;
-      ctx.font = "bold 32px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      const y = CANVAS_H * 0.3 - progress * 30;
-      ctx.strokeText(chainDisplay.text, CANVAS_W / 2, y);
-      ctx.fillText(chainDisplay.text, CANVAS_W / 2, y);
-      ctx.restore();
-    }
-  }
-}
-
-function drawGem(px, py, size, colorIndex) {
-  const idx = CELL_SPRITE_MAP[colorIndex % CELL_SPRITE_MAP.length];
-  const sx = (idx % 3) * SPRITE_CELL;
-  const sy = Math.floor(idx / 3) * SPRITE_CELL;
-
-  const pad = Math.floor(size * 0.08);
-  const w = size - pad * 2, h = size - pad * 2;
-
-  if (images.sprites) {
-    ctx.drawImage(images.sprites, sx, sy, SPRITE_CELL, SPRITE_CELL, px + pad, py + pad, w, h);
-  } else {
-    const palette = ["#3bd06a", "#ff5a4e", "#7a5cff", "#4fc3ff", "#ff4747", "#3dd4d8", "#ffc934", "#6adb62", "#41a1ff"];
-    ctx.fillStyle = palette[colorIndex % palette.length];
-    ctx.fillRect(px + pad, py + pad, w, h);
-  }
-}
-
-/* ========== HUD ========== */
-function updateHUD() {
-  if (el.score) el.score.textContent = pad(Game.score, SCORE_DIGITS);
-  if (el.level) el.level.textContent = String(Game.level);
-  if (el.best) el.best.textContent = pad(Math.max(Game.best, storage.best), SCORE_DIGITS);
-}
-
-/* ========== Main loop ========== */
-let rafId = 0;
-function loop(t) {
-  if (!Game.lastTick) Game.lastTick = t;
-  const dt = t - Game.lastTick;
-  Game.tick(dt);
-  drawAll();
-  rafId = requestAnimationFrame(loop);
-}
-
-/* ========== Boot ========== */
-async function boot() {
-  if (!ctx) return;
-
-  try {
-    const [sprites, badges, ui, bg] = await Promise.all([
-      loadImage(ASSETS.images.sprites).catch(() => null),
-      loadImage(ASSETS.images.badges).catch(() => null),
-      loadImage(ASSETS.images.ui).catch(() => null),
-      loadImage(ASSETS.images.bg).catch(() => null),
-    ]);
-    images.sprites = sprites;
-    images.badges = badges;
-    images.ui = ui;
-    images.bg = bg;
-  } catch { }
-
-  await audio.load();
-
-  resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
-  bindInputs();
-  updateHUD();
-  rafId = requestAnimationFrame(loop);
-}
-
-document.addEventListener("DOMContentLoaded", boot);
