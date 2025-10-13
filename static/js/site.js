@@ -17,7 +17,10 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ========== Footer Year ========== */
-(() => { const y = $('#y'); if (y) y.textContent = new Date().getFullYear(); })();
+(() => { 
+  const y = $('#y'); 
+  if (y) y.textContent = new Date().getFullYear(); 
+})();
 
 /* ========== Hamburger Menu & Focus Mgmt ========== */
 (() => {
@@ -48,7 +51,9 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
   }
 
   btn.addEventListener('click', () => (body.classList.contains(openClass) ? closeMenu() : openMenu()));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && body.classList.contains(openClass)) closeMenu(); });
+  document.addEventListener('keydown', (e) => { 
+    if (e.key === 'Escape' && body.classList.contains(openClass)) closeMenu(); 
+  });
 
   // Focus trap when open
   document.addEventListener('keydown', (e) => {
@@ -56,8 +61,14 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
     const focusables = $$(focusableSelectors, nav);
     if (!focusables.length) return;
     const first = focusables[0], last = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    if (e.shiftKey && document.activeElement === first) { 
+      e.preventDefault(); 
+      last.focus(); 
+    }
+    else if (!e.shiftKey && document.activeElement === last) { 
+      e.preventDefault(); 
+      first.focus(); 
+    }
   });
 })();
 
@@ -121,32 +132,67 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
   const list = (BANNERS[season] || []).map(name => `/assets/${name}`);
   if (!list.length) return;
 
-  list.forEach(src => { const i = new Image(); i.src = src; });
+  // Preload images
+  list.forEach(src => { 
+    const i = new Image(); 
+    i.src = src; 
+  });
 
+  // Inject styles if not already present
   if (!document.getElementById('fxStyles')) {
     const css = document.createElement('style');
     css.id = 'fxStyles';
     css.textContent = `
-      #bannerHero { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 900ms ease; opacity:1; }
-      .fade-out { opacity:0; }
-      .cta-sparkle { position:absolute; pointer-events:none; top:0; left:0; width:8px; height:8px; border-radius:50%; filter:blur(.2px); opacity:0; transition:opacity 300ms ease, transform 900ms ease; }
-      .reveal { opacity:0; transform:translateY(10px); transition:opacity 600ms ease, transform 600ms ease; }
-      .revealed { opacity:1; transform:none; }
+      #bannerHero { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        display: block; 
+        transition: opacity 900ms ease; 
+        opacity: 1; 
+      }
+      .fade-out { opacity: 0; }
+      .cta-sparkle { 
+        position: absolute; 
+        pointer-events: none; 
+        top: 0; 
+        left: 0; 
+        width: 8px; 
+        height: 8px; 
+        border-radius: 50%; 
+        filter: blur(0.2px); 
+        opacity: 0; 
+        transition: opacity 300ms ease, transform 900ms ease; 
+      }
+      .reveal { 
+        opacity: 0; 
+        transform: translateY(10px); 
+        transition: opacity 600ms ease, transform 600ms ease; 
+      }
+      .revealed { 
+        opacity: 1; 
+        transform: none; 
+      }
     `;
     document.head.appendChild(css);
   }
 
   el.src = list[0];
 
+  // Rotate through multiple banners if available
   if (!prefersReduced && list.length > 1) {
     let idx = 0;
     setInterval(() => {
       idx = (idx + 1) % list.length;
       el.classList.add('fade-out');
-      setTimeout(() => { el.src = list[idx]; el.classList.remove('fade-out'); }, 300);
+      setTimeout(() => { 
+        el.src = list[idx]; 
+        el.classList.remove('fade-out'); 
+      }, 300);
     }, 6500);
   }
 
+  // Ken Burns slow zoom effect
   if (!prefersReduced) {
     let t0 = performance.now();
     const amp = 0.03;
@@ -161,7 +207,7 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 
 /* ========== Desert Dust Particles over Hero ========== */
 (() => {
-  const host = $('.hero');
+  const host = $('.hero-banner');
   const canvas = $('#sandParticles');
   if (!host || !canvas) return;
   const ctx = canvas.getContext('2d', { alpha: true });
@@ -191,7 +237,8 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#ffffff';
     parts.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
+      p.x += p.vx; 
+      p.y += p.vy;
       if (p.x > canvas.width) p.x = -2;
       if (p.y > canvas.height) p.y = -2;
       ctx.globalAlpha = p.a;
@@ -229,7 +276,10 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 
   function schedule(el) {
     const delay = 12000 + Math.random() * 8000;
-    setTimeout(() => { sparkle(el); schedule(el); }, delay);
+    setTimeout(() => { 
+      sparkle(el); 
+      schedule(el); 
+    }, delay);
   }
   ctas.forEach(schedule);
 })();
@@ -241,7 +291,12 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
     return;
   }
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+    entries.forEach(e => { 
+      if (e.isIntersecting) { 
+        e.target.classList.add('revealed'); 
+        io.unobserve(e.target); 
+      } 
+    });
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
   $$('.reveal').forEach(el => io.observe(el));
 })();
@@ -251,11 +306,19 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
   const logo = document.querySelector('.brand');
   if (!logo) return;
   let clicks = 0, t;
-  function reset(){ clicks = 0; clearTimeout(t); }
+  function reset(){ 
+    clicks = 0; 
+    clearTimeout(t); 
+  }
   logo.addEventListener('click', (e) => {
     clicks += 1;
     clearTimeout(t);
-    if (clicks >= 3) { reset(); e.preventDefault(); window.location.href = '/fun/gem-stack.html?egg=1'; return; }
+    if (clicks >= 3) { 
+      reset(); 
+      e.preventDefault(); 
+      window.location.href = '/fun/gem-stack.html?egg=1'; 
+      return; 
+    }
     t = setTimeout(reset, 700);
   });
 })();
