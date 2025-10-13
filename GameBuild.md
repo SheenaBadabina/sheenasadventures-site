@@ -63,44 +63,39 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
     /fun/
       ├─ gem-stack.html          ← main page
       ├─ gem-stack.css           ← responsive layout
-      ├─ gem-stack.js            ← audio + event hooks (and later, core gameplay)
+      ├─ gem-stack.js            ← gameplay logic
       └─ GameBuild.md
     /assets/
-      ├─ images/
-      │   └─ game/
-      │        ├─ gem-sprites.png        ← 3×3 grid (gems)
-      │        ├─ ui-overlays.png        ← 3×3 grid (icons)
-      │        └─ level-badges.png       ← 3×3 grid (badges)
-      └─ sounds/
-           ├─ background-loop.mp3
-           ├─ gem-match.mp3
-           ├─ line-clear.mp3
-           ├─ level-up.mp3
-           └─ game-over.mp3
-    /assets/images/
+      ├─ background-loop.mp3
+      ├─ gem-match.mp3
+      ├─ line-clear.mp3
+      ├─ level-up.mp3
+      ├─ game-over.mp3
+      ├─ gem-sprites.png
+      ├─ ui-icons.png
+      ├─ level-badges.png
+      ├─ background-sky-canyon.png
       ├─ sheenas-adventures-game-gem-stack-thumb.png
       └─ sheenas-adventures-game-gem-stack-screenshot.png
 
 ---
 
 ## PAGE LAYOUT WIREFRAME (MOBILE-FIRST)
-```
-+-------------------------------------------------+
-| [Logo] [☰]                                      |
-|-------------------------------------------------|
-|     DESERT DROP — GEM STACK                     |
-|     [Play] [Settings] [How to Play]             |
-|-------------------------------------------------|
-|   [Canvas game area 16:9 ratio]                 |
-|   Falling gem columns animate here              |
-|-------------------------------------------------|
-|   Score: 002350   Level: 3   Best: 008120       |
-|-------------------------------------------------|
-|   [⬅️] [🔄] [➡️] [⬇️] [⏬]   (touch controls)    |
-|-------------------------------------------------|
-|   Pause | Sound | Color Mode | Retry            |
-+-------------------------------------------------+
-```
+    +-------------------------------------------------+
+    | [Logo] [☰]                                      |
+    |-------------------------------------------------|
+    |     DESERT DROP — GEM STACK                     |
+    |     [Play] [Settings] [How to Play]             |
+    |-------------------------------------------------|
+    |   [Canvas game area 16:9 ratio]                 |
+    |   Falling gem columns animate here              |
+    |-------------------------------------------------|
+    |   Score: 002350   Level: 3   Best: 008120       |
+    |-------------------------------------------------|
+    |   [⬅️] [🔄] [➡️] [⬇️] [⏬]   (touch controls)    |
+    |-------------------------------------------------|
+    |   Pause | Sound | Color Mode | Retry            |
+    +-------------------------------------------------+
 
 ---
 
@@ -142,7 +137,7 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 ---
 
 ## AUDIO SYSTEM
-**Files (in `/assets/sounds/`):**
+**Files (in `/assets/`):**
 | Filename | Role | Duration | Loop | Default Volume |
 |-----------|------|----------|------|----------------|
 | background-loop.mp3 | ambient desert rhythm | 30 s | ✅ | 0.3 |
@@ -175,11 +170,11 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 - Indexing convention (row-major): indices **0..8** map left→right, top→bottom.
 
 **File Locations**  
-- `/assets/images/game/gem-sprites.png`  
-- `/assets/images/game/level-badges.png`  
-- `/assets/images/game/ui-overlays.png`
+- `/assets/gem-sprites.png`  
+- `/assets/level-badges.png`  
+- `/assets/ui-icons.png`
 
-### 1) GEM SPRITES — `/assets/images/game/gem-sprites.png`
+### 1) GEM SPRITES — `/assets/gem-sprites.png`
 **Order (index → name):**  
 0: green-triangle  
 1: red-circle  
@@ -194,7 +189,7 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 **Usage notes:**  
 - Single-frame sprites; renderer slices by `(col = index % 3, row = Math.floor(index / 3)) × 256`.
 
-### 2) LEVEL BADGES — `/assets/images/game/level-badges.png`
+### 2) LEVEL BADGES — `/assets/level-badges.png`
 **Order (index → color):**  
 0: teal  
 1: amber  
@@ -209,7 +204,7 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 **Usage notes:**  
 - Display near score panel; current level color is `(level - 1) % 9`.
 
-### 3) UI OVERLAYS (BUTTON ICONS) — `/assets/images/game/ui-overlays.png`
+### 3) UI ICONS (BUTTON ICONS) — `/assets/ui-icons.png`
 **Order (index → icon):**  
 0: play  
 1: pause  
@@ -252,7 +247,7 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 ## UI & LAYOUT
 **gem-stack.html**  
 - Contains a centered `<canvas id="gameCanvas">`.  
-- Overlay buttons using `/assets/images/game/ui-overlays.png`.  
+- Overlay buttons using `/assets/ui-icons.png`.  
 - `data-game="play"` for Play; `data-audio="mute"` for Mute.
 
 **gem-stack.css**  
@@ -265,7 +260,7 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 ## HOMEPAGE INTEGRATION
 - CTA: “Play Desert Drop — Gem Stack” → `/fun/gem-stack.html`  
 - Logo Easter Egg: triple-click logo → open game page.  
-- Open Graph image: `/assets/images/sheenas-adventures-game-gem-stack-screenshot.png`  
+- Open Graph image: `/assets/sheenas-adventures-game-gem-stack-screenshot.png`  
 - SEO title: *Play Desert Drop — Gem Stack | Sheena’s Adventures*  
 - Description: *Match gems, chase combos, and keep the desert glowing.*  
 
@@ -282,7 +277,7 @@ Fast, intuitive, beautiful, and accessible. Designed for casual visitors who may
 ## VALIDATION CHECKLIST
 - [ ] Asset filenames exactly match this spec.  
 - [ ] Sprite sheets exported at **768×768 px** (3×3 grid, 256 px cells).  
-- [ ] MP3s uploaded to `/assets/sounds/` with durations listed above.  
+- [ ] MP3s uploaded to `/assets/` with durations listed above.  
 - [ ] Mobile tap targets ≥ 44–48 px.  
 - [ ] Background loop is seamless (no pop/click).  
 - [ ] Color-blind and high-contrast modes function.
