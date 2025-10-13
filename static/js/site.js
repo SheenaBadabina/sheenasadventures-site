@@ -1,13 +1,13 @@
 /* /static/js/site.js
    Global script for sheenasadventures.com
    - Mobile hamburger + focus handling
-   - Smart "Latest Blog" (scrape first card from /blog/index.html)
-   - Seasonal banner loader (+ optional within-season rotation with crossfade)
-   - Ken Burns banner motion (respects reduced motion)
-   - Desert dust particle overlay on hero (respects reduced motion)
-   - CTA sparkles (subtle, respects reduced motion)
-   - Scroll-reveal for sections/cards (respects reduced motion)
-   - Logo triple-click Easter egg -> /fun/gem-stack.html
+   - Smart "Latest Blog" (lazy fetch of first .story-card)
+   - Seasonal banner loader (+ rotation)
+   - Ken Burns banner motion
+   - Desert dust particles on hero
+   - CTA sparkles
+   - Scroll reveal
+   - Logo triple-click Easter egg
    - Footer year injection
 */
 
@@ -61,40 +61,39 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
   });
 })();
 
-/* ========== Latest Blog: Smart Fetch from /blog/index.html ========== */
-(async () => {
+/* ========== Latest Blog: Lightweight Lazy Fetch ========== */
+(() => {
   const mount = $('#latestBlog');
   if (!mount) return;
-  try {
-    const res = await fetch('/blog/index.html', { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const html = await res.text();
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const card = doc.querySelector('a.card.story-card');
-    if (!card) throw new Error('No story-card found');
 
-    const href = card.getAttribute('href') || '#';
-    const img  = card.querySelector('img');
-    const h3   = card.querySelector('h3');
-    const p    = card.querySelector('p');
+  function renderError() {
+    mount.innerHTML = `<div class="pad"><p class="meta">Could not load the latest blog. <button id="retryBlog" class="btn secondary" style="margin-top:0.5rem;">Retry</button></p></div>`;
+    const retry = $('#retryBlog');
+    if (retry) retry.addEventListener('click', () => {
+      mount.innerHTML = '<p class="meta">Loading latest blog...</p>';
+      requestIdleCallback(loadBlog, { timeout: 1500 });
+    });
+  }
 
-    const imgSrc = img?.getAttribute('src') || '/assets/logo-sheena.png';
-    const imgAlt = img?.getAttribute('alt') || (h3?.textContent?.trim() || 'Latest blog');
-    const title  = h3?.textContent?.trim() || 'Latest Blog';
-    const desc   = p?.textContent?.trim() || '';
+  async function loadBlog() {
+    try {
+      const res = await fetch('/blog/index.html', { cache: 'reload' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    mount.innerHTML = `
-      <a class="card story-card reveal" href="${href}">
-        <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" decoding="async">
-        <div class="pad">
-          <h3>${title}</h3>
-          <p>${desc}</p>
-          <span class="text-link">Read now →</span>
-        </div>
-      </a>
-    `;
-  } catch {
-    mount.innerHTML = `<div class="pad"><p class="meta">Could not load the latest blog.</p></div>`;
+      const html = await res.text();
+      // Extract only first .story-card using RegExp for speed
+      const match = html.match(/<a[^>]+class=["'][^"']*story-card[^"']*["'][\s\S]*?<\/a>/i);
+      if (!match) throw new Error('No story-card found');
+      mount.innerHTML = match[0];
+    } catch {
+      renderError();
+    }
+  }
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadBlog, { timeout: 1500 });
+  } else {
+    window.addEventListener('DOMContentLoaded', () => setTimeout(loadBlog, 400));
   }
 })();
 
@@ -122,51 +121,37 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
   const list = (BANNERS[season] || []).map(name => `/assets/${name}`);
   if (!list.length) return;
 
-  // Preload
   list.forEach(src => { const i = new Image(); i.src = src; });
 
-  // Inject minimal CSS for fades/Ken Burns if not present
   if (!document.getElementById('fxStyles')) {
     const css = document.createElement('style');
     css.id = 'fxStyles';
     css.textContent = `
-      #bannerHero { width:100%; height:100%; object-fit:cover; display:block; }
+      #bannerHero { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 900ms ease; opacity:1; }
       .fade-out { opacity:0; }
-      .kenburns { transform-origin:center; }
+      .cta-sparkle { position:absolute; pointer-events:none; top:0; left:0; width:8px; height:8px; border-radius:50%; filter:blur(.2px); opacity:0; transition:opacity 300ms ease, transform 900ms ease; }
       .reveal { opacity:0; transform:translateY(10px); transition:opacity 600ms ease, transform 600ms ease; }
       .revealed { opacity:1; transform:none; }
-      .cta-sparkle { position:absolute; pointer-events:none; top:0; left:0; width:8px; height:8px; border-radius:50%; filter:blur(.2px); opacity:0; transition:opacity 300ms ease, transform 900ms ease; }
     `;
     document.head.appendChild(css);
   }
 
-  // Set first image
   el.src = list[0];
 
-  // Optional rotation within season
   if (!prefersReduced && list.length > 1) {
     let idx = 0;
-    const intervalMs = 6500;
-    if (!document.getElementById('heroFadeStyles')) {
-      const css = document.createElement('style');
-      css.id = 'heroFadeStyles';
-      css.textContent = `#bannerHero { transition: opacity 900ms ease; opacity: 1; }`;
-      document.head.appendChild(css);
-    }
     setInterval(() => {
       idx = (idx + 1) % list.length;
       el.classList.add('fade-out');
       setTimeout(() => { el.src = list[idx]; el.classList.remove('fade-out'); }, 300);
-    }, intervalMs);
+    }, 6500);
   }
 
-  // Ken Burns motion (very gentle)
   if (!prefersReduced) {
-    // animate using JS rAF to keep it super subtle and smooth
     let t0 = performance.now();
-    const amp = 0.03; // up to +3% scale
+    const amp = 0.03;
     function loop(t) {
-      const s = 1 + (Math.sin((t - t0) / 8000) * amp + amp); // 1.0–1.06
+      const s = 1 + (Math.sin((t - t0) / 8000) * amp + amp);
       el.style.transform = `scale(${s})`;
       requestAnimationFrame(loop);
     }
@@ -183,38 +168,32 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 
   function resize() {
     const rect = host.getBoundingClientRect();
-    canvas.width = Math.floor(rect.width);
-    canvas.height = Math.floor(rect.height);
-    const s = getComputedStyle(canvas);
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
+    canvas.width = rect.width;
+    canvas.height = rect.height;
   }
   resize();
   window.addEventListener('resize', resize, { passive: true });
 
   const PARTICLE_COUNT = prefersReduced ? 0 : 28;
   const parts = [];
-  function spawn() {
-    return {
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    parts.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: Math.random() * 1.3 + 0.4,
       a: Math.random() * 0.25 + 0.1,
       vx: Math.random() * 0.06 + 0.02,
       vy: Math.random() * 0.03 + 0.01
-    };
+    });
   }
-  for (let i = 0; i < PARTICLE_COUNT; i++) parts.push(spawn());
 
   function step() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#ffffff';
     parts.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
+      p.x += p.vx; p.y += p.vy;
       if (p.x > canvas.width) p.x = -2;
       if (p.y > canvas.height) p.y = -2;
-
       ctx.globalAlpha = p.a;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -226,18 +205,17 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
   if (PARTICLE_COUNT > 0) requestAnimationFrame(step);
 })();
 
-/* ========== CTA Sparkles (subtle) ========== */
+/* ========== CTA Sparkles ========== */
 (() => {
   if (prefersReduced) return;
   const ctas = $$('.btn');
   if (!ctas.length) return;
 
   function sparkle(el) {
-    const rect = el.getBoundingClientRect();
     const span = document.createElement('span');
     span.className = 'cta-sparkle';
-    span.style.left = (Math.random() * (el.offsetWidth - 8)) + 'px';
-    span.style.top  = (Math.random() * (el.offsetHeight - 8)) + 'px';
+    span.style.left = Math.random() * (el.offsetWidth - 8) + 'px';
+    span.style.top = Math.random() * (el.offsetHeight - 8) + 'px';
     span.style.background = 'radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0))';
     el.style.position = 'relative';
     el.appendChild(span);
