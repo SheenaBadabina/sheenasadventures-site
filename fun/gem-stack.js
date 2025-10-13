@@ -468,10 +468,23 @@ const Game = {
 
 /* ========== Button Visibility ========== */
 function updateButtonVisibility() {
+  console.log("Game state:", { running: Game.running, over: Game.over, paused: Game.paused });
+  
   // Show/hide buttons based on game state
-  if (el.play) el.play.style.display = (Game.running && !Game.over) ? "none" : "inline-flex";
-  if (el.pause) el.pause.style.display = (Game.running && !Game.over) ? "inline-flex" : "none";
-  if (el.restart) el.restart.style.display = (Game.running || Game.over) ? "inline-flex" : "none";
+  if (el.play) {
+    el.play.style.display = (!Game.running || Game.over) ? "inline-flex" : "none";
+    console.log("Play button:", el.play.style.display);
+  }
+  
+  if (el.pause) {
+    el.pause.style.display = (Game.running && !Game.over) ? "inline-flex" : "none";
+    console.log("Pause button:", el.pause.style.display);
+  }
+  
+  if (el.restart) {
+    el.restart.style.display = (Game.running || Game.over) ? "inline-flex" : "none";
+    console.log("Restart button:", el.restart.style.display);
+  }
   
   // Add/remove playing class to body
   if (Game.running && !Game.over) {
@@ -506,9 +519,13 @@ function bindInputs() {
   if (el.mute) {
     el.mute.addEventListener("click", () => {
       const on = audio.toggleMute();
+      console.log("Mute toggled, audio enabled:", on);
+      // Update button text
       el.mute.textContent = on ? "🔇 Mute" : "🔊 Unmute";
       el.mute.setAttribute("aria-pressed", on ? "false" : "true");
     });
+    // Set initial state
+    el.mute.textContent = audio.enabled ? "🔇 Mute" : "🔊 Unmute";
   }
 
   el.left  && el.left.addEventListener("click",  () => tryMove(-1));
