@@ -20,6 +20,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Hide header/footer when playing */
+body.playing .site-header,
+body.playing .site-footer {
+  display: none;
+}
+
+body.playing .game-wrap {
+  padding: 8px;
+  max-width: 100%;
+}
+
+body.playing .canvas-shell {
+  max-width: 100%;
+  height: 70vh;
+}
+
 .game-wrap {
   max-width: 960px;
   margin-inline: auto;
@@ -268,4 +284,4 @@ body[data-contrast="high"] .ctrl {
 
 body[data-contrast="high"] .hud .pill {
   border-color: #3a4b58;
-   }
+}
