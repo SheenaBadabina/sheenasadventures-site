@@ -92,11 +92,25 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
       if (!res.ok) throw new Error('HTTP ' + res.status);
 
       const html = await res.text();
-      // Extract only first .story-card using RegExp for speed
-      const match = html.match(/<a[^>]+class=["'][^"']*story-card[^"']*["'][\s\S]*?<\/a>/i);
-      if (!match) throw new Error('No story-card found');
-      mount.innerHTML = match[0];
-    } catch {
+      
+      // Extract first blog link from the list
+      const match = html.match(/<li[^>]*class=["'][^"']*blog-item[^"']*["'][^>]*>[\s\S]*?<a[^>]+class=["'][^"']*blog-link[^"']*["'][^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>[\s\S]*?<\/li>/i);
+      
+      if (!match) throw new Error('No blog post found');
+      
+      const url = match[1];
+      const title = match[2].trim();
+      
+      // Create a nice card display
+      mount.innerHTML = `
+        <a href="${url}" class="story-card" style="text-decoration: none; color: inherit; display: block;">
+          <h3 style="margin: 1.5rem 1.5rem 0.75rem; font-size: 1.4rem; font-weight: 700;">${title}</h3>
+          <p style="margin: 0 1.5rem 1rem; color: var(--color-muted);">Latest blog post</p>
+          <span class="text-link" style="margin: 0 1.5rem 1.5rem;">Read More →</span>
+        </a>
+      `;
+    } catch (err) {
+      console.error('Blog fetch error:', err);
       renderError();
     }
   }
