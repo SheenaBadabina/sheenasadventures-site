@@ -1,124 +1,62 @@
+<!-- File: blog/index.html -->
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Blog • Sheena’s Adventures</title>
-  <meta name="description" content="Latest trips, discoveries, and field notes from Sheena’s Adventures across the Utah desert." />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Site-wide stylesheet per StyleGuide.md -->
-  <link rel="stylesheet" href="/assets/site.css" />
+    <title>Blog — Sheena’s Adventures</title>
+    <meta name="description" content="Titles-only index of Sheena’s Adventures blog posts." />
 
-  <!-- Social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Sheena’s Adventures Blog" />
-  <meta property="og:description" content="Pigeon Blood Agate, Opalized Wood at Yellow Cat Road, Utah Desert Field Guide, and more." />
-  <meta property="og:url" content="https://sheenas-adventures.pages.dev/blog/index.html" />
-  <meta name="twitter:card" content="summary_large_image" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/sheenas-adventures-favicon-logo.png" />
 
-  <style>
-    /* Light helpers that defer to site.css tokens */
-    .wrap { max-width: 72ch; margin: 0 auto; padding: 1rem; }
-    .page-title { font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.2; margin: 1rem 0 .25rem; }
-    .meta { color: var(--text-muted, #667085); font-size: .95rem; }
-    .list { display: grid; gap: 1rem; margin: 1.25rem 0 2.5rem; }
-    .card {
-      border: 1px solid var(--border, #e5e7eb);
-      border-radius: 14px;
-      padding: 1rem;
-      background: var(--surface, #fff);
-      box-shadow: 0 1px 2px rgba(0,0,0,.04);
-    }
-    .card h2 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin: 0 0 .35rem; }
-    .card a { text-decoration: none; }
-    .card p { margin: .25rem 0 0; }
-    .pill { display:inline-block; font-size:.8rem; padding:.2rem .5rem; border-radius:999px; background:var(--pill-bg,#f1f5f9); color:var(--pill-fg,#334155); }
-    @media (min-width: 720px) { .list { grid-template-columns: 1fr 1fr; } }
-  </style>
-</head>
-<body>
-  <header class="site-header" role="banner">
-    <nav class="site-nav" aria-label="Main"></nav>
-  </header>
+    <!-- Styles (site-wide) -->
+    <link rel="stylesheet" href="/static/styles.css" />
 
-  <main class="wrap" id="content" role="main">
-    <h1 class="page-title">Sheena’s Adventures Blog</h1>
-    <p class="meta">Newest posts first. Older “relic” posts are preserved for the archive.</p>
+    <!-- Defer global script (latest blog teaser, a11y helpers, footer year, etc.) -->
+    <script src="/static/js/site.js" defer></script>
+  </head>
 
-    <section id="blog-list" class="list" aria-label="Blog posts"></section>
+  <!-- Note: banner/background is handled by your CSS (no inline styles here). -->
+  <body class="page-blog">
+    <!-- Header: logo top-right, links to home -->
+    <header class="site-header" aria-label="Site header">
+      <a class="site-logo" href="/" aria-label="Sheena’s Adventures — Home">
+        <img
+          src="/assets/logosheenas-adventures-logo-bubble-braids.png"
+          alt="Sheena’s Adventures"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </a>
+    </header>
 
-    <hr style="margin:2rem 0;border:none;border-top:1px solid var(--border,#e5e7eb)" />
+    <main id="content" class="site-main" tabindex="-1">
+      <h1 class="page-title">Blog</h1>
 
-    <section aria-label="About">
-      <p class="meta">
-        Some posts load their body from <code>/assets/prose/*.txt</code> to keep the HTML lean and fast.
-      </p>
-    </section>
-  </main>
+      <!-- Titles-only list (newest/featured first). 
+           Your global JS reads the FIRST item here when building the site-wide “Latest Blog” teaser. -->
+      <nav class="blog-index" aria-label="Blog posts">
+        <ul class="blog-list">
+          <li class="blog-item">
+            <a class="blog-link" href="/blog/pigeon-blood-agate.html">Pigeon Blood Agate</a>
+          </li>
+          <li class="blog-item">
+            <a class="blog-link" href="/blog/2025-09-28-opalized-wood-yellow-cat-road.html">Opalized Wood — Yellow Cat Road</a>
+          </li>
+          <li class="blog-item">
+            <a class="blog-link" href="/blog/utah-desert-field-guide.html">Utah Desert Field Guide</a>
+          </li>
+          <li class="blog-item">
+            <a class="blog-link" href="/blog/meet-the-desert-dreamer.html">Meet the Desert Dreamer</a>
+          </li>
+        </ul>
+      </nav>
+    </main>
 
-  <footer class="site-footer" role="contentinfo"></footer>
-
-  <!-- Data: newest -> oldest -->
-  <script id="posts-data" type="application/json">
-  [
-    {
-      "title": "Pigeon Blood Agate and the Breakdown That Broke Me",
-      "href": "/blog/pigeon-blood-agate.html",
-      "date": "2025-10-12",
-      "tag": "New",
-      "summary": "Hunting vivid red, betroidal agate near Moab; the truck dies, a desert rescue on a flatbed through a dry wash, pottery sherds in the dust, and the first outing with a new 4K camera + gimbal."
-    },
-    {
-      "title": "Opalized Wood on Yellow Cat Road",
-      "href": "/blog/2025-09-28-opalized-wood-yellow-cat-road.html",
-      "date": "2025-09-28",
-      "summary": "A return to Yellow Cat Road: purple agates, opalized wood, wide skies, and a brush with an old uranium claim site."
-    },
-    {
-      "title": "Utah Desert Field Guide",
-      "href": "/blog/utah-desert-field-guide.html",
-      "date": "2025-09-01",
-      "summary": "A living reference for plants, rocks, weather, navigation, and safety—built from miles of boots-on-sand experience."
-    },
-    {
-      "title": "Meet the Desert Dreamer",
-      "href": "/blog/meet-the-desert-dreamer.html",
-      "date": "2025-08-15",
-      "summary": "Origin story vibes: why I chase color locked in stone and storms brewing on the horizon."
-    }
-  ]
-  </script>
-
-  <script>
-    (function renderIndex() {
-      const mount = document.getElementById('blog-list');
-      const dataEl = document.getElementById('posts-data');
-      let posts = [];
-      try { posts = JSON.parse(dataEl.textContent.trim()); } catch (_) { posts = []; }
-
-      mount.innerHTML = posts.map(p => `
-        <article class="card" itemscope itemtype="https://schema.org/BlogPosting">
-          <header>
-            <h2 itemprop="headline">
-              <a href="${p.href}" itemprop="url">${escapeHtml(p.title)}</a>
-            </h2>
-            <p class="meta">
-              <time datetime="${p.date}" itemprop="datePublished">${formatDate(p.date)}</time>
-              ${p.tag ? ` <span class="pill" aria-label="Post tag">${escapeHtml(p.tag)}</span>` : ``}
-            </p>
-          </header>
-          ${p.summary ? `<p itemprop="description">${escapeHtml(p.summary)}</p>` : ``}
-        </article>
-      `).join('');
-
-      function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-      function formatDate(iso){
-        if(!iso) return '';
-        const d = new Date(iso);
-        const opts = { year:'numeric', month:'long', day:'numeric' };
-        return isNaN(d) ? iso : d.toLocaleDateString(undefined, opts);
-      }
-    })();
-  </script>
-</body>
+    <footer class="site-footer" aria-label="Site footer">
+      <small>&copy; <span data-js="year">2025</span> Sheena’s Adventures</small>
+    </footer>
+  </body>
 </html>
