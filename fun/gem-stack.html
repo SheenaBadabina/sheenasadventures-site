@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Desert Drop — Gem Stack | Sheena’s Adventures</title>
+  <title>Desert Drop — Gem Stack | Sheena's Adventures</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Match gems, chase combos, and keep the desert glowing. A mobile-first browser game from Sheena’s Adventures.">
+  <meta name="description" content="Match gems, chase combos, and keep the desert glowing. A mobile-first browser game from Sheena's Adventures.">
 
   <!-- Open Graph / Social -->
   <meta property="og:title" content="Desert Drop — Gem Stack">
@@ -15,7 +15,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#00BFA5">
 
-  <!-- Preload key game assets (flat /assets) -->
+  <!-- Preload key game assets -->
   <link rel="preload" as="image" href="/assets/gem-sprites.png" imagesrcset="/assets/gem-sprites.png 1x">
   <link rel="preload" as="image" href="/assets/level-badges.png">
   <link rel="preload" as="image" href="/assets/ui-icons.png">
@@ -27,7 +27,7 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/" aria-label="Sheena’s Adventures Home">Sheena’s Adventures</a>
+    <a class="brand" href="/" aria-label="Sheena's Adventures Home">Sheena's Adventures</a>
     <nav class="site-nav">
       <a href="/work-with-me.html">Work With Me</a>
       <a href="/adventures.html">Adventures</a>
@@ -39,7 +39,7 @@
 
   <main class="game-wrap" aria-labelledby="title">
     <section class="game-header">
-      <h1 id="title">Desert Drop — Gem Stack</h1>
+      <h1 class="game-title">Desert Drop — Gem Stack</h1>
 
       <div class="controls primary">
         <button class="btn" data-game="play" aria-label="Start Game">Play</button>
@@ -47,27 +47,24 @@
       </div>
 
       <div class="hud" role="group" aria-label="Game Status">
-        <div class="hud-item">Score: <span data-ui="score">000000</span></div>
-        <div class="hud-item">Level: <span data-ui="level">1</span></div>
-        <div class="hud-item">Best: <span data-ui="best">000000</span></div>
+        <div class="pill">Score: <span data-ui="score">000000</span></div>
+        <div class="pill">Level: <span data-ui="level">1</span></div>
+        <div class="pill">Best: <span data-ui="best">000000</span></div>
       </div>
     </section>
 
     <section class="game-stage">
-      <!-- The JS draws everything here -->
-      <canvas id="gameCanvas" width="640" height="960" aria-label="Game canvas"></canvas>
+      <div class="canvas-shell">
+        <canvas id="gameCanvas" width="640" height="960" aria-label="Game canvas"></canvas>
+      </div>
     </section>
 
     <section class="controls on-screen" aria-label="On-screen Controls">
-      <div class="control-row">
-        <button class="ctrl" data-control="left"  aria-label="Move Left">◀</button>
-        <button class="ctrl" data-control="rotate" aria-label="Rotate">↻</button>
-        <button class="ctrl" data-control="right" aria-label="Move Right">▶</button>
-      </div>
-      <div class="control-row">
-        <button class="ctrl" data-control="down" aria-label="Soft Drop">▼</button>
-        <button class="ctrl" data-control="drop" aria-label="Hard Drop">⤓</button>
-      </div>
+      <button class="ctrl" data-control="left" aria-label="Move Left">◀</button>
+      <button class="ctrl" data-control="rotate" aria-label="Rotate">↻</button>
+      <button class="ctrl" data-control="right" aria-label="Move Right">▶</button>
+      <button class="ctrl" data-control="down" aria-label="Soft Drop">▼</button>
+      <button class="ctrl" data-control="drop" aria-label="Hard Drop">⤓</button>
     </section>
 
     <section class="howto">
@@ -88,14 +85,13 @@
   </main>
 
   <footer class="site-footer">
-    <p>© <span id="y"></span> Sheena’s Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
+    <p>© <span id="y"></span> Sheena's Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
   </footer>
 
-  <!-- Game script (paths flattened in JS to /assets/...) -->
+  <!-- Game script -->
   <script src="/fun/gem-stack.js" defer></script>
   <script>
-    // tiny helper for footer year
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
-</html>
+  </html>
