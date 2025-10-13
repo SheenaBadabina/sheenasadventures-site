@@ -82,31 +82,40 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
     const retry = $('#retryBlog');
     if (retry) retry.addEventListener('click', () => {
       mount.innerHTML = '<p class="meta">Loading latest blog...</p>';
-      requestIdleCallback(loadBlog, { timeout: 1500 });
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadBlog, { timeout: 1500 });
+      } else {
+        setTimeout(loadBlog, 400);
+      }
     });
   }
 
   async function loadBlog() {
     try {
-      const res = await fetch('/blog/index.html', { cache: 'reload' });
+      const res = await fetch('/blog/index.html', { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
 
       const html = await res.text();
       
-      // Extract first blog link from the list
-      const match = html.match(/<li[^>]*class=["'][^"']*blog-item[^"']*["'][^>]*>[\s\S]*?<a[^>]+class=["'][^"']*blog-link[^"']*["'][^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>[\s\S]*?<\/li>/i);
+      // Try to match the NEW blog card structure
+      let match = html.match(/<article[^>]*class=["'][^"']*blog-card[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>[\s\S]*?<\/article>/i);
+      
+      // Fallback: try old structure if new one doesn't exist
+      if (!match) {
+        match = html.match(/<li[^>]*class=["'][^"']*blog-item[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>[\s\S]*?<\/li>/i);
+      }
       
       if (!match) throw new Error('No blog post found');
       
       const url = match[1];
-      const title = match[2].trim();
+      const title = match[2].replace(/<[^>]*>/g, '').trim();
       
       // Create a nice card display
       mount.innerHTML = `
         <a href="${url}" class="story-card" style="text-decoration: none; color: inherit; display: block;">
-          <h3 style="margin: 1.5rem 1.5rem 0.75rem; font-size: 1.4rem; font-weight: 700;">${title}</h3>
+          <h3 style="margin: 1.5rem 1.5rem 0.75rem; font-size: 1.4rem; font-weight: 700; color: var(--color-text);">${title}</h3>
           <p style="margin: 0 1.5rem 1rem; color: var(--color-muted);">Latest blog post</p>
-          <span class="text-link" style="margin: 0 1.5rem 1.5rem;">Read More →</span>
+          <span class="text-link" style="margin: 0 1.5rem 1.5rem; display: inline-block;">Read More →</span>
         </a>
       `;
     } catch (err) {
