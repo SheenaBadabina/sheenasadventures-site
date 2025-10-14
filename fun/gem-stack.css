@@ -1,6 +1,16 @@
-/* ==========================================================
-   Desert Drop — Gem Stack CSS (with Hamburger Menu)
-   ========================================================== */
+/* ========================================
+   Desert Drop — Gem Stack
+   Game-specific styles
+   ======================================== */
+
+/* Root Variables */
+:root {
+  --teal: #00bfa5;
+  --bg: #0b0f12;
+  --surface: #0f1419;
+  --text: #d9e1e8;
+  --muted: #92a1ad;
+}
 
 /* Base Reset */
 *,
@@ -9,303 +19,101 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-  background: #0B0F12;
-  color: #D9E1E8;
+  background: var(--bg);
+  color: var(--text);
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
-  overflow-y: auto;
 }
 
-body.menu-open {
-  overflow: hidden;
-}
-
-/* ==========================================================
-   Header with Hamburger Menu
-   ========================================================== */
-
+/* Header */
 .site-header {
+  background: rgba(11, 15, 18, 0.95);
+  backdrop-filter: blur(6px);
+  padding: 1rem;
   position: sticky;
   top: 0;
-  z-index: 50;
-  background: rgba(11,15,18,0.95);
-  backdrop-filter: blur(8px);
-  padding: 0.75rem 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 100;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .brand {
-  font-weight: 600;
-  color: #00BFA5;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--teal);
   text-decoration: none;
-  font-size: 1.1rem;
-  z-index: 52;
 }
 
-/* Hamburger Button */
-.hamburger {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  z-index: 52;
-}
-
-.hamburger span {
-  width: 24px;
-  height: 2px;
-  background: #00BFA5;
-  transition: all 0.3s ease;
-}
-
-/* Hamburger animation when open */
-body.menu-open .hamburger span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-body.menu-open .hamburger span:nth-child(2) {
-  opacity: 0;
-}
-
-body.menu-open .hamburger span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Navigation Menu */
 .site-nav {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(11,15,18,0.98);
-  backdrop-filter: blur(12px);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  z-index: 51;
-  pointer-events: none;
-}
-
-body.menu-open .site-nav {
-  transform: translateX(0);
-  pointer-events: auto;
+  gap: 1.5rem;
 }
 
 .site-nav a {
-  color: #D9E1E8;
+  color: var(--text);
   text-decoration: none;
-  font-size: 1.5rem;
   font-weight: 500;
-  padding: 1rem 2rem;
-  transition: color 0.2s ease;
+  transition: color 0.2s;
 }
 
 .site-nav a:hover {
-  color: #00BFA5;
+  color: var(--teal);
 }
 
-/* Desktop: Show regular nav */
-@media (min-width: 768px) {
-  .hamburger {
-    display: none;
-  }
-  
-  .site-nav {
-    position: static;
-    width: auto;
-    height: auto;
-    background: none;
-    backdrop-filter: none;
-    flex-direction: row;
-    gap: 1.5rem;
-    transform: none;
-  }
-  
-  .site-nav a {
-    font-size: 1rem;
-    padding: 0;
-  }
-}
-
-/* ==========================================================
-   Game Layout
-   ========================================================== */
-
+/* Game Container */
 .game-wrap {
-  max-width: 600px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 1rem;
-}
-
-h1 {
+  padding: 2rem 1rem;
   text-align: center;
+}
+
+.game-wrap h1 {
   font-size: 2rem;
-  margin: 1rem 0;
-  color: #00BFA5;
+  margin: 0 0 1.5rem;
+  color: var(--teal);
+  text-shadow: 0 2px 4px rgba(0, 191, 165, 0.3);
 }
 
-/* ==========================================================
-   Buttons
-   ========================================================== */
-
-.btn {
-  background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%);
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 191, 165, 0.3);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 191, 165, 0.5);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn.secondary {
-  background: linear-gradient(135deg, #424242 0%, #303030 100%);
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-}
-
-.btn.secondary:hover {
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
-}
-
-.btn.touch {
-  min-width: 64px;
-  min-height: 64px;
-  font-size: 1.5rem;
-  padding: 1rem;
-}
-
-/* ==========================================================
-   Controls Layout
-   ========================================================== */
-
+/* Controls */
 .controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
   justify-content: center;
-  margin: 1rem 0;
-}
-
-.controls.primary {
-  margin-top: 1.5rem;
-}
-
-.controls.on-screen {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.controls.on-screen .btn:nth-child(4) {
-  grid-column: 1;
-}
-
-.controls.on-screen .btn:nth-child(5) {
-  grid-column: 3;
-}
-
-/* ==========================================================
-   HUD (Score/Level)
-   ========================================================== */
-
-.hud {
-  display: flex;
-  flex-wrap: wrap;
   gap: 0.75rem;
-  justify-content: center;
-  margin: 1rem 0;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.pill {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(0, 191, 165, 0.3);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #D9E1E8;
-  white-space: nowrap;
+.btn.touch[data-control="down"],
+.btn.touch[data-control="drop"] {
+  grid-column: span 1;
 }
 
-.pill span {
-  color: #00BFA5;
-  font-family: monospace;
-}
-
-/* ==========================================================
-   Canvas
-   ========================================================== */
-
-.canvas-shell {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  margin: 1.5rem auto;
-  aspect-ratio: 2 / 3;
-  background: #1a2332;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-#gameCanvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  touch-action: none;
-}
-
-/* ==========================================================
-   How to Play
-   ========================================================== */
-
+/* How to Play */
 .howto {
-  margin: 2rem 0;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  max-width: 600px;
+  margin: 2rem auto;
   padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid rgba(0, 191, 165, 0.2);
+  border-radius: 12px;
 }
 
 .howto summary {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #D9E1E8;
+  color: var(--text);
   cursor: pointer;
   user-select: none;
   list-style: none;
+  padding: 0.5rem 0;
 }
 
 .howto summary::-webkit-details-marker {
@@ -314,9 +122,9 @@ h1 {
 
 .howto summary::before {
   content: '▶ ';
-  color: #00BFA5;
+  color: var(--teal);
   display: inline-block;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s;
 }
 
 .howto details[open] summary::before {
@@ -327,18 +135,18 @@ h1 {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #92A1AD;
-  line-height: 1.7;
+  color: var(--muted);
+  text-align: left;
 }
 
 .howto-body p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
 }
 
 .howto-body ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
 }
 
 .howto-body li {
@@ -351,39 +159,145 @@ h1 {
   content: '→';
   position: absolute;
   left: 0;
-  color: #00BFA5;
+  color: var(--teal);
 }
 
-/* ==========================================================
-   Footer
-   ========================================================== */
-
-.site-footer {
-  text-align: center;
-  padding: 2rem 1rem;
-  color: #92A1AD;
-  font-size: 0.9rem;
+.howto-body kbd {
+  background: rgba(0, 191, 165, 0.1);
+  border: 1px solid var(--teal);
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+  color: var(--teal);
 }
 
-.site-footer a {
-  color: #00BFA5;
-  text-decoration: none;
-}
-
-.site-footer a:hover {
-  text-decoration: underline;
-}
-
-/* ==========================================================
-   Desktop Optimizations
-   ========================================================== */
-
+/* Desktop: Hide touch controls */
 @media (min-width: 720px) {
   .controls.on-screen {
     display: none;
   }
-  
-  h1 {
-    font-size: 2.5rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 720px) {
+  .game-wrap {
+    padding: 1rem 0.5rem;
   }
-     }
+  
+  .game-wrap h1 {
+    font-size: 1.5rem;
+  }
+  
+  .canvas-shell {
+    max-width: 100%;
+    margin: 0 0.5rem 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .hud {
+    gap: 0.5rem;
+  }
+  
+  .pill {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+} {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--teal);
+  background: var(--surface);
+  color: var(--teal);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: var(--teal);
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 191, 165, 0.4);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.secondary {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.btn.secondary:hover {
+  background: var(--muted);
+  color: var(--bg);
+}
+
+/* HUD */
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid rgba(0, 191, 165, 0.3);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.pill span {
+  color: var(--teal);
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+/* Canvas Container */
+.canvas-shell {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  background: var(--surface);
+  border: 2px solid rgba(0, 191, 165, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+#gameCanvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  display: block;
+}
+
+/* Touch Controls */
+.controls.on-screen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  max-width: 400px;
+  margin: 0 auto 1.5rem;
+}
+
+.btn.touch {
+  min-height: 56px;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+
+.btn
