@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Desert Drop — Gem Stack | Sheena's Adventures</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Match gems, chase combos, and keep the desert glowing. A mobile-first browser game from Sheena's Adventures.">
 
-  <link rel="icon" type="image/png" href="/assets/sheenas-adventures-favicon-logo.png" />
-  
-  <!-- Open Graph / Social -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Desert Drop — Gem Stack">
   <meta property="og:description" content="Match gems, chase combos, and keep the desert glowing.">
   <meta property="og:type" content="website">
@@ -17,97 +15,69 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#00BFA5">
 
-  <!-- Preload key game assets -->
-  <link rel="preload" as="image" href="/assets/gem-sprites.png">
-  <link rel="preload" as="image" href="/assets/level-badges.png">
-  <link rel="preload" as="image" href="/assets/ui-icons.png">
-  <link rel="preload" as="image" href="/assets/background-sky-canyon.png">
-  <link rel="preload" as="audio" href="/assets/background-loop.mp3">
-
-  <!-- Global site styles FIRST, then game-specific -->
-  <link rel="stylesheet" href="/static/styles.css">
+  <!-- ONLY GAME CSS - NO SITE CSS -->
   <link rel="stylesheet" href="/fun/gem-stack.css">
-  <script src="/static/js/site.js" defer></script>
+  
+  <!-- Preload assets -->
+  <link rel="preload" as="image" href="/assets/gem-sprites.png">
+  <link rel="preload" as="image" href="/assets/background-sky-canyon.png">
 </head>
-
-<body class="page-game">
-
-  <!-- Use your standard header -->
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="/" class="brand">
-        <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena's Adventures" height="48" width="48" />
-      </a>
-      <button class="hamburger" aria-label="Menu">☰</button>
-      <nav class="site-nav" data-collapsible>
-        <a href="/">Home</a>
-        <a href="/blog/">Blog</a>
-        <a href="/work-with-me.html">Work With Me</a>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="game-wrap" aria-labelledby="title">
-    <section class="game-header">
-      <h1 id="title">Desert Drop — Gem Stack</h1>
-
+<body>
+  
+  <main class="game-wrap">
+    <header class="game-header">
+      <h1 class="game-title">Desert Drop — Gem Stack</h1>
+      
       <div class="controls primary">
-        <button class="btn game-btn" data-game="play" aria-label="Start Game">▶ Play</button>
-        <button class="btn secondary game-btn" data-audio="mute" aria-pressed="false" aria-label="Toggle Sound">🔇 Mute</button>
+        <button class="btn" id="playBtn" data-game="play">▶️ Play</button>
+        <button class="btn" id="pauseBtn" data-game="pause" style="display:none;">⏸️ Pause</button>
+        <button class="btn secondary" id="restartBtn" data-game="restart" style="display:none;">🔄 Restart</button>
+        <button class="btn secondary" id="muteBtn" data-audio="mute">🔇 Mute</button>
       </div>
-
-      <div class="hud" role="group" aria-label="Game Status">
+      
+      <div class="hud">
         <div class="pill">Score: <span data-ui="score">000000</span></div>
         <div class="pill">Level: <span data-ui="level">1</span></div>
         <div class="pill">Best: <span data-ui="best">000000</span></div>
       </div>
-    </section>
+    </header>
 
     <section class="game-stage">
       <div class="canvas-shell">
-        <canvas id="gameCanvas" width="640" height="960" aria-label="Game canvas"></canvas>
+        <canvas id="gameCanvas" width="640" height="960"></canvas>
       </div>
     </section>
 
-    <section class="controls on-screen" aria-label="On-screen Controls">
-      <button class="ctrl" data-control="left"  aria-label="Move Left">◀</button>
-      <button class="ctrl" data-control="rotate" aria-label="Rotate">↻</button>
-      <button class="ctrl" data-control="right" aria-label="Move Right">▶</button>
-      <button class="ctrl" data-control="down" aria-label="Soft Drop">▼</button>
-      <button class="ctrl" data-control="drop" aria-label="Hard Drop">⤓</button>
+    <section class="controls on-screen">
+      <button class="ctrl" data-control="left">◀</button>
+      <button class="ctrl" data-control="rotate">↻</button>
+      <button class="ctrl" data-control="right">▶</button>
+      <button class="ctrl" data-control="down">▼</button>
+      <button class="ctrl" data-control="drop">⤓</button>
     </section>
 
     <section class="howto">
       <details>
         <summary>How to Play</summary>
         <div class="howto-body">
-          <p><strong>Match 3+ gems</strong> of the same type horizontally or vertically to clear them.</p>
-          <p><strong>Chain combos</strong> earn bonus points — keep the cascade going!</p>
-          <p><strong>Controls:</strong></p>
+          <p>Match three or more gems in a line to clear them. Create cascades for bonus points!</p>
           <ul>
-            <li><kbd>←</kbd> <kbd>→</kbd> Move gem column</li>
-            <li><kbd>↑</kbd> Rotate gems in column</li>
-            <li><kbd>↓</kbd> Soft drop (faster fall)</li>
-            <li><kbd>Space</kbd> Hard drop (instant)</li>
+            <li><strong>Move:</strong> ⬅️ ➡️ or arrow buttons</li>
+            <li><strong>Rotate:</strong> ⬆️ or ↻ button</li>
+            <li><strong>Drop:</strong> ⬇️ or Space</li>
+            <li><strong>Pause:</strong> P key or ⏸️ button</li>
           </ul>
-          <p><strong>Goal:</strong> Don't let the gems stack to the top!</p>
         </div>
       </details>
     </section>
+
+    <footer class="game-footer">
+      <p>© 2025 Sheena's Adventures</p>
+    </footer>
   </main>
 
-  <footer class="site-footer">
-    <p>
-      © <span id="y">2025</span> Sheena's Adventures •
-      <a href="/terms.html">Terms</a> •
-      <a href="/privacy.html">Privacy</a>
-    </p>
-  </footer>
-
-  <!-- Game Logic -->
+  <!-- Game JavaScript -->
   <script src="/fun/gem-stack.js"></script>
-
+  
 </body>
-  </html>
+</html>
