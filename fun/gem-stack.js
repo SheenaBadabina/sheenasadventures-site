@@ -23,24 +23,9 @@ const ASSETS = {
 /* ========== DOM hookups ========== */
 const $ = (sel) => document.querySelector(sel);
 
-const dom = {
-  canvas: $("#gameCanvas"),
-  play:   $('[data-game="play"]'),
-  pause:  $('[data-game="pause"]'),
-  restart: $('[data-game="restart"]'),
-  mute:   $('[data-audio="mute"]'),
-  score:  $('[data-ui="score"]'),
-  level:  $('[data-ui="level"]'),
-  best:   $('[data-ui="best"]'),
-  left:   $('[data-control="left"]'),
-  right:  $('[data-control="right"]'),
-  down:   $('[data-control="down"]'),
-  drop:   $('[data-control="drop"]'),
-  rotate: $('[data-control="rotate"]'),
-  toggleRotation: $('[data-control="toggle-rotation"]')
-};
+let dom = {};  // Will be populated in init()
 
-const ctx = dom.canvas ? dom.canvas.getContext("2d") : null;
+const ctx = null;  // Will be set in init()
 
 /* ========== Constants ========== */
 const COLS = 9;  // Changed to 9 for true center
@@ -315,6 +300,7 @@ function update(timestamp) {
 
 /* ========== Rendering ========== */
 function draw() {
+  const ctx = window.ctx;
   if (!ctx || !dom.canvas) return;
   
   const cw = dom.canvas.width;
@@ -457,21 +443,42 @@ function gameOver() {
 /* ========== Event Listeners ========== */
 function setupEvents() {
   console.log("Setting up event listeners...");
+  console.log("Play button:", dom.play);
+  console.log("Pause button:", dom.pause);
+  console.log("Restart button:", dom.restart);
   
   // Game controls
   if (dom.play) {
-    dom.play.addEventListener("click", startGame);
+    dom.play.addEventListener("click", (e) => {
+      console.log("Play button clicked!");
+      e.preventDefault();
+      startGame();
+    });
     console.log("✅ Play button wired");
+  } else {
+    console.log("❌ Play button NOT found!");
   }
   
   if (dom.pause) {
-    dom.pause.addEventListener("click", togglePause);
+    dom.pause.addEventListener("click", (e) => {
+      console.log("Pause button clicked!");
+      e.preventDefault();
+      togglePause();
+    });
     console.log("✅ Pause button wired");
+  } else {
+    console.log("❌ Pause button NOT found!");
   }
   
   if (dom.restart) {
-    dom.restart.addEventListener("click", restartGame);
+    dom.restart.addEventListener("click", (e) => {
+      console.log("Restart button clicked!");
+      e.preventDefault();
+      restartGame();
+    });
     console.log("✅ Restart button wired");
+  } else {
+    console.log("❌ Restart button NOT found!");
   }
   
   // Mute button
@@ -589,6 +596,35 @@ function setupEvents() {
 async function init() {
   console.log("🎮 Initializing Gem Stack...");
   
+  // SELECT ALL DOM ELEMENTS AFTER PAGE IS LOADED
+  dom = {
+    canvas: $("#gameCanvas"),
+    play:   $('[data-game="play"]'),
+    pause:  $('[data-game="pause"]'),
+    restart: $('[data-game="restart"]'),
+    mute:   $('[data-audio="mute"]'),
+    score:  $('[data-ui="score"]'),
+    level:  $('[data-ui="level"]'),
+    best:   $('[data-ui="best"]'),
+    left:   $('[data-control="left"]'),
+    right:  $('[data-control="right"]'),
+    down:   $('[data-control="down"]'),
+    drop:   $('[data-control="drop"]'),
+    rotate: $('[data-control="rotate"]'),
+    toggleRotation: $('[data-control="toggle-rotation"]')
+  };
+  
+  // CRITICAL: Make sure DOM elements exist
+  if (!dom.canvas) {
+    console.error("❌ Canvas not found! Retrying...");
+    setTimeout(init, 100);
+    return;
+  }
+  
+  // Get canvas context
+  const ctx = dom.canvas.getContext("2d");
+  window.ctx = ctx;  // Make it global
+  
   // Load sprites
   loadSprites();
   
@@ -611,7 +647,7 @@ async function init() {
     console.log("✅ Canvas sized");
   }
   
-  // Setup events
+  // Setup events AFTER everything is ready
   setupEvents();
   
   // Initialize UI
@@ -624,9 +660,10 @@ async function init() {
   console.log("✅ Ready to play!");
 }
 
-// Start when page loads
+// WAIT for DOM to be fully loaded before initializing
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
+  // DOM already loaded
   init();
-      }
+    }
