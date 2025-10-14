@@ -97,36 +97,6 @@
   </footer>
 
   <!-- Game script -->
-  <script src="/fun/gem-stack.js" defer></script>
-  <script>
-    // Wait for everything to load
-    window.addEventListener('DOMContentLoaded', () => {
-      // Footer year
-      const yearEl = document.getElementById('y');
-      if (yearEl) {
-        yearEl.textContent = new Date().getFullYear();
-      }
-      
-      // Hamburger menu toggle
-      const hamburger = document.querySelector('.hamburger');
-      if (hamburger) {
-        hamburger.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          document.body.classList.toggle('menu-open');
-          const isOpen = document.body.classList.contains('menu-open');
-          hamburger.setAttribute('aria-expanded', isOpen);
-        });
-        
-        // Close menu when clicking nav links
-        document.querySelectorAll('.site-nav a').forEach(link => {
-          link.addEventListener('click', () => {
-            document.body.classList.remove('menu-open');
-            hamburger.setAttribute('aria-expanded', 'false');
-          });
-        });
-      }
-    });
-  </script>
+  <script src="/fun/gem-stack.js"></script>
 </body>
 </html>
