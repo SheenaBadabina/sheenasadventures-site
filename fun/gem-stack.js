@@ -559,4 +559,31 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-        }
+}
+
+/* ========== Hamburger Menu ========== */
+// Footer year
+const yearEl = document.getElementById('y');
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
+
+// Hamburger menu toggle
+const hamburger = document.querySelector('.hamburger');
+if (hamburger) {
+  hamburger.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    document.body.classList.toggle('menu-open');
+    const isOpen = document.body.classList.contains('menu-open');
+    hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  
+  // Close menu when clicking nav links
+  document.querySelectorAll('.site-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.body.classList.remove('menu-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+    }
