@@ -126,7 +126,7 @@ const Game = {
 };
 
 /* ========== Sprite Loading ========== */
-const sprites = { loaded: false, bg: null };
+const sprites = { loaded: false, bg: null, bgLoaded: false };
 
 function loadSprites() {
   const img = new Image();
@@ -142,9 +142,15 @@ function loadSprites() {
   const bgImg = new Image();
   bgImg.onload = () => {
     sprites.bg = bgImg;
+    sprites.bgLoaded = true;
     console.log("✅ Background loaded");
+    // Draw immediately after background loads
+    if (ctx) draw();
   };
-  bgImg.onerror = () => console.warn("⚠️ Failed to load background");
+  bgImg.onerror = () => {
+    console.warn("⚠️ Failed to load background");
+    sprites.bgLoaded = false;
+  };
   bgImg.src = ASSETS.images.bg;
 }
 
@@ -352,11 +358,11 @@ function update(time) {
 function draw() {
   if (!ctx) return;
   
-  // Background image
-  if (sprites.bg) {
+  // Background image or fallback color
+  if (sprites.bgLoaded && sprites.bg) {
     ctx.drawImage(sprites.bg, 0, 0, el.canvas.width, el.canvas.height);
   } else {
-    ctx.fillStyle = "#1a2332";
+    ctx.fillStyle = "#2c4a5f";
     ctx.fillRect(0, 0, el.canvas.width, el.canvas.height);
   }
   
@@ -553,4 +559,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-      }
+        }
