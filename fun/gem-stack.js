@@ -63,14 +63,12 @@ function loadSprites() {
   images.sprites.src = ASSETS.images.sprites;
   images.sprites.onload = () => {
     console.log("✅ Gem sprites loaded");
-    draw();
   };
   
   images.bg = new Image();
   images.bg.src = ASSETS.images.bg;
   images.bg.onload = () => {
     console.log("✅ Background loaded");
-    draw();
   };
   
   images.badges = new Image();
@@ -671,7 +669,6 @@ async function init() {
       const rect = dom.canvas.getBoundingClientRect();
       dom.canvas.width = rect.width;
       dom.canvas.height = rect.height;
-      draw();
     }
     resize();
     window.addEventListener("resize", resize);
@@ -699,4 +696,4 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-  }
+}
