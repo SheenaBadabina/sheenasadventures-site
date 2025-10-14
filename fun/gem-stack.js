@@ -165,9 +165,10 @@ function spawnColumn() {
     Math.floor(Math.random() * 9),
     Math.floor(Math.random() * 9)
   ];
-  Game.colX = Math.floor((Game.cols - 1) / 2); // Start at column 3 (middle of 0-7)
-  Game.colY = 0; // Start at top
-  Game.dropTimer = 0; // Reset timer
+  Game.colX = 4; // Center of 8 columns (0-7, so middle is 3.5, round to 4)
+  Game.colY = 0;
+  Game.dropTimer = 0;
+  console.log('Spawned at column:', Game.colX);
 }
 
 function canPlace() {
@@ -359,7 +360,11 @@ function moveLeft() {
 
 function moveRight() {
   if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
-  if (Game.colX < Game.cols - 1) Game.colX++; // Fix: was checking < Game.cols - 1, should allow up to Game.cols - 1
+  // Cols are 0-7, so max position is 7
+  if (Game.colX < 7) {
+    Game.colX++;
+    console.log('Moved right to column:', Game.colX);
+  }
 }
 
 function rotateColumn() {
@@ -382,6 +387,8 @@ function rotateColumn() {
 function toggleRotation() {
   Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
   
+  console.log('🔄 Rotation mode changed to:', Game.rotationMode);
+  
   // Update button text on all rotation-related buttons
   const rotateBtn = document.querySelector('[data-control="rotate"]');
   const toggleBtn = document.querySelector('[data-control="toggle-rotation"]');
@@ -391,11 +398,12 @@ function toggleRotation() {
   }
   
   if (toggleBtn) {
-    toggleBtn.textContent = Game.rotationMode === 'vertical' ? '↕️ Vert' : '↔️ Horiz';
-    toggleBtn.style.fontSize = '0.9rem';
+    if (Game.rotationMode === 'vertical') {
+      toggleBtn.innerHTML = '↕️<br><small>Vert</small>';
+    } else {
+      toggleBtn.innerHTML = '↔️<br><small>Horiz</small>';
+    }
   }
-  
-  console.log('Rotation mode:', Game.rotationMode);
 }
 
 function softDrop() {
@@ -621,10 +629,17 @@ function setupEvents() {
     });
   }
   
-  // Remove complex long-press logic, just use simple click for rotation toggle
+  // Rotation toggle button
   const toggleRotationBtn = document.querySelector('[data-control="toggle-rotation"]');
   if (toggleRotationBtn) {
-    toggleRotationBtn.addEventListener('click', toggleRotation);
+    toggleRotationBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleRotation();
+      console.log('Toggle button clicked!');
+    });
+    console.log('Toggle rotation button found and wired!');
+  } else {
+    console.error('Toggle rotation button NOT FOUND!');
   }
   
   // Simple rotation button
@@ -777,4 +792,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-            }
+          }
