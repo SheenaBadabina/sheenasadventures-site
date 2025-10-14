@@ -1,295 +1,214 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gem Guide | Desert Drop</title>
-  <meta name="description" content="Complete guide to gems, power-ups, and strategies for Desert Drop - Gem Stack.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gem Guide - Desert Drop | Sheena's Adventures</title>
   <link rel="stylesheet" href="/fun/gem-guide.css">
 </head>
 <body>
-  
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Sheena's Adventures Home">Sheena's Adventures</a>
+    
+    <button class="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav class="site-nav">
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+
   <main class="guide-wrap">
-    <header class="guide-header">
-      <h1>💎 Desert Drop — Gem Guide</h1>
-      <p class="subtitle">Your complete rockhound's field guide</p>
-      <a href="/fun/gem-stack.html" class="btn-back">← Back to Game</a>
-    </header>
+    <h1>🎨 Gem Collection</h1>
+    <p class="intro">Match 3 or more identical gems in a line to clear them!</p>
 
-    <!-- GEM GALLERY -->
-    <section class="section">
-      <h2>🎨 Gem Collection</h2>
-      <p>Match 3 or more identical gems in a line to clear them!</p>
-      
-      <div class="gem-grid">
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #3bd06a, #2a9d4f);">
-            <span class="gem-shape">▲</span>
-          </div>
-          <h3>Green Triangle</h3>
-          <p class="gem-desc">Emerald geode</p>
-        </div>
+    <!-- Gem Grid -->
+    <section class="gem-grid">
+      <!-- Gem 0: Green Triangle -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="0"></div>
+        <h3>Green Triangle</h3>
+        <p>Emerald geode</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #ff5a4e, #c0392b);">
-            <span class="gem-shape">●</span>
-          </div>
-          <h3>Red Circle</h3>
-          <p class="gem-desc">Ruby sphere</p>
-        </div>
+      <!-- Gem 1: Red Circle -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="1"></div>
+        <h3>Red Circle</h3>
+        <p>Ruby sphere</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #7a5cff, #5b3cc4);">
-            <span class="gem-shape">⬡</span>
-          </div>
-          <h3>Purple Hexagon</h3>
-          <p class="gem-desc">Amethyst crystal</p>
-        </div>
+      <!-- Gem 2: Purple Hexagon -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="2"></div>
+        <h3>Purple Hexagon</h3>
+        <p>Amethyst crystal</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #4fc3ff, #2980b9);">
-            <span class="gem-shape">◆</span>
-          </div>
-          <h3>Blue Diamond</h3>
-          <p class="gem-desc">Sapphire shard</p>
-        </div>
+      <!-- Gem 3: Blue Diamond -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="3"></div>
+        <h3>Blue Diamond</h3>
+        <p>Sapphire shard</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #ff4747, #d63031);">
-            <span class="gem-shape">♥</span>
-          </div>
-          <h3>Red Heart</h3>
-          <p class="gem-desc">Garnet love stone</p>
-        </div>
+      <!-- Gem 4: Red Heart -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="4"></div>
+        <h3>Red Heart</h3>
+        <p>Garnet love stone</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #3dd4d8, #00b894);">
-            <span class="gem-shape">💧</span>
-          </div>
-          <h3>Cyan Teardrop</h3>
-          <p class="gem-desc">Aquamarine drop</p>
-        </div>
+      <!-- Gem 5: Cyan Teardrop -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="5"></div>
+        <h3>Cyan Teardrop</h3>
+        <p>Aquamarine drop</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #ffc934, #f39c12);">
-            <span class="gem-shape">■</span>
-          </div>
-          <h3>Yellow Square</h3>
-          <p class="gem-desc">Citrine block</p>
-        </div>
+      <!-- Gem 6: Yellow Square -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="6"></div>
+        <h3>Yellow Square</h3>
+        <p>Citrine block</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #6adb62, #27ae60);">
-            <span class="gem-shape">⬠</span>
-          </div>
-          <h3>Green Pentagon</h3>
-          <p class="gem-desc">Peridot star</p>
-        </div>
+      <!-- Gem 7: Green Pentagon -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="7"></div>
+        <h3>Green Pentagon</h3>
+        <p>Peridot star</p>
+      </div>
 
-        <div class="gem-card">
-          <div class="gem-icon" style="background: linear-gradient(135deg, #41a1ff, #3498db);">
-            <span class="gem-shape">⬢</span>
-          </div>
-          <h3>Blue Octagon</h3>
-          <p class="gem-desc">Lapis medallion</p>
-        </div>
+      <!-- Gem 8: Blue Octagon -->
+      <div class="gem-card">
+        <div class="gem-sprite" data-gem="8"></div>
+        <h3>Blue Octagon</h3>
+        <p>Lapis shield</p>
       </div>
     </section>
 
-    <!-- POWER-UPS -->
-    <section class="section">
-      <h2>⚡ Power-Ups (Coming Soon!)</h2>
-      <p>Special gems with unique abilities</p>
-      
-      <div class="powerup-list">
-        <div class="powerup-card">
-          <div class="powerup-icon shimmer">✨</div>
-          <div class="powerup-info">
-            <h3>Shimmer Gem</h3>
-            <p>Clears ALL gems of its color from the board</p>
-            <span class="badge">Match 5+</span>
-          </div>
-        </div>
-
-        <div class="powerup-card">
-          <div class="powerup-icon bomb">💥</div>
-          <div class="powerup-info">
-            <h3>Canyon Bomb</h3>
-            <p>Explodes in a 3×3 area, clearing everything nearby</p>
-            <span class="badge">Match 6+</span>
-          </div>
-        </div>
-
-        <div class="powerup-card">
-          <div class="powerup-icon blocker">🪨</div>
-          <div class="powerup-info">
-            <h3>Fossil Blocker</h3>
-            <p>Solid rock that only clears when adjacent gems explode</p>
-            <span class="badge">Random spawn</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SCORING -->
-    <section class="section">
+    <!-- Scoring Section -->
+    <section class="info-section">
       <h2>🎯 Scoring System</h2>
-      
-      <div class="scoring-table">
-        <div class="score-row">
-          <span class="score-label">3-Match</span>
-          <span class="score-value">100 points</span>
+      <div class="scoring-grid">
+        <div class="score-card">
+          <div class="score-amount">30 pts</div>
+          <p>Match 3 gems</p>
         </div>
-        <div class="score-row">
-          <span class="score-label">4-Match</span>
-          <span class="score-value">150 points</span>
+        <div class="score-card">
+          <div class="score-amount">+10 pts</div>
+          <p>Each extra gem</p>
         </div>
-        <div class="score-row">
-          <span class="score-label">5-Match</span>
-          <span class="score-value">200 points</span>
-        </div>
-        <div class="score-row">
-          <span class="score-label">Each extra gem</span>
-          <span class="score-value">+50 points</span>
-        </div>
-        <div class="score-row highlight">
-          <span class="score-label">Cascade Chain</span>
-          <span class="score-value">+10% per chain</span>
+        <div class="score-card">
+          <div class="score-amount">+10%</div>
+          <p>Per chain combo</p>
         </div>
       </div>
     </section>
 
-    <!-- LEVEL PROGRESSION -->
-    <section class="section">
-      <h2>📈 Level Progression</h2>
-      
-      <div class="progression-info">
-        <div class="prog-item">
-          <div class="prog-icon">🎯</div>
-          <div>
-            <h4>Level Up Requirement</h4>
-            <p>Clear 10 matches to advance</p>
-          </div>
+    <!-- How to Play Section -->
+    <section class="info-section">
+      <h2>📖 How to Play</h2>
+      <div class="rules">
+        <div class="rule">
+          <strong>Match 3+</strong>
+          <p>Line up 3 or more identical gems horizontally, vertically, or diagonally</p>
         </div>
-        
-        <div class="prog-item">
-          <div class="prog-icon">⚡</div>
-          <div>
-            <h4>Speed Increase</h4>
-            <p>Gems fall 10% faster each level</p>
-          </div>
+        <div class="rule">
+          <strong>Gravity</strong>
+          <p>Gems fall down after matches clear, creating potential chain combos</p>
         </div>
-        
-        <div class="prog-item">
-          <div class="prog-icon">🎨</div>
-          <div>
-            <h4>More Colors</h4>
-            <p>New gem types unlock at higher levels (max 9)</p>
-          </div>
+        <div class="rule">
+          <strong>Level Up</strong>
+          <p>Clear 10 lines to advance to the next level - game speeds up!</p>
+        </div>
+        <div class="rule">
+          <strong>Game Over</strong>
+          <p>Stack reaches the top? Game over! Try to beat your high score!</p>
         </div>
       </div>
     </section>
 
-    <!-- TIPS & STRATEGY -->
-    <section class="section">
-      <h2>💡 Pro Tips</h2>
-      
-      <div class="tips-list">
-        <div class="tip">
-          <span class="tip-icon">🎯</span>
-          <div>
-            <h4>Plan Ahead</h4>
-            <p>Look at the colors in your falling column and set up future matches</p>
-          </div>
-        </div>
-
-        <div class="tip">
-          <span class="tip-icon">⛓️</span>
-          <div>
-            <h4>Create Cascades</h4>
-            <p>Position gems so clearing one match causes another - chain bonuses add up fast!</p>
-          </div>
-        </div>
-
-        <div class="tip">
-          <span class="tip-icon">🔄</span>
-          <div>
-            <h4>Use Rotation Wisely</h4>
-            <p>Reorder your gems before placing - sometimes rotating saves a bad position</p>
-          </div>
-        </div>
-
-        <div class="tip">
-          <span class="tip-icon">📐</span>
-          <div>
-            <h4>Horizontal Mode</h4>
-            <p>Toggle orientation (Space) to lay gems flat - great for filling gaps!</p>
-          </div>
-        </div>
-
-        <div class="tip">
-          <span class="tip-icon">🏔️</span>
-          <div>
-            <h4>Keep It Flat</h4>
-            <p>Avoid tall stacks in the middle - spread gems out for more matching options</p>
-          </div>
-        </div>
-
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <div>
-            <h4>Speed Matters</h4>
-            <p>Early levels are forgiving - use them to practice and build strategy</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTROLS -->
-    <section class="section">
-      <h2>⌨️ Controls Reference</h2>
-      
+    <!-- Controls Section -->
+    <section class="info-section">
+      <h2>🎮 Controls</h2>
       <div class="controls-grid">
         <div class="control-item">
-          <kbd>←</kbd>
-          <span>Move Left</span>
+          <div class="control-key">◀️ / ▶️</div>
+          <p>Move left/right</p>
         </div>
         <div class="control-item">
-          <kbd>→</kbd>
-          <span>Move Right</span>
+          <div class="control-key">↻</div>
+          <p>Rotate gems</p>
         </div>
         <div class="control-item">
-          <kbd>↑</kbd>
-          <span>Rotate Gems</span>
+          <div class="control-key">↕️/↔️</div>
+          <p>Toggle rotation mode</p>
         </div>
         <div class="control-item">
-          <kbd>↓</kbd>
-          <span>Soft Drop</span>
+          <div class="control-key">⬇️</div>
+          <p>Soft drop (speed up)</p>
         </div>
         <div class="control-item">
-          <kbd>Space</kbd>
-          <span>Toggle Orientation</span>
+          <div class="control-key">⤓</div>
+          <p>Hard drop (instant)</p>
         </div>
         <div class="control-item">
-          <kbd>P</kbd>
-          <span>Pause Game</span>
+          <div class="control-key">P</div>
+          <p>Pause game</p>
         </div>
-        <div class="control-item">
-          <kbd>M</kbd>
-          <span>Mute Sound</span>
-        </div>
-      </div>
-
-      <div class="mobile-note">
-        <p>📱 <strong>Mobile Players:</strong> Use on-screen buttons below the game board</p>
       </div>
     </section>
 
-    <footer class="guide-footer">
+    <!-- Pro Tips Section -->
+    <section class="info-section">
+      <h2>💡 Pro Tips</h2>
+      <ul class="tips-list">
+        <li>🌟 <strong>Plan ahead:</strong> Look for potential matches before placing gems</li>
+        <li>⚡ <strong>Chain reactions:</strong> Set up combos for bonus points!</li>
+        <li>🔄 <strong>Use both modes:</strong> Switch between vertical and horizontal rotation for better placement</li>
+        <li>🎯 <strong>Clear from bottom:</strong> Matches near the bottom create the best cascades</li>
+        <li>⏱️ <strong>Don't panic:</strong> You have 3 seconds per drop on level 1 - take your time!</li>
+      </ul>
+    </section>
+
+    <!-- Back to Game -->
+    <div class="back-to-game">
       <a href="/fun/gem-stack.html" class="btn-play">🎮 Play Now</a>
-      <p>© 2025 Sheena's Adventures</p>
-    </footer>
+    </div>
   </main>
 
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Sheena's Adventures • <a href="/contact.html">Contact</a></p>
+  </footer>
+
+  <script>
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Hamburger menu
+    const hamburger = document.querySelector('.hamburger');
+    if (hamburger) {
+      hamburger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        document.body.classList.toggle('menu-open');
+        const isOpen = document.body.classList.contains('menu-open');
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+      
+      document.querySelectorAll('.site-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          document.body.classList.remove('menu-open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+  </script>
 </body>
-                                    </html>
+</html>
