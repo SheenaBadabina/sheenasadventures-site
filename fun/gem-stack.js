@@ -23,14 +23,13 @@ const ASSETS = {
 /* ========== DOM hookups ========== */
 const $ = (sel) => document.querySelector(sel);
 
-let dom = {};  // Will be populated in init()
-
-const ctx = null;  // Will be set in init()
+let dom = {};
+let ctx = null;
 
 /* ========== Constants ========== */
-const COLS = 9;  // Changed to 9 for true center
+const COLS = 9;
 const ROWS = 15;
-const SPRITE_SIZE = 1024 / 3;  // 341.33px per gem
+const SPRITE_SIZE = 1024 / 3;
 const GEM_TYPES = 9;
 
 /* ========== Game State ========== */
@@ -46,7 +45,7 @@ const Game = {
   dropTimer: 0,
   dropInterval: 2000,
   lastTime: 0,
-  rotationMode: 'vertical'  // 'vertical' or 'horizontal'
+  rotationMode: 'vertical'
 };
 
 /* ========== Images ========== */
@@ -92,7 +91,6 @@ const audio = {
     const sound = new Audio(src);
     sound.preload = "auto";
     
-    // CRITICAL: Set loop for background music
     if (key === "bg") {
       sound.loop = true;
     }
@@ -110,7 +108,6 @@ const audio = {
   toggleMute() {
     this.muted = !this.muted;
     
-    // Pause or resume background music
     if (this.sounds.bg) {
       if (this.muted) {
         this.sounds.bg.pause();
@@ -134,7 +131,7 @@ function spawnColumn() {
     Math.floor(Math.random() * GEM_TYPES) + 1,
     Math.floor(Math.random() * GEM_TYPES) + 1
   ];
-  Game.colX = 4;  // True center of 9 columns (0-8)
+  Game.colX = 4;
   console.log("Spawned at column:", Game.colX, "of", COLS);
 }
 
@@ -156,7 +153,7 @@ function placeColumn() {
   Game.column = null;
   Game.dropTimer = 0;
   
-  if (canPlace(3)) {
+  if (canPlace(4)) {
     spawnColumn();
   } else {
     gameOver();
@@ -233,25 +230,23 @@ function checkMatches() {
 
 /* ========== Controls ========== */
 function moveLeft() {
-  if (!Game.column || Game.paused) return;
+  if (!Game.column || Game.paused || !Game.running) return;
   if (Game.colX > 0) Game.colX--;
   draw();
 }
 
 function moveRight() {
-  if (!Game.column || Game.paused) return;
+  if (!Game.column || Game.paused || !Game.running) return;
   if (Game.colX < COLS - 1) Game.colX++;
   draw();
 }
 
 function rotateColumn() {
-  if (!Game.column || Game.paused) return;
+  if (!Game.column || Game.paused || !Game.running) return;
   
   if (Game.rotationMode === 'vertical') {
-    // Rotate within the column (shift gems up/down)
     Game.column.unshift(Game.column.pop());
   } else {
-    // Horizontal mode - swap positions in a different pattern
     const temp = Game.column[0];
     Game.column[0] = Game.column[2];
     Game.column[2] = temp;
@@ -263,7 +258,6 @@ function rotateColumn() {
 function toggleRotationMode() {
   Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
   
-  // Update button text
   if (dom.toggleRotation) {
     dom.toggleRotation.textContent = Game.rotationMode === 'vertical' ? '↕️ Vert' : '↔️ Horiz';
   }
@@ -272,12 +266,12 @@ function toggleRotationMode() {
 }
 
 function softDrop() {
-  if (!Game.column || Game.paused) return;
+  if (!Game.column || Game.paused || !Game.running) return;
   placeColumn();
 }
 
 function hardDrop() {
-  if (!Game.column || Game.paused) return;
+  if (!Game.column || Game.paused || !Game.running) return;
   placeColumn();
 }
 
@@ -300,7 +294,6 @@ function update(timestamp) {
 
 /* ========== Rendering ========== */
 function draw() {
-  const ctx = window.ctx;
   if (!ctx || !dom.canvas) return;
   
   const cw = dom.canvas.width;
@@ -389,7 +382,6 @@ function startGame() {
   spawnColumn();
   updateUI();
   
-  // Start background music
   if (audio.sounds.bg && !audio.muted) {
     audio.sounds.bg.play().catch(e => console.log("BG music failed:", e));
   }
@@ -399,6 +391,8 @@ function startGame() {
 }
 
 function togglePause() {
+  if (!Game.running) return;
+  
   console.log("Toggle pause clicked!");
   Game.paused = !Game.paused;
   
@@ -422,6 +416,7 @@ function restartGame() {
   
   Game.running = false;
   Game.paused = false;
+  initGrid();
   draw();
 }
 
@@ -443,42 +438,68 @@ function gameOver() {
 /* ========== Event Listeners ========== */
 function setupEvents() {
   console.log("Setting up event listeners...");
-  console.log("Play button:", dom.play);
-  console.log("Pause button:", dom.pause);
-  console.log("Restart button:", dom.restart);
   
   // Game controls
-  if (dom.play) {
-    dom.play.addEventListener("click", (e) => {
-      console.log("Play button clicked!");
+  const playBtn = $('[data-game="play"]');
+  const pauseBtn = $('[data-game="pause"]');
+  const restartBtn = $('[data-game="restart"]');
+  
+  console.log("Play button found:", playBtn);
+  console.log("Pause button found:", pauseBtn);
+  console.log("Restart button found:", restartBtn);
+  
+  if (playBtn) {
+    playBtn.addEventListener("click", function(e) {
+      console.log("🎮 PLAY CLICKED!");
       e.preventDefault();
+      e.stopPropagation();
+      startGame();
+    });
+    playBtn.addEventListener("touchend", function(e) {
+      console.log("🎮 PLAY TOUCHED!");
+      e.preventDefault();
+      e.stopPropagation();
       startGame();
     });
     console.log("✅ Play button wired");
   } else {
-    console.log("❌ Play button NOT found!");
+    console.error("❌ Play button NOT found!");
   }
   
-  if (dom.pause) {
-    dom.pause.addEventListener("click", (e) => {
-      console.log("Pause button clicked!");
+  if (pauseBtn) {
+    pauseBtn.addEventListener("click", function(e) {
+      console.log("⏸️ PAUSE CLICKED!");
       e.preventDefault();
+      e.stopPropagation();
+      togglePause();
+    });
+    pauseBtn.addEventListener("touchend", function(e) {
+      console.log("⏸️ PAUSE TOUCHED!");
+      e.preventDefault();
+      e.stopPropagation();
       togglePause();
     });
     console.log("✅ Pause button wired");
   } else {
-    console.log("❌ Pause button NOT found!");
+    console.error("❌ Pause button NOT found!");
   }
   
-  if (dom.restart) {
-    dom.restart.addEventListener("click", (e) => {
-      console.log("Restart button clicked!");
+  if (restartBtn) {
+    restartBtn.addEventListener("click", function(e) {
+      console.log("🔄 RESTART CLICKED!");
       e.preventDefault();
+      e.stopPropagation();
+      restartGame();
+    });
+    restartBtn.addEventListener("touchend", function(e) {
+      console.log("🔄 RESTART TOUCHED!");
+      e.preventDefault();
+      e.stopPropagation();
       restartGame();
     });
     console.log("✅ Restart button wired");
   } else {
-    console.log("❌ Restart button NOT found!");
+    console.error("❌ Restart button NOT found!");
   }
   
   // Mute button
@@ -496,7 +517,6 @@ function setupEvents() {
       e.preventDefault();
       moveLeft();
     });
-    // Prevent context menu on long press
     dom.left.addEventListener("contextmenu", (e) => e.preventDefault());
     console.log("✅ Left button wired");
   }
@@ -594,48 +614,48 @@ function setupEvents() {
 
 /* ========== Initialization ========== */
 async function init() {
-  console.log("🎮 Initializing Gem Stack...");
-  
-  // SELECT ALL DOM ELEMENTS AFTER PAGE IS LOADED
-  dom = {
-    canvas: $("#gameCanvas"),
-    play:   $('[data-game="play"]'),
-    pause:  $('[data-game="pause"]'),
-    restart: $('[data-game="restart"]'),
-    mute:   $('[data-audio="mute"]'),
-    score:  $('[data-ui="score"]'),
-    level:  $('[data-ui="level"]'),
-    best:   $('[data-ui="best"]'),
-    left:   $('[data-control="left"]'),
-    right:  $('[data-control="right"]'),
-    down:   $('[data-control="down"]'),
-    drop:   $('[data-control="drop"]'),
-    rotate: $('[data-control="rotate"]'),
-    toggleRotation: $('[data-control="toggle-rotation"]')
-  };
-  
-  // CRITICAL: Make sure DOM elements exist
-  if (!dom.canvas) {
-    console.error("❌ Canvas not found! Retrying...");
-    setTimeout(init, 100);
-    return;
-  }
-  
-  // Get canvas context
-  const ctx = dom.canvas.getContext("2d");
-  window.ctx = ctx;  // Make it global
-  
-  // Load sprites
-  loadSprites();
-  
-  // Load audio
-  for (const [key, src] of Object.entries(ASSETS.audio)) {
-    await audio.load(key, src);
-  }
-  console.log("✅ Audio loaded");
-  
-  // Canvas sizing
-  if (dom.canvas) {
+  try {
+    console.log("🎮 Initializing Gem Stack...");
+    
+    // SELECT ALL DOM ELEMENTS AFTER PAGE IS LOADED
+    dom = {
+      canvas: $("#gameCanvas"),
+      play:   $('[data-game="play"]'),
+      pause:  $('[data-game="pause"]'),
+      restart: $('[data-game="restart"]'),
+      mute:   $('[data-audio="mute"]'),
+      score:  $('[data-ui="score"]'),
+      level:  $('[data-ui="level"]'),
+      best:   $('[data-ui="best"]'),
+      left:   $('[data-control="left"]'),
+      right:  $('[data-control="right"]'),
+      down:   $('[data-control="down"]'),
+      drop:   $('[data-control="drop"]'),
+      rotate: $('[data-control="rotate"]'),
+      toggleRotation: $('[data-control="toggle-rotation"]')
+    };
+    
+    // CRITICAL: Make sure canvas exists
+    if (!dom.canvas) {
+      console.error("❌ Canvas not found! Retrying...");
+      setTimeout(init, 100);
+      return;
+    }
+    
+    // Get canvas context
+    ctx = dom.canvas.getContext("2d");
+    
+    // Load sprites
+    loadSprites();
+    
+    // Load audio
+    console.log("Loading audio...");
+    for (const [key, src] of Object.entries(ASSETS.audio)) {
+      await audio.load(key, src);
+    }
+    console.log("✅ Audio loaded");
+    
+    // Canvas sizing
     function resize() {
       const rect = dom.canvas.getBoundingClientRect();
       dom.canvas.width = rect.width;
@@ -645,25 +665,27 @@ async function init() {
     resize();
     window.addEventListener("resize", resize);
     console.log("✅ Canvas sized");
+    
+    // Setup events AFTER everything is ready
+    setupEvents();
+    
+    // Initialize UI
+    initGrid();
+    updateUI();
+    
+    // Draw initial state (shows background immediately)
+    draw();
+    
+    console.log("✅ Ready to play!");
+    
+  } catch (error) {
+    console.error("❌ INITIALIZATION ERROR:", error);
   }
-  
-  // Setup events AFTER everything is ready
-  setupEvents();
-  
-  // Initialize UI
-  initGrid();
-  updateUI();
-  
-  // Draw initial state (shows background immediately)
-  draw();
-  
-  console.log("✅ Ready to play!");
 }
 
 // WAIT for DOM to be fully loaded before initializing
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
-  // DOM already loaded
   init();
-    }
+                              }
