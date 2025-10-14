@@ -129,41 +129,61 @@ function spawnColumn() {
     Math.floor(Math.random() * GEM_TYPES) + 1
   ];
   Game.colX = 4;
-  Game.orientation = 'vertical';  // Always spawn vertical
+  Game.colY = 0;  // Start at top
+  Game.orientation = 'vertical';
   console.log("Spawned at column:", Game.colX);
 }
 
-function canPlace() {
+function canPlacePiece() {
   if (!Game.column) return false;
   
   if (Game.orientation === 'vertical') {
-    // Check if column is valid and top 3 rows are empty
-    if (Game.colX < 0 || Game.colX >= COLS) return false;
-    return Game.grid[0][Game.colX] === 0 && 
-           Game.grid[1][Game.colX] === 0 && 
-           Game.grid[2][Game.colX] === 0;
+    // Check if we can place at current Y position
+    const row = Game.colY + 2;  // Bottom gem of the 3-gem column
+    
+    // Check if hit bottom
+    if (row >= ROWS - 1) return false;
+    
+    // Check if would collide with existing gems below
+    if (Game.colY + 3 < ROWS && Game.grid[Game.colY + 3][Game.colX] !== 0) return false;
+    
   } else {
-    // Horizontal - check if 3 columns are valid and top row is empty
-    if (Game.colX - 1 < 0 || Game.colX + 1 >= COLS) return false;
-    return Game.grid[0][Game.colX - 1] === 0 && 
-           Game.grid[0][Game.colX] === 0 && 
-           Game.grid[0][Game.colX + 1] === 0;
+    // Horizontal - check if would collide below
+    const row = Game.colY;
+    
+    // Check if hit bottom
+    if (row >= ROWS - 1) return false;
+    
+    // Check all 3 horizontal positions
+    if (Game.colY + 1 < ROWS) {
+      if (Game.grid[Game.colY + 1][Game.colX - 1] !== 0 ||
+          Game.grid[Game.colY + 1][Game.colX] !== 0 ||
+          Game.grid[Game.colY + 1][Game.colX + 1] !== 0) {
+        return false;
+      }
+    }
   }
+  
+  return true;
 }
 
-function placeColumn() {
+function lockPiece() {
   if (!Game.column) return;
   
   if (Game.orientation === 'vertical') {
-    // Place vertically (stacked in one column)
+    // Lock vertically at current Y position
     for (let i = 0; i < 3; i++) {
-      Game.grid[i][Game.colX] = Game.column[i];
+      if (Game.colY + i < ROWS) {
+        Game.grid[Game.colY + i][Game.colX] = Game.column[i];
+      }
     }
   } else {
-    // Place horizontally (side by side in top row)
-    Game.grid[0][Game.colX - 1] = Game.column[0];
-    Game.grid[0][Game.colX] = Game.column[1];
-    Game.grid[0][Game.colX + 1] = Game.column[2];
+    // Lock horizontally at current Y position
+    if (Game.colY < ROWS) {
+      Game.grid[Game.colY][Game.colX - 1] = Game.column[0];
+      Game.grid[Game.colY][Game.colX] = Game.column[1];
+      Game.grid[Game.colY][Game.colX + 1] = Game.column[2];
+    }
   }
   
   // Clear the active column
@@ -321,12 +341,12 @@ function toggleRotationMode() {
 
 function softDrop() {
   if (!Game.column || Game.paused || !Game.running) return;
-  placeColumn();
+  lockPiece();
 }
 
 function hardDrop() {
   if (!Game.column || Game.paused || !Game.running) return;
-  placeColumn();
+  lockPiece();
 }
 
 /* ========== Game Loop ========== */
@@ -340,9 +360,17 @@ function update(timestamp) {
   if (Game.column) {
     Game.dropTimer += delta;
     
-    // Auto-drop after interval
+    // Move piece down one row every dropInterval
     if (Game.dropTimer >= Game.dropInterval) {
-      placeColumn();
+      Game.dropTimer = 0;
+      
+      // Try to move down
+      if (canPlacePiece()) {
+        Game.colY++;  // Move down one row
+      } else {
+        // Can't move down - lock it in place
+        lockPiece();
+      }
     }
   }
   
@@ -397,10 +425,10 @@ function draw() {
   // Draw active column
   if (Game.column) {
     if (Game.orientation === 'vertical') {
-      // Draw vertically (3 gems stacked)
+      // Draw vertically (3 gems stacked) at current Y position
       for (let i = 0; i < 3; i++) {
         const x = offsetX + Game.colX * cellSize;
-        const y = offsetY + i * cellSize;
+        const y = offsetY + (Game.colY + i) * cellSize;
         const gem = Game.column[i];
         
         if (gem > 0 && images.sprites && images.sprites.complete) {
@@ -408,7 +436,7 @@ function draw() {
           const sx = (gemIndex % 3) * SPRITE_SIZE;
           const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
           
-          ctx.globalAlpha = 0.8;
+          ctx.globalAlpha = 0.9;
           ctx.drawImage(
             images.sprites,
             sx, sy, SPRITE_SIZE, SPRITE_SIZE,
@@ -418,10 +446,10 @@ function draw() {
         }
       }
     } else {
-      // Draw horizontally (3 gems side by side)
+      // Draw horizontally (3 gems side by side) at current Y position
       for (let i = 0; i < 3; i++) {
         const x = offsetX + (Game.colX + i - 1) * cellSize;
-        const y = offsetY + 0 * cellSize;
+        const y = offsetY + Game.colY * cellSize;
         const gem = Game.column[i];
         
         if (gem > 0 && images.sprites && images.sprites.complete) {
@@ -429,7 +457,7 @@ function draw() {
           const sx = (gemIndex % 3) * SPRITE_SIZE;
           const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
           
-          ctx.globalAlpha = 0.8;
+          ctx.globalAlpha = 0.9;
           ctx.drawImage(
             images.sprites,
             sx, sy, SPRITE_SIZE, SPRITE_SIZE,
@@ -679,4 +707,4 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-  }
+    }
