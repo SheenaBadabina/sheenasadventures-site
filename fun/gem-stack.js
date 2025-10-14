@@ -386,6 +386,9 @@ function hardDrop() {
 
 /* ========== Game Control ========== */
 function startGame() {
+  console.log('START GAME CALLED!');
+  alert('Play button clicked!'); // Debug alert
+  
   Game.running = true;
   Game.paused = false;
   Game.over = false;
@@ -404,6 +407,9 @@ function startGame() {
   Game.lastTime = performance.now();
   requestAnimationFrame(gameLoop);
 }
+
+// Make startGame globally accessible
+window.gameStart = startGame;
 
 function togglePause() {
   if (!Game.running || Game.over) return;
@@ -695,4 +701,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-          }
+}
