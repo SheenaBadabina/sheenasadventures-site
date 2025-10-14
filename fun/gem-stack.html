@@ -23,6 +23,9 @@
 
   <!-- Page styles -->
   <link rel="stylesheet" href="/fun/gem-stack.css">
+  
+  <!-- Game script - load with defer so it runs after DOM loads -->
+  <script defer src="/fun/gem-stack.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -38,9 +41,9 @@
 
     <!-- Game Controls -->
     <section class="controls primary">
-      <button class="btn" data-game="play">▶️ Play</button>
-      <button class="btn" data-game="pause">⏸️ Pause</button>
-      <button class="btn secondary" data-game="restart">🔄 Restart</button>
+      <button class="btn" data-game="play" onclick="window.startGame()">▶️ Play</button>
+      <button class="btn" data-game="pause" onclick="window.togglePause()">⏸️ Pause</button>
+      <button class="btn secondary" data-game="restart" onclick="window.restartGame()">🔄 Restart</button>
       <button class="btn secondary" data-audio="mute">🔇 Mute</button>
       <a href="/fun/gem-guide.html" class="btn secondary">📖 Guide</a>
     </section>
@@ -97,8 +100,5 @@
       </details>
     </section>
   </main>
-
-  <!-- Game script -->
-  <script src="/fun/gem-stack.js"></script>
 </body>
 </html>
