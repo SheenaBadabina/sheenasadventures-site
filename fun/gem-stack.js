@@ -58,7 +58,7 @@ const Game = {
   
   // Timing
   dropTimer: 0,
-  dropSpeed: 1000,
+  dropSpeed: 2000, // SLOWER - 2 seconds per drop
   lastTime: 0,
   
   // Rotation mode
@@ -160,7 +160,8 @@ function spawnColumn() {
     Math.floor(Math.random() * 9),
     Math.floor(Math.random() * 9)
   ];
-  Game.colX = 3;
+  Game.colX = Math.floor(Game.cols / 2); // Start in middle (column 4)
+  Game.dropTimer = 0; // Reset timer
 }
 
 function canPlace() {
@@ -395,13 +396,13 @@ function startGame() {
     Game.score = 0;
     Game.level = 1;
     Game.lines = 0;
-    Game.dropSpeed = 1000;
+    Game.dropSpeed = 2000; // Start at 2 seconds
     Game.dropTimer = 0;
     
     console.log('Initializing grid...');
     initGrid();
     
-    console.log('Spawning column...');
+    console.log('Spawning first column...');
     spawnColumn();
     
     console.log('Updating UI...');
