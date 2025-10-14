@@ -1,0 +1,398 @@
+/* ==========================================================================
+   Gem Guide - Desert Rockhound Field Guide
+   ========================================================================== */
+
+:root {
+  --color-accent: #00BFA5;
+  --color-bg: #0B0F12;
+  --color-surface: #0F1419;
+  --color-text: #D9E1E8;
+  --color-muted: #92A1AD;
+  --desert-sand: #e67e22;
+  --desert-sky: #3498db;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(180deg, #0B0F12 0%, #1a1f2e 100%);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.guide-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.guide-header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, var(--desert-sky), var(--desert-sand));
+  border-radius: 16px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.guide-header h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.btn-back {
+  display: inline-block;
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+/* Sections */
+.section {
+  background: var(--color-surface);
+  border: 1px solid #22303a;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: var(--color-accent);
+}
+
+.section > p {
+  color: var(--color-muted);
+  margin-bottom: 20px;
+}
+
+/* Gem Grid */
+.gem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.gem-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gem-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,191,165,0.2);
+}
+
+.gem-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.gem-card h3 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.gem-desc {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+/* Power-ups */
+.powerup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.powerup-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s;
+}
+
+.powerup-card:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: var(--color-accent);
+}
+
+.powerup-icon {
+  font-size: 3rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.powerup-icon.shimmer {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  animation: shimmer 2s infinite;
+}
+
+.powerup-icon.bomb {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.powerup-icon.blocker {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+}
+
+@keyframes shimmer {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.5); }
+  50% { box-shadow: 0 0 40px rgba(255,215,0,0.8); }
+}
+
+.powerup-info h3 {
+  margin-bottom: 5px;
+}
+
+.powerup-info p {
+  color: var(--color-muted);
+  margin-bottom: 8px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Scoring Table */
+.scoring-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-muted);
+}
+
+.score-row.highlight {
+  background: rgba(0,191,165,0.1);
+  border-left-color: var(--color-accent);
+}
+
+.score-label {
+  font-weight: 600;
+}
+
+.score-value {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Progression */
+.progression-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.prog-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+
+.prog-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.prog-item h4 {
+  margin-bottom: 5px;
+}
+
+.prog-item p {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+/* Tips */
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-accent);
+}
+
+.tip-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tip h4 {
+  margin-bottom: 5px;
+  color: var(--color-accent);
+}
+
+.tip p {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+/* Controls */
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+
+kbd {
+  display: inline-block;
+  padding: 8px 16px;
+  background: var(--color-surface);
+  border: 2px solid #22303a;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.mobile-note {
+  padding: 15px;
+  background: rgba(0,191,165,0.1);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-accent);
+}
+
+/* Footer */
+.guide-footer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.btn-play {
+  display: inline-block;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--color-accent), #00a896);
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 10px 20px rgba(0,191,165,0.3);
+  transition: all 0.3s;
+  margin-bottom: 20px;
+}
+
+.btn-play:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(0,191,165,0.4);
+}
+
+.guide-footer p {
+  color: var(--color-muted);
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gem-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .powerup-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .controls-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  }
