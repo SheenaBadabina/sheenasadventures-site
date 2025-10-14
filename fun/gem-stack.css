@@ -17,6 +17,7 @@ html, body {
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* ==========================================================
@@ -379,4 +380,4 @@ h1 {
   h1 {
     font-size: 2.5rem;
   }
-     }
+}
