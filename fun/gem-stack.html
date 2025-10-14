@@ -66,12 +66,12 @@
 
     <!-- Touch Controls -->
     <section class="controls on-screen">
-      <button class="btn touch" data-control="left" aria-label="Move Left">◀️</button>
-      <button class="btn touch" data-control="rotate" aria-label="Rotate">↻</button>
-      <button class="btn touch" data-control="right" aria-label="Move Right">▶️</button>
-      <button class="btn touch" data-control="down" aria-label="Soft Drop">⬇️</button>
+      <button class="btn touch" data-control="left" onclick="window.moveLeft()" aria-label="Move Left">◀️</button>
+      <button class="btn touch" data-control="rotate" onclick="window.rotateColumn()" aria-label="Rotate">↻</button>
+      <button class="btn touch" data-control="right" onclick="window.moveRight()" aria-label="Move Right">▶️</button>
+      <button class="btn touch" data-control="down" onclick="window.softDrop()" aria-label="Soft Drop">⬇️</button>
       <span></span>
-      <button class="btn touch" data-control="drop" aria-label="Hard Drop">⤓</button>
+      <button class="btn touch" data-control="drop" onclick="window.hardDrop()" aria-label="Hard Drop">⤓</button>
     </section>
 
     <!-- How to Play -->
