@@ -390,6 +390,17 @@ function startGame() {
   console.log("✅ Game started!");
 }
 
+// Make functions globally accessible for inline onclick
+window.startGame = startGame;
+window.togglePause = togglePause;
+window.restartGame = restartGame;
+window.moveLeft = moveLeft;
+window.moveRight = moveRight;
+window.rotateColumn = rotateColumn;
+window.toggleRotationMode = toggleRotationMode;
+window.softDrop = softDrop;
+window.hardDrop = hardDrop;
+
 function togglePause() {
   if (!Game.running) return;
   
@@ -688,4 +699,4 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-                              }
+  }
