@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Desert Drop — Gem Stack | Sheena's Adventures</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Match gems, chase combos, and keep the desert glowing. A mobile-first browser game from Sheena's Adventures.">
 
-  <!-- Open Graph -->
+  <!-- Open Graph / Social -->
   <meta property="og:title" content="Desert Drop — Gem Stack">
   <meta property="og:description" content="Match gems, chase combos, and keep the desert glowing.">
   <meta property="og:type" content="website">
@@ -15,69 +15,84 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#00BFA5">
 
-  <!-- ONLY GAME CSS - NO SITE CSS -->
-  <link rel="stylesheet" href="/fun/gem-stack.css">
-  
-  <!-- Preload assets -->
+  <!-- Preload key game assets -->
   <link rel="preload" as="image" href="/assets/gem-sprites.png">
+  <link rel="preload" as="image" href="/assets/level-badges.png">
   <link rel="preload" as="image" href="/assets/background-sky-canyon.png">
+  <link rel="preload" as="audio" href="/assets/background-loop.mp3">
+
+  <!-- Page styles -->
+  <link rel="stylesheet" href="/fun/gem-stack.css">
 </head>
 <body>
-  
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Sheena's Adventures Home">Sheena's Adventures</a>
+    <nav class="site-nav">
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+
   <main class="game-wrap">
-    <header class="game-header">
-      <h1 class="game-title">Desert Drop — Gem Stack</h1>
-      
-      <div class="controls primary">
-        <button class="btn" id="playBtn" data-game="play">▶️ Play</button>
-        <button class="btn" id="pauseBtn" data-game="pause" style="display:none;">⏸️ Pause</button>
-        <button class="btn secondary" id="restartBtn" data-game="restart" style="display:none;">🔄 Restart</button>
-        <button class="btn secondary" id="muteBtn" data-audio="mute">🔇 Mute</button>
-      </div>
-      
-      <div class="hud">
-        <div class="pill">Score: <span data-ui="score">000000</span></div>
-        <div class="pill">Level: <span data-ui="level">1</span></div>
-        <div class="pill">Best: <span data-ui="best">000000</span></div>
-      </div>
-    </header>
+    <h1>Desert Drop — Gem Stack</h1>
 
-    <section class="game-stage">
-      <div class="canvas-shell">
-        <canvas id="gameCanvas" width="640" height="960"></canvas>
-      </div>
+    <!-- Game Controls -->
+    <section class="controls primary">
+      <button class="btn" data-game="play">▶️ Play</button>
+      <button class="btn" data-game="pause" style="display:none;">⏸️ Pause</button>
+      <button class="btn secondary" data-game="restart" style="display:none;">🔄 Restart</button>
+      <button class="btn secondary" data-audio="mute">🔇 Mute</button>
+      <a href="/fun/gem-guide.html" class="btn secondary">📖 Guide</a>
     </section>
 
+    <!-- HUD -->
+    <section class="hud">
+      <div class="pill">Score: <span data-ui="score">000000</span></div>
+      <div class="pill">Level: <span data-ui="level">1</span></div>
+      <div class="pill">Best: <span data-ui="best">000000</span></div>
+    </section>
+
+    <!-- Canvas -->
+    <section class="canvas-shell">
+      <canvas id="gameCanvas" width="800" height="1200"></canvas>
+    </section>
+
+    <!-- Touch Controls -->
     <section class="controls on-screen">
-      <button class="ctrl" data-control="left">◀</button>
-      <button class="ctrl" data-control="rotate">↻</button>
-      <button class="ctrl" data-control="right">▶</button>
-      <button class="ctrl" data-control="down">▼</button>
-      <button class="ctrl" data-control="drop">⤓</button>
+      <button class="btn touch" data-control="left" aria-label="Move Left">◀️</button>
+      <button class="btn touch" data-control="rotate" aria-label="Rotate">↻</button>
+      <button class="btn touch" data-control="right" aria-label="Move Right">▶️</button>
+      <button class="btn touch" data-control="down" aria-label="Soft Drop">⬇️</button>
+      <button class="btn touch" data-control="drop" aria-label="Hard Drop">⤓</button>
     </section>
 
+    <!-- How to Play -->
     <section class="howto">
       <details>
         <summary>How to Play</summary>
         <div class="howto-body">
-          <p>Match three or more gems in a line to clear them. Create cascades for bonus points!</p>
+          <p>Match three or more identical gems in a line—horizontal, vertical, or diagonal—to clear them. Cascades can chain for bonus points. Levels increase every 10 clears and speed up the game.</p>
           <ul>
-            <li><strong>Move:</strong> ⬅️ ➡️ or arrow buttons</li>
-            <li><strong>Rotate:</strong> ⬆️ or ↻ button</li>
-            <li><strong>Drop:</strong> ⬇️ or Space</li>
-            <li><strong>Pause:</strong> P key or ⏸️ button</li>
+            <li><strong>Move:</strong> ⬅️ / ➡️ or on-screen arrows</li>
+            <li><strong>Rotate:</strong> ⬆️ or ↻</li>
+            <li><strong>Soft Drop:</strong> ⬇️</li>
+            <li><strong>Hard Drop:</strong> Space / ⤓</li>
+            <li><strong>Pause:</strong> P key or Pause button</li>
+            <li><strong>Mute:</strong> M key or Mute button</li>
           </ul>
         </div>
       </details>
     </section>
-
-    <footer class="game-footer">
-      <p>© 2025 Sheena's Adventures</p>
-    </footer>
   </main>
 
-  <!-- Game JavaScript -->
-  <script src="/fun/gem-stack.js"></script>
-  
+  <footer class="site-footer">
+    <p>© <span id="y"></span> Sheena's Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
+  </footer>
+
+  <!-- Game script -->
+  <script src="/fun/gem-stack.js" defer></script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
