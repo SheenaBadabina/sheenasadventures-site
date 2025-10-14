@@ -27,13 +27,6 @@
 <body>
   <header class="site-header">
     <a class="brand" href="/" aria-label="Sheena's Adventures Home">Sheena's Adventures</a>
-    
-    <button class="hamburger" aria-label="Menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    
     <nav class="site-nav">
       <a href="/work-with-me.html">Work With Me</a>
       <a href="/contact.html">Contact</a>
@@ -45,10 +38,10 @@
 
     <!-- Game Controls -->
     <section class="controls primary">
-      <button class="btn" data-game="play" id="playBtn" onclick="window.gameStart()">▶️ Play</button>
-      <button class="btn" data-game="pause" id="pauseBtn" style="display:none;">⏸️ Pause</button>
-      <button class="btn secondary" data-game="restart" id="restartBtn" style="display:none;">🔄 Restart</button>
-      <button class="btn secondary" data-audio="mute" id="muteBtn">🔇 Mute</button>
+      <button class="btn" data-game="play">▶️ Play</button>
+      <button class="btn" data-game="pause">⏸️ Pause</button>
+      <button class="btn secondary" data-game="restart">🔄 Restart</button>
+      <button class="btn secondary" data-audio="mute">🔇 Mute</button>
       <a href="/fun/gem-guide.html" class="btn secondary">📖 Guide</a>
     </section>
 
@@ -66,12 +59,12 @@
 
     <!-- Touch Controls -->
     <section class="controls on-screen">
-      <button class="btn touch" data-control="left" onclick="window.moveLeft()" aria-label="Move Left">◀️</button>
-      <button class="btn touch" data-control="rotate" onclick="window.rotateColumn()" aria-label="Rotate">↻</button>
-      <button class="btn touch" data-control="right" onclick="window.moveRight()" aria-label="Move Right">▶️</button>
-      <button class="btn touch" data-control="toggle-rotation" onclick="window.toggleRotation()" aria-label="Toggle Rotation Mode">↕️<br><small>Vert</small></button>
-      <button class="btn touch" data-control="down" onclick="window.softDrop()" aria-label="Soft Drop">⬇️</button>
-      <button class="btn touch" data-control="drop" onclick="window.hardDrop()" aria-label="Hard Drop">⤓</button>
+      <button class="btn touch" data-control="left" aria-label="Move Left">◀️</button>
+      <button class="btn touch" data-control="rotate" aria-label="Rotate">↻</button>
+      <button class="btn touch" data-control="right" aria-label="Move Right">▶️</button>
+      <button class="btn touch" data-control="toggle-rotation" aria-label="Toggle Rotation Mode">↕️ Vert</button>
+      <button class="btn touch" data-control="down" aria-label="Soft Drop">⬇️</button>
+      <button class="btn touch" data-control="drop" aria-label="Hard Drop">⤓</button>
     </section>
 
     <!-- How to Play -->
@@ -79,40 +72,31 @@
       <details>
         <summary>How to Play</summary>
         <div class="howto-body">
-          <p>Match three or more identical gems in a line—horizontal, vertical, or diagonal—to clear them. Cascades can chain for bonus points. Levels increase every 10 clears and speed up the game.</p>
+          <p><strong>Match 3+ gems</strong> in a line (horizontal, vertical, or diagonal) to clear them. Cascades chain for bonus points. Every 10 clears levels you up and speeds the game.</p>
           
           <p><strong>Controls:</strong></p>
           <ul>
-            <li><strong>Move Left/Right:</strong> ⬅️ / ➡️ arrows or on-screen ◀️ / ▶️ buttons</li>
-            <li><strong>Rotate:</strong> ⬆️ arrow or ↻ button (cycles gems in current mode)</li>
-            <li><strong>Toggle Rotation Mode:</strong> ↕️/↔️ button or R key to switch between vertical and horizontal rotation</li>
-            <li><strong>Soft Drop:</strong> ⬇️ arrow or ⬇️ button (speeds up fall)</li>
-            <li><strong>Hard Drop:</strong> Space bar or ⤓ button (instant drop)</li>
-            <li><strong>Pause:</strong> P key or ⏸️ button</li>
-            <li><strong>Mute:</strong> M key or 🔇 button</li>
-          </ul>
-          
-          <p><strong>Rotation Modes:</strong></p>
-          <ul>
-            <li><strong>Vertical (↕️):</strong> Gems cycle bottom → middle → top</li>
-            <li><strong>Horizontal (↔️):</strong> Gems swap positions left ↔ right</li>
-            <li><strong>Tip:</strong> Click the ↕️/↔️ button to switch modes anytime!</li>
+            <li><kbd>←</kbd> / <kbd>→</kbd> Move column left/right</li>
+            <li><kbd>↑</kbd> Rotate gems in column</li>
+            <li><kbd>↓</kbd> Soft drop (place immediately)</li>
+            <li><kbd>Space</kbd> Hard drop (instant place)</li>
+            <li><kbd>P</kbd> Pause game</li>
+            <li><kbd>M</kbd> Mute/unmute audio</li>
           </ul>
           
           <p><strong>Scoring:</strong></p>
           <ul>
-            <li>3 gems = 100 points</li>
-            <li>Each extra gem = +50 points</li>
-            <li>Combos = +10% per chain</li>
+            <li>3 gems = 300 points</li>
+            <li>4 gems = 400 points</li>
+            <li>5+ gems = 500+ points</li>
+            <li>Combos add +10% per chain</li>
           </ul>
+          
+          <p>Game ends when gems stack to the top. Chase your high score!</p>
         </div>
       </details>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <p>© <span id="y"></span> Sheena's Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
-  </footer>
 
   <!-- Game script -->
   <script src="/fun/gem-stack.js"></script>
