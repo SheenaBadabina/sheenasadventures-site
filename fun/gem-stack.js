@@ -422,8 +422,15 @@ function startGame() {
   }
 }
 
-// Make startGame globally accessible
+// Make functions globally accessible for onclick
 window.gameStart = startGame;
+window.togglePause = togglePause;
+window.restartGame = restartGame;
+window.moveLeft = moveLeft;
+window.moveRight = moveRight;
+window.rotateColumn = rotateColumn;
+window.softDrop = softDrop;
+window.hardDrop = hardDrop;
 
 function togglePause() {
   if (!Game.running || Game.over) return;
@@ -490,10 +497,10 @@ function gameLoop(time) {
 function draw() {
   if (!ctx) return;
   
-  const cellSize = Math.min(
+  const cellSize = Math.floor(Math.min(
     canvas.width / Game.cols,
     canvas.height / Game.rows
-  );
+  ));
   
   // Background
   if (images.bgLoaded && images.bg) {
@@ -503,19 +510,19 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
   
-  // Grid gems
+  // Grid gems - draw aligned to grid
   for (let r = 0; r < Game.rows; r++) {
     for (let c = 0; c < Game.cols; c++) {
       if (Game.grid[r][c] !== -1) {
-        drawGem(Game.grid[r][c], c * cellSize, r * cellSize, cellSize);
+        drawGem(Game.grid[r][c], Math.floor(c * cellSize), Math.floor(r * cellSize), cellSize);
       }
     }
   }
   
-  // Active column
+  // Active column - draw aligned to grid
   if (Game.activeCol && !Game.paused && !Game.over) {
     for (let i = 0; i < 3; i++) {
-      drawGem(Game.activeCol[i], Game.colX * cellSize, i * cellSize, cellSize);
+      drawGem(Game.activeCol[i], Math.floor(Game.colX * cellSize), Math.floor(i * cellSize), cellSize);
     }
   }
   
@@ -716,4 +723,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-          }
+            }
