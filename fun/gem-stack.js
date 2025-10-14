@@ -1,10 +1,10 @@
-// Other touch controls
-  if (dom.left) dom.left.addEventListener('click', moveLeft);
-  if (dom.right) dom.right.addEventListener('click', moveRight);
-  if (dom.down) dom.down.addEventListener('click', softDrop);
-  if (dom.drop) dom.drop.addEventListener('click', hardDrop);/*  Desert Drop — Gem Stack
-    SIMPLIFIED WORKING VERSION
-    All core features, no fancy effects
+/*  Desert Drop — Gem Stack
+    FINAL VERSION 20 - All bugs fixed
+    - Background loads immediately
+    - 3 second drop speed on level 1
+    - Sprites render correctly (1024x1024)
+    - All controls working
+    - Rotation modes (vertical + horizontal)
     ----------------------------------------------------- */
 
 /* ========== Asset paths ========== */
@@ -62,7 +62,7 @@ const Game = {
   
   // Timing
   dropTimer: 0,
-  dropSpeed: 3000, // MUCH SLOWER - 3 seconds per drop
+  dropSpeed: 3000, // 3 seconds per drop
   lastTime: 0,
   
   // Rotation mode
@@ -164,7 +164,7 @@ function spawnColumn() {
     Math.floor(Math.random() * 9),
     Math.floor(Math.random() * 9)
   ];
-  Game.colX = Math.floor(Game.cols / 2); // Start in middle (column 4)
+  Game.colX = Math.floor(Game.cols / 2); // Start in middle
   Game.dropTimer = 0; // Reset timer
 }
 
@@ -258,8 +258,7 @@ function checkMatches() {
     }
   }
   
-  // Diagonal (optional but included)
-  // Top-left to bottom-right
+  // Diagonal (top-left to bottom-right)
   for (let startR = 0; startR < Game.rows; startR++) {
     for (let startC = 0; startC < Game.cols; startC++) {
       let count = 1;
@@ -281,7 +280,7 @@ function checkMatches() {
     }
   }
   
-  // Top-right to bottom-left
+  // Diagonal (top-right to bottom-left)
   for (let startR = 0; startR < Game.rows; startR++) {
     for (let startC = Game.cols - 1; startC >= 0; startC--) {
       let count = 1;
@@ -317,7 +316,7 @@ function checkMatches() {
     const newLevel = Math.floor(Game.lines / 10) + 1;
     if (newLevel > Game.level) {
       Game.level = newLevel;
-      Game.dropSpeed = Math.max(200, 1000 - (Game.level - 1) * 100);
+      Game.dropSpeed = Math.max(800, 3000 - (Game.level - 1) * 200);
       audio.play('lvl');
     }
     
@@ -393,50 +392,28 @@ function hardDrop() {
 /* ========== Game Control ========== */
 function startGame() {
   try {
-    console.log('Starting game...');
-    
     Game.running = true;
     Game.paused = false;
     Game.over = false;
     Game.score = 0;
     Game.level = 1;
     Game.lines = 0;
-    Game.dropSpeed = 3000; // Start at 3 seconds
+    Game.dropSpeed = 3000; // 3 seconds
     Game.dropTimer = 0;
     
-    console.log('Initializing grid...');
     initGrid();
-    
-    console.log('Spawning first column...');
     spawnColumn();
-    
-    console.log('Updating UI...');
     updateUI();
     
-    console.log('Starting audio...');
     audio.playBg();
     
-    console.log('Starting game loop...');
     Game.lastTime = performance.now();
     requestAnimationFrame(gameLoop);
-    
-    console.log('Game started successfully!');
   } catch (error) {
     alert('Error starting game: ' + error.message);
     console.error('Game start error:', error);
   }
 }
-
-// Make functions globally accessible for onclick
-window.gameStart = startGame;
-window.togglePause = togglePause;
-window.restartGame = restartGame;
-window.moveLeft = moveLeft;
-window.moveRight = moveRight;
-window.rotateColumn = rotateColumn;
-window.toggleRotation = toggleRotation;
-window.softDrop = softDrop;
-window.hardDrop = hardDrop;
 
 function togglePause() {
   if (!Game.running || Game.over) return;
@@ -516,7 +493,7 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
   
-  // Grid gems - draw aligned to grid
+  // Grid gems - pixel-perfect alignment
   for (let r = 0; r < Game.rows; r++) {
     for (let c = 0; c < Game.cols; c++) {
       if (Game.grid[r][c] !== -1) {
@@ -525,7 +502,7 @@ function draw() {
     }
   }
   
-  // Active column - draw aligned to grid
+  // Active column - pixel-perfect alignment
   if (Game.activeCol && !Game.paused && !Game.over) {
     for (let i = 0; i < 3; i++) {
       drawGem(Game.activeCol[i], Math.floor(Game.colX * cellSize), Math.floor(i * cellSize), cellSize);
@@ -566,7 +543,7 @@ function drawGem(type, x, y, size) {
   }
   
   // CORRECT: 1024×1024 sprite sheet with 341.33px cells
-  const SPRITE_CELL = 1024 / 3; // = 341.333...
+  const SPRITE_CELL = 1024 / 3;
   const col = type % 3;
   const row = Math.floor(type / 3);
   
@@ -616,15 +593,20 @@ function setupEvents() {
     dom.rotate.addEventListener('touchstart', (e) => {
       pressTimer = setTimeout(() => {
         toggleRotation();
-        // Haptic feedback if available
         if (navigator.vibrate) navigator.vibrate(50);
-      }, 500); // 0.5 second long press
+      }, 500);
     });
     
     dom.rotate.addEventListener('touchend', () => {
       clearTimeout(pressTimer);
     });
   }
+  
+  // Other touch controls
+  if (dom.left) dom.left.addEventListener('click', moveLeft);
+  if (dom.right) dom.right.addEventListener('click', moveRight);
+  if (dom.down) dom.down.addEventListener('click', softDrop);
+  if (dom.drop) dom.drop.addEventListener('click', hardDrop);
   
   // Keyboard
   document.addEventListener('keydown', (e) => {
@@ -700,6 +682,8 @@ function resizeCanvas() {
 
 /* ========== Initialization ========== */
 async function init() {
+  console.log('Initializing game v20...');
+  
   if (!ctx) {
     console.error('Canvas not found!');
     return;
@@ -709,15 +693,17 @@ async function init() {
   try {
     images.sprites = await loadImage(ASSETS.images.sprites);
     images.loaded = true;
+    console.log('Sprites loaded');
   } catch (e) {
-    console.warn('Sprites failed to load, using fallback colors');
+    console.warn('Sprites failed, using fallback');
   }
   
   try {
     images.bg = await loadImage(ASSETS.images.bg);
     images.bgLoaded = true;
+    console.log('Background loaded');
   } catch (e) {
-    console.warn('Background failed to load, using fallback color');
+    console.warn('Background failed, using fallback');
   }
   
   // Load audio
@@ -725,21 +711,40 @@ async function init() {
     await audio.load(key, src);
   }
   
-  // Setup
+  // Setup canvas
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
+  
+  // Setup events
   setupEvents();
+  
+  // Update UI
   updateUI();
+  
+  // Draw initial state
   draw();
   
   // Footer year
   const yearEl = document.getElementById('y');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+  
+  console.log('Game ready v20!');
 }
+
+// Make functions globally accessible for onclick
+window.gameStart = startGame;
+window.togglePause = togglePause;
+window.restartGame = restartGame;
+window.moveLeft = moveLeft;
+window.moveRight = moveRight;
+window.rotateColumn = rotateColumn;
+window.toggleRotation = toggleRotation;
+window.softDrop = softDrop;
+window.hardDrop = hardDrop;
 
 // Start when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-        }
+  }
