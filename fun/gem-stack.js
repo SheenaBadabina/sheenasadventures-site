@@ -166,25 +166,21 @@ function initGrid() {
 }
 
 function canPlace(col, gems) {
+  // Check if the top 3 rows of this column are empty
+  if (col < 0 || col >= Game.cols) return false;
+  
   for (let i = 0; i < 3; i++) {
-    if (Game.grid[i][col] !== -1) return false;
+    if (Game.grid[i][col] !== -1) {
+      return false; // Column is blocked
+    }
   }
-  return true;
+  return true; // Column is clear
 }
 
 function placeGems(col, gems) {
   // Place gems at the TOP of the column (rows 0, 1, 2)
   for (let r = 0; r < 3; r++) {
     Game.grid[r][col] = gems[r];
-  }
-  
-  // Check if placement causes game over
-  if (!canPlace(col, [0, 0, 0])) {
-    Game.over = true;
-    audio.stopBg();
-    audio.play("over");
-    updateUI();
-    return;
   }
   
   applyGravity();
@@ -327,16 +323,14 @@ function update(time) {
     if (Game.dropTimer >= Game.dropInterval) {
       const col = Game.activeCol.x;
       
-      // Check if we can place the gems
-      if (canPlace(col, Game.activeCol.gems)) {
-        placeGems(col, Game.activeCol.gems);
-        
-        // Only spawn new column if game isn't over
-        if (!Game.over) {
-          spawnColumn();
-        }
+      // Place the gems and check for game over
+      placeGems(col, Game.activeCol.gems);
+      
+      // Check if we can spawn a new column
+      if (canPlace(3, [0, 0, 0])) {
+        spawnColumn();
       } else {
-        // Can't place = game over
+        // Grid is full - game over
         Game.over = true;
         audio.stopBg();
         audio.play("over");
@@ -428,13 +422,19 @@ function startGame() {
   Game.score = 0;
   Game.level = 1;
   Game.dropTimer = 0;
+  Game.dropInterval = 2000; // Start slower - 2 seconds
   
-  initGrid();
-  spawnColumn();
+  initGrid(); // Make sure grid is empty
+  spawnColumn(); // Spawn first column
   updateUI();
   
   audio.playBg();
   Game.lastTime = performance.now();
+  
+  // Draw initial state so background shows
+  draw();
+  
+  // Start game loop
   requestAnimationFrame(update);
 }
 
@@ -529,6 +529,9 @@ async function init() {
       const rect = el.canvas.getBoundingClientRect();
       el.canvas.width = rect.width;
       el.canvas.height = rect.height;
+      
+      // Draw background immediately after resize
+      draw();
     }
     resize();
     window.addEventListener("resize", resize);
@@ -538,6 +541,10 @@ async function init() {
   setupEventListeners();
   
   updateUI();
+  
+  // Draw initial background
+  draw();
+  
   console.log("✅ Ready to play!");
 }
 
@@ -546,4 +553,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-        }
+      }
