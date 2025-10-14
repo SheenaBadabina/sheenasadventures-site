@@ -69,9 +69,9 @@
       <button class="btn touch" data-control="left" onclick="window.moveLeft()" aria-label="Move Left">◀️</button>
       <button class="btn touch" data-control="rotate" onclick="window.rotateColumn()" aria-label="Rotate">↻</button>
       <button class="btn touch" data-control="right" onclick="window.moveRight()" aria-label="Move Right">▶️</button>
-      <button class="btn touch" data-control="down" onclick="window.softDrop()" aria-label="Soft Drop">⬇️</button>
-      <span></span>
-      <button class="btn touch" data-control="drop" onclick="window.hardDrop()" aria-label="Hard Drop">⤓</button>
+      <button class="btn touch" data-control="toggle-rotation" onclick="window.toggleRotation()" aria-label="Toggle Rotation Mode" style="grid-column: 1;">↕️/↔️</button>
+      <button class="btn touch" data-control="down" onclick="window.softDrop()" aria-label="Soft Drop" style="grid-column: 2;">⬇️</button>
+      <button class="btn touch" data-control="drop" onclick="window.hardDrop()" aria-label="Hard Drop" style="grid-column: 3;">⤓</button>
     </section>
 
     <!-- How to Play -->
@@ -83,9 +83,9 @@
           
           <p><strong>Controls:</strong></p>
           <ul>
-            <li><strong>Move Left/Right:</strong> ⬅️ / ➡️ arrows or on-screen buttons</li>
-            <li><strong>Rotate:</strong> ⬆️ arrow or ↻ button (cycles gems vertically)</li>
-            <li><strong>Toggle Rotation Mode:</strong> Long-press ↻ button or press R key to switch between vertical (↻) and horizontal (↔️) rotation</li>
+            <li><strong>Move Left/Right:</strong> ⬅️ / ➡️ arrows or on-screen ◀️ / ▶️ buttons</li>
+            <li><strong>Rotate:</strong> ⬆️ arrow or ↻ button (cycles gems in current mode)</li>
+            <li><strong>Toggle Rotation Mode:</strong> ↕️/↔️ button or R key to switch between vertical and horizontal rotation</li>
             <li><strong>Soft Drop:</strong> ⬇️ arrow or ⬇️ button (speeds up fall)</li>
             <li><strong>Hard Drop:</strong> Space bar or ⤓ button (instant drop)</li>
             <li><strong>Pause:</strong> P key or ⏸️ button</li>
@@ -94,8 +94,9 @@
           
           <p><strong>Rotation Modes:</strong></p>
           <ul>
-            <li><strong>Vertical (↻):</strong> Gems cycle bottom → middle → top</li>
+            <li><strong>Vertical (↕️):</strong> Gems cycle bottom → middle → top</li>
             <li><strong>Horizontal (↔️):</strong> Gems swap positions left ↔ right</li>
+            <li><strong>Tip:</strong> Click the ↕️/↔️ button to switch modes anytime!</li>
           </ul>
           
           <p><strong>Scoring:</strong></p>
@@ -116,4 +117,4 @@
   <!-- Game script -->
   <script src="/fun/gem-stack.js"></script>
 </body>
-</html>
+    </html>
