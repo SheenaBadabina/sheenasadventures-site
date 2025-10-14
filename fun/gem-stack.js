@@ -126,7 +126,7 @@ const Game = {
 };
 
 /* ========== Sprite Loading ========== */
-const sprites = { loaded: false };
+const sprites = { loaded: false, bg: null };
 
 function loadSprites() {
   const img = new Image();
@@ -137,6 +137,15 @@ function loadSprites() {
   };
   img.onerror = () => console.error("❌ Failed to load sprites");
   img.src = ASSETS.images.sprites;
+  
+  // Load background
+  const bgImg = new Image();
+  bgImg.onload = () => {
+    sprites.bg = bgImg;
+    console.log("✅ Background loaded");
+  };
+  bgImg.onerror = () => console.warn("⚠️ Failed to load background");
+  bgImg.src = ASSETS.images.bg;
 }
 
 function drawGem(type, x, y, size) {
@@ -164,9 +173,20 @@ function canPlace(col, gems) {
 }
 
 function placeGems(col, gems) {
+  // Place gems at the TOP of the column (rows 0, 1, 2)
   for (let r = 0; r < 3; r++) {
     Game.grid[r][col] = gems[r];
   }
+  
+  // Check if placement causes game over
+  if (!canPlace(col, [0, 0, 0])) {
+    Game.over = true;
+    audio.stopBg();
+    audio.play("over");
+    updateUI();
+    return;
+  }
+  
   applyGravity();
   checkMatches();
 }
@@ -303,31 +323,48 @@ function update(time) {
   if (!Game.paused && !Game.over && Game.activeCol) {
     Game.dropTimer += dt;
     
+    // Only drop when timer expires
     if (Game.dropTimer >= Game.dropInterval) {
       const col = Game.activeCol.x;
+      
+      // Check if we can place the gems
       if (canPlace(col, Game.activeCol.gems)) {
         placeGems(col, Game.activeCol.gems);
-        spawnColumn();
+        
+        // Only spawn new column if game isn't over
+        if (!Game.over) {
+          spawnColumn();
+        }
       } else {
+        // Can't place = game over
         Game.over = true;
         audio.stopBg();
         audio.play("over");
         updateUI();
       }
+      
       Game.dropTimer = 0;
     }
   }
   
   draw();
-  requestAnimationFrame(update);
+  
+  // Continue loop
+  if (Game.running) {
+    requestAnimationFrame(update);
+  }
 }
 
 function draw() {
   if (!ctx) return;
   
-  // Background
-  ctx.fillStyle = "#1a2332";
-  ctx.fillRect(0, 0, el.canvas.width, el.canvas.height);
+  // Background image
+  if (sprites.bg) {
+    ctx.drawImage(sprites.bg, 0, 0, el.canvas.width, el.canvas.height);
+  } else {
+    ctx.fillStyle = "#1a2332";
+    ctx.fillRect(0, 0, el.canvas.width, el.canvas.height);
+  }
   
   const cellSize = Math.min(
     el.canvas.width / Game.cols,
@@ -509,4 +546,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-}
+        }
