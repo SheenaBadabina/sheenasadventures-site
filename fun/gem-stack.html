@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Match gems, chase combos, and keep the desert glowing. A mobile-first browser game from Sheena's Adventures.">
 
+  <link rel="icon" type="image/png" href="/assets/sheenas-adventures-favicon-logo.png" />
+  
   <!-- Open Graph / Social -->
   <meta property="og:title" content="Desert Drop — Gem Stack">
   <meta property="og:description" content="Match gems, chase combos, and keep the desert glowing.">
@@ -16,36 +18,44 @@
   <meta name="theme-color" content="#00BFA5">
 
   <!-- Preload key game assets -->
-  <link rel="preload" as="image" href="/assets/gem-sprites.png" imagesrcset="/assets/gem-sprites.png 1x">
+  <link rel="preload" as="image" href="/assets/gem-sprites.png">
   <link rel="preload" as="image" href="/assets/level-badges.png">
   <link rel="preload" as="image" href="/assets/ui-icons.png">
   <link rel="preload" as="image" href="/assets/background-sky-canyon.png">
   <link rel="preload" as="audio" href="/assets/background-loop.mp3">
 
-  <!-- Page styles -->
+  <!-- Global site styles FIRST, then game-specific -->
+  <link rel="stylesheet" href="/static/styles.css">
   <link rel="stylesheet" href="/fun/gem-stack.css">
+  <script src="/static/js/site.js" defer></script>
 </head>
-<body>
+
+<body class="page-game">
+
+  <!-- Use your standard header -->
   <header class="site-header">
-    <a class="brand" href="/" aria-label="Sheena's Adventures Home">Sheena's Adventures</a>
-    <nav class="site-nav">
-      <a href="/work-with-me.html">Work With Me</a>
-      <a href="/adventures.html">Adventures</a>
-      <a href="/blog/">Blog</a>
-      <a href="/about.html">About</a>
-      <a href="/contact.html">Contact</a>
-    </nav>
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena's Adventures" height="48" width="48" />
+      </a>
+      <button class="hamburger" aria-label="Menu">☰</button>
+      <nav class="site-nav" data-collapsible>
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/work-with-me.html">Work With Me</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
   </header>
 
   <main class="game-wrap" aria-labelledby="title">
     <section class="game-header">
-      <h1 class="game-title">Desert Drop — Gem Stack</h1>
+      <h1 id="title">Desert Drop — Gem Stack</h1>
 
       <div class="controls primary">
-        <button class="btn" id="playBtn" data-game="play" aria-label="Start Game">▶️ Play</button>
-        <button class="btn" id="pauseBtn" data-game="pause" aria-label="Pause Game" style="display:none;">⏸️ Pause</button>
-        <button class="btn secondary" id="restartBtn" data-game="restart" aria-label="Restart Game" style="display:none;">🔄 Restart</button>
-        <button class="btn secondary" id="muteBtn" data-audio="mute" aria-pressed="false" aria-label="Toggle Sound">🔇 Mute</button>
+        <button class="btn game-btn" data-game="play" aria-label="Start Game">▶ Play</button>
+        <button class="btn secondary game-btn" data-audio="mute" aria-pressed="false" aria-label="Toggle Sound">🔇 Mute</button>
       </div>
 
       <div class="hud" role="group" aria-label="Game Status">
@@ -62,7 +72,7 @@
     </section>
 
     <section class="controls on-screen" aria-label="On-screen Controls">
-      <button class="ctrl" data-control="left" aria-label="Move Left">◀</button>
+      <button class="ctrl" data-control="left"  aria-label="Move Left">◀</button>
       <button class="ctrl" data-control="rotate" aria-label="Rotate">↻</button>
       <button class="ctrl" data-control="right" aria-label="Move Right">▶</button>
       <button class="ctrl" data-control="down" aria-label="Soft Drop">▼</button>
@@ -73,28 +83,31 @@
       <details>
         <summary>How to Play</summary>
         <div class="howto-body">
-          <p>Reorder the falling column and slide it into place. Match three or more identical gems in a line—horizontal, vertical, or diagonal—to clear them. Cascades can chain for bonus points. Levels increase every 10 clears and speed up the game.</p>
+          <p><strong>Match 3+ gems</strong> of the same type horizontally or vertically to clear them.</p>
+          <p><strong>Chain combos</strong> earn bonus points — keep the cascade going!</p>
+          <p><strong>Controls:</strong></p>
           <ul>
-            <li><strong>Move:</strong> ⬅️ / ➡️ or on-screen arrows</li>
-            <li><strong>Rotate:</strong> ⬆️ or ↻</li>
-            <li><strong>Soft Drop:</strong> ⬇️</li>
-            <li><strong>Hard Drop:</strong> Space / ⤓</li>
-            <li><strong>Pause:</strong> P key or Pause button</li>
-            <li><strong>Mute:</strong> M key or Mute button</li>
+            <li><kbd>←</kbd> <kbd>→</kbd> Move gem column</li>
+            <li><kbd>↑</kbd> Rotate gems in column</li>
+            <li><kbd>↓</kbd> Soft drop (faster fall)</li>
+            <li><kbd>Space</kbd> Hard drop (instant)</li>
           </ul>
+          <p><strong>Goal:</strong> Don't let the gems stack to the top!</p>
         </div>
       </details>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>© <span id="y"></span> Sheena's Adventures • <a href="https://www.youtube.com/@sheenasadventures" target="_blank" rel="noopener">YouTube</a> • <a href="/contact.html">Contact</a></p>
+    <p>
+      © <span id="y">2025</span> Sheena's Adventures •
+      <a href="/terms.html">Terms</a> •
+      <a href="/privacy.html">Privacy</a>
+    </p>
   </footer>
 
-  <!-- Game script -->
-  <script src="/fun/gem-stack.js" defer></script>
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  <!-- Game Logic -->
+  <script src="/fun/gem-stack.js"></script>
+
 </body>
-</html>
+  </html>
