@@ -386,26 +386,39 @@ function hardDrop() {
 
 /* ========== Game Control ========== */
 function startGame() {
-  console.log('START GAME CALLED!');
-  alert('Play button clicked!'); // Debug alert
-  
-  Game.running = true;
-  Game.paused = false;
-  Game.over = false;
-  Game.score = 0;
-  Game.level = 1;
-  Game.lines = 0;
-  Game.dropSpeed = 1000;
-  Game.dropTimer = 0;
-  
-  initGrid();
-  spawnColumn();
-  updateUI();
-  
-  audio.playBg();
-  
-  Game.lastTime = performance.now();
-  requestAnimationFrame(gameLoop);
+  try {
+    console.log('Starting game...');
+    
+    Game.running = true;
+    Game.paused = false;
+    Game.over = false;
+    Game.score = 0;
+    Game.level = 1;
+    Game.lines = 0;
+    Game.dropSpeed = 1000;
+    Game.dropTimer = 0;
+    
+    console.log('Initializing grid...');
+    initGrid();
+    
+    console.log('Spawning column...');
+    spawnColumn();
+    
+    console.log('Updating UI...');
+    updateUI();
+    
+    console.log('Starting audio...');
+    audio.playBg();
+    
+    console.log('Starting game loop...');
+    Game.lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
+    
+    console.log('Game started successfully!');
+  } catch (error) {
+    alert('Error starting game: ' + error.message);
+    console.error('Game start error:', error);
+  }
 }
 
 // Make startGame globally accessible
