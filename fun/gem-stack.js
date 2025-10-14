@@ -416,47 +416,63 @@ function restartGame() {
 }
 
 /* ========== Event Listeners (FIXED) ========== */
-if (el.play) {
-  el.play.addEventListener("click", startGame);
-}
-
-if (el.pause) {
-  el.pause.addEventListener("click", togglePause);
-}
-
-if (el.restart) {
-  el.restart.addEventListener("click", restartGame);
-}
-
-// FIX: Mute button with proper state update
-if (el.mute) {
-  el.mute.addEventListener("click", () => {
-    const enabled = audio.toggleMute();
-    el.mute.textContent = enabled ? "🔇 Mute" : "🔊 Unmute";
-  });
-}
-
-// FIX: Touch controls with proper functions
-if (el.left) el.left.addEventListener("click", moveLeft);
-if (el.right) el.right.addEventListener("click", moveRight);
-if (el.rotate) el.rotate.addEventListener("click", rotateGems);
-if (el.down) el.down.addEventListener("click", softDrop); // FIXED
-if (el.drop) el.drop.addEventListener("click", hardDrop); // FIXED
-
-// Keyboard
-document.addEventListener("keydown", (e) => {
-  if (!Game.running || Game.paused || Game.over) return;
+function setupEventListeners() {
+  console.log("Setting up event listeners...");
+  console.log("Play button:", el.play);
+  console.log("Mute button:", el.mute);
   
-  switch(e.key) {
-    case "ArrowLeft": moveLeft(); break;
-    case "ArrowRight": moveRight(); break;
-    case "ArrowUp": rotateGems(); break;
-    case "ArrowDown": softDrop(); break;
-    case " ": e.preventDefault(); hardDrop(); break;
-    case "p": case "P": togglePause(); break;
-    case "m": case "M": audio.toggleMute(); break;
+  if (el.play) {
+    el.play.addEventListener("click", () => {
+      console.log("Play button clicked!");
+      startGame();
+    });
+  } else {
+    console.error("Play button not found!");
   }
-});
+
+  if (el.pause) {
+    el.pause.addEventListener("click", togglePause);
+  }
+
+  if (el.restart) {
+    el.restart.addEventListener("click", restartGame);
+  }
+
+  // FIX: Mute button with proper state update
+  if (el.mute) {
+    el.mute.addEventListener("click", () => {
+      console.log("Mute button clicked!");
+      const enabled = audio.toggleMute();
+      el.mute.textContent = enabled ? "🔇 Mute" : "🔊 Unmute";
+    });
+  } else {
+    console.error("Mute button not found!");
+  }
+
+  // FIX: Touch controls with proper functions
+  if (el.left) el.left.addEventListener("click", moveLeft);
+  if (el.right) el.right.addEventListener("click", moveRight);
+  if (el.rotate) el.rotate.addEventListener("click", rotateGems);
+  if (el.down) el.down.addEventListener("click", softDrop); // FIXED
+  if (el.drop) el.drop.addEventListener("click", hardDrop); // FIXED
+
+  // Keyboard
+  document.addEventListener("keydown", (e) => {
+    if (!Game.running || Game.paused || Game.over) return;
+    
+    switch(e.key) {
+      case "ArrowLeft": moveLeft(); break;
+      case "ArrowRight": moveRight(); break;
+      case "ArrowUp": rotateGems(); break;
+      case "ArrowDown": softDrop(); break;
+      case " ": e.preventDefault(); hardDrop(); break;
+      case "p": case "P": togglePause(); break;
+      case "m": case "M": audio.toggleMute(); break;
+    }
+  });
+  
+  console.log("Event listeners setup complete!");
+}
 
 /* ========== Initialization ========== */
 async function init() {
@@ -481,8 +497,16 @@ async function init() {
     window.addEventListener("resize", resize);
   }
   
+  // Setup event listeners AFTER everything is loaded
+  setupEventListeners();
+  
   updateUI();
   console.log("✅ Ready to play!");
 }
 
-init();
+// Wait for DOM to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
