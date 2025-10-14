@@ -166,18 +166,29 @@ function placeColumn() {
     Game.grid[0][Game.colX + 1] = Game.column[2];
   }
   
-  applyGravity();
-  checkMatches();
-  
+  // Clear the active column
   Game.column = null;
   Game.dropTimer = 0;
   
-  // Check if we can spawn a new column in the center
+  // Apply physics
+  applyGravity();
+  checkMatches();
+  
+  // Try to spawn next piece
+  trySpawnNewPiece();
+}
+
+function trySpawnNewPiece() {
+  // Reset to center, vertical orientation
   Game.colX = 4;
   Game.orientation = 'vertical';
-  if (canPlace()) {
+  
+  // Check if center column top 3 rows are empty
+  if (Game.grid[0][4] === 0 && Game.grid[1][4] === 0 && Game.grid[2][4] === 0) {
+    // Can spawn!
     spawnColumn();
   } else {
+    // Can't spawn - game over
     gameOver();
   }
 }
@@ -325,10 +336,14 @@ function update(timestamp) {
   const delta = timestamp - Game.lastTime;
   Game.lastTime = timestamp;
   
-  Game.dropTimer += delta;
-  
-  if (Game.dropTimer >= Game.dropInterval && Game.column) {
-    placeColumn();
+  // Only update drop timer if we have an active column
+  if (Game.column) {
+    Game.dropTimer += delta;
+    
+    // Auto-drop after interval
+    if (Game.dropTimer >= Game.dropInterval) {
+      placeColumn();
+    }
   }
   
   draw();
@@ -664,4 +679,4 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-          }
+  }
