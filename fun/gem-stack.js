@@ -552,13 +552,14 @@ function drawGem(type, x, y, size) {
     return;
   }
   
-  const CELL = 256;
+  // CORRECT: 1024×1024 sprite sheet with 341.33px cells
+  const SPRITE_CELL = 1024 / 3; // = 341.333...
   const col = type % 3;
   const row = Math.floor(type / 3);
   
   ctx.drawImage(
     images.sprites,
-    col * CELL, row * CELL, CELL, CELL,
+    col * SPRITE_CELL, row * SPRITE_CELL, SPRITE_CELL, SPRITE_CELL,
     x, y, size, size
   );
 }
@@ -715,4 +716,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-}
+          }
