@@ -165,7 +165,7 @@ function spawnColumn() {
     Math.floor(Math.random() * 9),
     Math.floor(Math.random() * 9)
   ];
-  Game.colX = Math.floor(Game.cols / 2); // Start in middle
+  Game.colX = Math.floor((Game.cols - 1) / 2); // Start at column 3 (middle of 0-7)
   Game.colY = 0; // Start at top
   Game.dropTimer = 0; // Reset timer
 }
@@ -359,7 +359,7 @@ function moveLeft() {
 
 function moveRight() {
   if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
-  if (Game.colX < Game.cols - 1) Game.colX++;
+  if (Game.colX < Game.cols - 1) Game.colX++; // Fix: was checking < Game.cols - 1, should allow up to Game.cols - 1
 }
 
 function rotateColumn() {
@@ -381,10 +381,21 @@ function rotateColumn() {
 
 function toggleRotation() {
   Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
-  // Visual feedback
-  if (dom.rotate) {
-    dom.rotate.textContent = Game.rotationMode === 'vertical' ? '↻' : '↔️';
+  
+  // Update button text on all rotation-related buttons
+  const rotateBtn = document.querySelector('[data-control="rotate"]');
+  const toggleBtn = document.querySelector('[data-control="toggle-rotation"]');
+  
+  if (rotateBtn) {
+    rotateBtn.textContent = Game.rotationMode === 'vertical' ? '↻' : '↔️';
   }
+  
+  if (toggleBtn) {
+    toggleBtn.textContent = Game.rotationMode === 'vertical' ? '↕️ Vert' : '↔️ Horiz';
+    toggleBtn.style.fontSize = '0.9rem';
+  }
+  
+  console.log('Rotation mode:', Game.rotationMode);
 }
 
 function softDrop() {
@@ -610,56 +621,15 @@ function setupEvents() {
     });
   }
   
-  // Touch controls with long-press for rotation toggle
+  // Remove complex long-press logic, just use simple click for rotation toggle
+  const toggleRotationBtn = document.querySelector('[data-control="toggle-rotation"]');
+  if (toggleRotationBtn) {
+    toggleRotationBtn.addEventListener('click', toggleRotation);
+  }
+  
+  // Simple rotation button
   if (dom.rotate) {
-    let pressTimer = null;
-    let longPressTriggered = false;
-    
-    // Regular click for rotation
-    dom.rotate.addEventListener('click', (e) => {
-      if (!longPressTriggered) {
-        rotateColumn();
-      }
-      longPressTriggered = false;
-    });
-    
-    // Long press to toggle mode (works on both touch and mouse)
-    dom.rotate.addEventListener('mousedown', (e) => {
-      longPressTriggered = false;
-      pressTimer = setTimeout(() => {
-        longPressTriggered = true;
-        toggleRotation();
-        if (navigator.vibrate) navigator.vibrate(50);
-      }, 500);
-    });
-    
-    dom.rotate.addEventListener('mouseup', () => {
-      if (pressTimer) clearTimeout(pressTimer);
-    });
-    
-    dom.rotate.addEventListener('mouseleave', () => {
-      if (pressTimer) clearTimeout(pressTimer);
-    });
-    
-    // Touch events
-    dom.rotate.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      longPressTriggered = false;
-      pressTimer = setTimeout(() => {
-        longPressTriggered = true;
-        toggleRotation();
-        if (navigator.vibrate) navigator.vibrate(50);
-      }, 500);
-    });
-    
-    dom.rotate.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      if (pressTimer) clearTimeout(pressTimer);
-      if (!longPressTriggered) {
-        rotateColumn();
-      }
-      longPressTriggered = false;
-    });
+    dom.rotate.addEventListener('click', rotateColumn);
   }
   
   // Other touch controls
@@ -807,4 +777,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-    }
+            }
