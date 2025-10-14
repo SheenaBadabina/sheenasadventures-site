@@ -1,292 +1,382 @@
-/* ==========================================================================
-   Desert Drop — Gem Stack | Bug Fix Release
-   ========================================================================== */
+/* ==========================================================
+   Desert Drop — Gem Stack CSS (with Hamburger Menu)
+   ========================================================== */
 
-/* --- Color tokens --- */
-:root {
-  --color-accent: #00BFA5;
-  --color-bg: #0B0F12;
-  --color-surface: #0F1419;
-  --color-text: #D9E1E8;
-  --color-muted: #92A1AD;
-  --ring: var(--color-accent);
+/* Base Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* --- Base --- */
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0B0F12;
+  color: #D9E1E8;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* Hide header/footer when playing */
-body.playing .site-header,
-body.playing .site-footer {
-  display: none;
+/* ==========================================================
+   Header with Hamburger Menu
+   ========================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11,15,18,0.95);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-body.playing .game-wrap {
-  padding: 4px;
-  max-width: 100%;
+.brand {
+  font-weight: 600;
+  color: #00BFA5;
+  text-decoration: none;
+  font-size: 1.1rem;
+  z-index: 52;
 }
 
-body.playing .canvas-shell {
-  max-width: 100%;
-  height: 65vh;
-}
-
-.game-wrap {
-  max-width: 960px;
-  margin-inline: auto;
-  padding: 16px;
-}
-
-/* --- Header --- */
-.game-header {
+/* Hamburger Button */
+.hamburger {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-block: 8px 12px;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 52;
 }
 
-.game-title {
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  font-size: clamp(1.125rem, 2.6vw, 1.5rem);
-  color: var(--color-text);
-  margin: 0;
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: #00BFA5;
+  transition: all 0.3s ease;
 }
 
-/* --- Buttons --- */
-.controls.primary {
+/* Hamburger animation when open */
+body.menu-open .hamburger span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+body.menu-open .hamburger span:nth-child(2) {
+  opacity: 0;
+}
+
+body.menu-open .hamburger span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Navigation Menu */
+.site-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(11,15,18,0.98);
+  backdrop-filter: blur(12px);
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-.btn {
-  display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
-  padding: 0.6rem 0.8rem;
-  border-radius: 12px;
-  border: 1px solid #22303a;
-  background: #121821;
-  color: var(--color-text);
-  font-weight: 600;
-  font-size: 0.9rem;
+  gap: 2rem;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 51;
+}
+
+body.menu-open .site-nav {
+  transform: translateX(0);
+}
+
+.site-nav a {
+  color: #D9E1E8;
   text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 1rem 2rem;
+  transition: color 0.2s ease;
+}
+
+.site-nav a:hover {
+  color: #00BFA5;
+}
+
+/* Desktop: Show regular nav */
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+  
+  .site-nav {
+    position: static;
+    width: auto;
+    height: auto;
+    background: none;
+    backdrop-filter: none;
+    flex-direction: row;
+    gap: 1.5rem;
+    transform: none;
+  }
+  
+  .site-nav a {
+    font-size: 1rem;
+    padding: 0;
+  }
+}
+
+/* ==========================================================
+   Game Layout
+   ========================================================== */
+
+.game-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 1rem 0;
+  color: #00BFA5;
+}
+
+/* ==========================================================
+   Buttons
+   ========================================================== */
+
+.btn {
+  background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 120ms ease, background 160ms ease, border-color 160ms ease;
-  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 191, 165, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
 }
 
 .btn:hover {
-  background: #151d27;
-  border-color: #2a3a46;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 191, 165, 0.5);
 }
 
 .btn:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  transform: translateY(0);
 }
 
 .btn.secondary {
-  background: #0d1218;
-  border-color: #1a252f;
+  background: linear-gradient(135deg, #424242 0%, #303030 100%);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
 }
 
-/* --- Canvas --- */
-.game-stage {
-  margin-top: 16px;
+.btn.secondary:hover {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
+
+.btn.touch {
+  min-width: 64px;
+  min-height: 64px;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+/* ==========================================================
+   Controls Layout
+   ========================================================== */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.controls.primary {
+  margin-top: 1.5rem;
+}
+
+.controls.on-screen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.controls.on-screen .btn:nth-child(4) {
+  grid-column: 1;
+}
+
+.controls.on-screen .btn:nth-child(5) {
+  grid-column: 3;
+}
+
+/* ==========================================================
+   HUD (Score/Level)
+   ========================================================== */
+
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 191, 165, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #D9E1E8;
+  white-space: nowrap;
+}
+
+.pill span {
+  color: #00BFA5;
+  font-family: monospace;
+}
+
+/* ==========================================================
+   Canvas
+   ========================================================== */
 
 .canvas-shell {
   position: relative;
   width: 100%;
-  max-width: 720px;
-  margin-inline: auto;
-  background: linear-gradient(180deg, #121821 0%, #0B0F12 100%);
+  max-width: 600px;
+  margin: 1.5rem auto;
+  aspect-ratio: 2 / 3;
+  background: #1a2332;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 #gameCanvas {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
+  touch-action: none;
 }
 
-/* --- HUD --- */
-.hud {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
+/* ==========================================================
+   How to Play
+   ========================================================== */
 
-.hud .pill {
-  background: var(--color-surface);
-  border: 1px solid #22303a;
-  color: var(--color-text);
-  padding: 0.4rem 0.7rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  font-size: 0.85rem;
-  text-align: center;
-  flex: 1;
-  min-width: 100px;
-}
-
-/* --- On-screen controls --- */
-.controls.on-screen {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 16px;
-  max-width: 400px;
-  margin-inline: auto;
-}
-
-.ctrl {
-  min-height: 56px;
-  min-width: 56px;
-  padding: 0.8rem;
-  border-radius: 12px;
-  border: 1px solid #22303a;
-  background: #121821;
-  color: var(--color-text);
-  font-size: 1.3rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 120ms ease, background 160ms ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-}
-
-.ctrl:hover {
-  background: #151d27;
-  border-color: #2a3a46;
-}
-
-.ctrl:active {
-  transform: translateY(2px) scale(0.96);
-  background: #0d1218;
-}
-
-.ctrl:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-/* Position drop buttons centered on second row */
-.ctrl:nth-child(4) {
-  grid-column: 1 / 2;
-}
-
-.ctrl:nth-child(5) {
-  grid-column: 3 / 4;
-}
-
-/* --- How to play --- */
 .howto {
-  margin-top: 20px;
-  background: var(--color-surface);
-  border: 1px solid #22303a;
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: var(--color-text);
+  margin: 2rem 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
 }
 
 .howto summary {
-  cursor: pointer;
+  font-size: 1.2rem;
   font-weight: 700;
-  font-size: 1.05rem;
-  padding: 4px 0;
+  color: #D9E1E8;
+  cursor: pointer;
   user-select: none;
+  list-style: none;
 }
 
-.howto summary:hover {
-  color: var(--color-accent);
+.howto summary::-webkit-details-marker {
+  display: none;
+}
+
+.howto summary::before {
+  content: '▶ ';
+  color: #00BFA5;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.howto details[open] summary::before {
+  transform: rotate(90deg);
 }
 
 .howto-body {
-  margin-top: 12px;
-  line-height: 1.6;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #92A1AD;
+  line-height: 1.7;
+}
+
+.howto-body p {
+  margin: 0 0 1rem 0;
 }
 
 .howto-body ul {
-  margin-top: 8px;
-  padding-left: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
 }
 
 .howto-body li {
-  margin-bottom: 6px;
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
 }
 
-/* --- Accessibility --- */
-:focus:not(:focus-visible) {
-  outline: none;
+.howto-body li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #00BFA5;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .btn,
-  .ctrl {
-    transition: none;
-  }
+/* ==========================================================
+   Footer
+   ========================================================== */
+
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #92A1AD;
+  font-size: 0.9rem;
 }
 
-/* --- Desktop optimizations --- */
+.site-footer a {
+  color: #00BFA5;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================
+   Desktop Optimizations
+   ========================================================== */
+
 @media (min-width: 720px) {
-  .game-wrap {
-    padding: 20px;
-  }
-
-  .game-header {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .game-title {
-    font-size: clamp(1.25rem, 2vw, 1.75rem);
-  }
-
-  .hud .pill {
-    min-width: 120px;
-    font-size: 0.95rem;
-  }
-
-  /* Hide touch controls on desktop - use keyboard instead */
   .controls.on-screen {
     display: none;
   }
-
-  .canvas-shell {
-    max-width: 600px;
+  
+  h1 {
+    font-size: 2.5rem;
   }
-}
-
-/* --- High contrast mode --- */
-body[data-contrast="high"] .btn,
-body[data-contrast="high"] .ctrl {
-  border-color: #3a4b58;
-  background: #0d1218;
-}
-
-body[data-contrast="high"] .hud .pill {
-  border-color: #3a4b58;
-   }
+     }
