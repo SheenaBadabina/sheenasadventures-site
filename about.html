@@ -1,21 +1,141 @@
-Sheena is the creator, filmmaker, and explorer behind *Sheena’s Adventures*.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Meet Sheena — Utah explorer, rockhound, and storyteller behind Sheena’s Adventures." />
+  <title>About Sheena • Sheena’s Adventures</title>
 
-Every video. Every photograph. Every website. Every moment in the desert — all captured, crafted, and shared by her. What began as weekend exploration has grown into a journey of discovery, creativity, and connection.
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="/static/styles.css" />
 
-Sheena’s Adventures is about more than just finding beautiful rocks. It’s about chasing stories hidden in the landscapes of Utah — stories written in agates, petrified wood, fossils, and the volcanic scars of deep time. Every location tells its own tale, and Sheena is there to uncover it — camera in hand, notebook in her pack, music building in her mind.
+  <style>
+    /* Inline animation + layout styling */
+    .about-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
 
-The adventures are real. The finds are real. The music you hear in every video is original — either composed by Sheena herself or created through AI tools guided by her ear for emotion and rhythm. Each track is built to match the heartbeat of the desert: the shimmer of heat, the crack of thunder, the whisper of wind through sage.
+    .portrait-wrapper {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin-bottom: 1.5rem;
+    }
 
-For Sheena, filming is an act of presence. Every adventure starts with curiosity and ends with gratitude — not just for what’s found, but for what’s learned along the way. The Utah desert has become her classroom, her canvas, and her companion. Through her lens, she shows that wonder is never far away if you’re willing to look closely.
+    .portrait-wrapper img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
-Outside the desert, Sheena is also the storyteller and designer behind *Dragon Bones & Wizards Hats* — a world of fantasy that blends storytelling, sound, and art. Where Sheena’s Adventures captures the real world’s magic, *Dragon Bones & Wizards Hats* imagines the worlds that might have been.
+    /* Desert shimmer ring animation */
+    .ring {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
 
-Both projects share the same heartbeat: curiosity, creativity, and a love for the strange beauty of existence.
+    .ring circle {
+      fill: none;
+      stroke: #c67a3d; /* copper tone */
+      stroke-width: 4;
+      stroke-dasharray: 565;
+      stroke-dashoffset: 565;
+      animation: shimmer 6s linear infinite;
+    }
 
-Sheena believes adventure is a form of art — a way to listen to the world and create something that lasts. Whether she’s coding a new website, filming a thunderstorm over red rock, or cutting a new track for her next video, she’s always exploring the same question:
+    @keyframes shimmer {
+      0% { stroke-dashoffset: 565; opacity: 0.5; }
+      50% { stroke-dashoffset: 0; opacity: 1; }
+      100% { stroke-dashoffset: -565; opacity: 0.5; }
+    }
 
-What else is out there waiting to be discovered?
+    .bio {
+      max-width: 700px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-color, #222);
+      margin-bottom: 2rem;
+      white-space: pre-line;
+    }
 
-Because for Sheena, it’s never just about the destination.
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
 
-It’s about the journey.
+    .btn {
+      padding: 0.9rem 1.8rem;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-pink {
+      background-color: #ff3eb5;
+      color: #fff;
+    }
+
+    .btn-teal {
+      background-color: #2ac1b5;
+      color: #fff;
+    }
+
+    .btn-olive {
+      background-color: #a4b471;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>About Me</h1>
+  </header>
+
+  <main class="about-container">
+    <!-- Portrait with animated desert ring -->
+    <div class="portrait-wrapper">
+      <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena portrait" />
+      <svg class="ring" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="90"></circle>
+      </svg>
+    </div>
+
+    <!-- Fetched biography text -->
+    <section class="bio" id="bio"></section>
+
+    <!-- Buttons -->
+    <div class="cta-buttons">
+      <a href="/build-a-website.html" class="btn btn-pink">Build my website</a>
+      <a href="/work-with-me.html" class="btn btn-teal">Work with me</a>
+      <a href="/contact.html" class="btn btn-olive">Contact</a>
+    </div>
+  </main>
+
+  <script>
+    // Fetch about text dynamically
+    fetch('/assets/prose/about-sheena.txt')
+      .then(response => response.text())
+      .then(text => document.getElementById('bio').textContent = text)
+      .catch(err => console.error('Error loading bio:', err));
+  </script>
+</body>
+</html>
