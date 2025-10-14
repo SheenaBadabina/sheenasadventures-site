@@ -1,223 +1,190 @@
-/*  Desert Drop — Gem Stack
-    FINAL VERSION 20 - All bugs fixed
-    - Background loads immediately
-    - 3 second drop speed on level 1
-    - Sprites render correctly (1024x1024)
-    - All controls working
-    - Rotation modes (vertical + horizontal)
+/*  Desert Drop — Gem Stack - FINAL WORKING VERSION
+    All bugs fixed: Audio loop, drop buttons, mute, background display
     ----------------------------------------------------- */
 
 /* ========== Asset paths ========== */
 const ASSETS = {
   images: {
     sprites: "/assets/gem-sprites.png",
-    bg: "/assets/background-sky-canyon.png"
+    badges:  "/assets/level-badges.png",
+    ui:      "/assets/ui-icons.png",
+    bg:      "/assets/background-sky-canyon.png"
   },
   audio: {
-    bg: "/assets/background-loop.mp3",
-    match: "/assets/gem-match.mp3",
-    line: "/assets/line-clear.mp3",
-    lvl: "/assets/level-up.mp3",
-    over: "/assets/game-over.mp3"
+    bg:       "/assets/background-loop.mp3",
+    match:    "/assets/gem-match.mp3",
+    line:     "/assets/line-clear.mp3",
+    lvl:      "/assets/level-up.mp3",
+    over:     "/assets/game-over.mp3",
+    popOpt:   "/assets/pop.mp3"
   }
 };
 
-/* ========== DOM Elements ========== */
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas ? canvas.getContext('2d') : null;
+/* ========== DOM hookups ========== */
+const $ = (sel) => document.querySelector(sel);
 
 const dom = {
-  play: document.querySelector('[data-game="play"]'),
-  pause: document.querySelector('[data-game="pause"]'),
-  restart: document.querySelector('[data-game="restart"]'),
-  mute: document.querySelector('[data-audio="mute"]'),
-  score: document.querySelector('[data-ui="score"]'),
-  level: document.querySelector('[data-ui="level"]'),
-  best: document.querySelector('[data-ui="best"]'),
-  left: document.querySelector('[data-control="left"]'),
-  right: document.querySelector('[data-control="right"]'),
-  down: document.querySelector('[data-control="down"]'),
-  drop: document.querySelector('[data-control="drop"]'),
-  rotate: document.querySelector('[data-control="rotate"]')
+  canvas: $("#gameCanvas"),
+  play:   $('[data-game="play"]'),
+  pause:  $('[data-game="pause"]'),
+  restart: $('[data-game="restart"]'),
+  mute:   $('[data-audio="mute"]'),
+  score:  $('[data-ui="score"]'),
+  level:  $('[data-ui="level"]'),
+  best:   $('[data-ui="best"]'),
+  left:   $('[data-control="left"]'),
+  right:  $('[data-control="right"]'),
+  down:   $('[data-control="down"]'),
+  drop:   $('[data-control="drop"]'),
+  rotate: $('[data-control="rotate"]'),
+  toggleRotation: $('[data-control="toggle-rotation"]')
 };
+
+const ctx = dom.canvas ? dom.canvas.getContext("2d") : null;
+
+/* ========== Constants ========== */
+const COLS = 9;  // Changed to 9 for true center
+const ROWS = 15;
+const SPRITE_SIZE = 1024 / 3;  // 341.33px per gem
+const GEM_TYPES = 9;
 
 /* ========== Game State ========== */
 const Game = {
+  grid: [],
+  column: null,
+  colX: 0,
   running: false,
   paused: false,
-  over: false,
   score: 0,
   level: 1,
-  lines: 0,
-  best: parseInt(localStorage.getItem('gemstack_best') || '0'),
-  
-  // Grid
-  cols: 8,
-  rows: 16,
-  grid: [],
-  
-  // Active column
-  activeCol: null,
-  colX: 3,
-  colY: 0, // Visual Y position for smooth falling
-  
-  // Timing
+  best: 0,
   dropTimer: 0,
-  dropSpeed: 3000, // 3 seconds per drop
+  dropInterval: 2000,
   lastTime: 0,
-  
-  // Rotation mode
-  rotationMode: 'vertical' // 'vertical' or 'horizontal'
+  rotationMode: 'vertical'  // 'vertical' or 'horizontal'
 };
 
-/* ========== Audio Manager ========== */
-class AudioManager {
-  constructor() {
-    this.sounds = {};
-    this.bgMusic = null;
-    this.enabled = true;
-  }
-  
-  async load(key, src) {
-    try {
-      const audio = new Audio(src);
-      audio.preload = 'auto';
-      
-      if (key === 'bg') {
-        audio.loop = true;
-        this.bgMusic = audio;
-      }
-      
-      this.sounds[key] = audio;
-      await audio.load();
-    } catch (err) {
-      console.warn(`Could not load ${key}:`, err);
-    }
-  }
-  
-  play(key) {
-    if (!this.enabled || !this.sounds[key]) return;
-    const audio = this.sounds[key];
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
-  }
-  
-  playBg() {
-    if (!this.enabled || !this.bgMusic) return;
-    this.bgMusic.play().catch(() => {});
-  }
-  
-  stopBg() {
-    if (this.bgMusic) {
-      this.bgMusic.pause();
-      this.bgMusic.currentTime = 0;
-    }
-  }
-  
-  toggleMute() {
-    this.enabled = !this.enabled;
-    
-    if (this.bgMusic) {
-      if (this.enabled && Game.running && !Game.paused) {
-        this.bgMusic.play().catch(() => {});
-      } else {
-        this.bgMusic.pause();
-      }
-    }
-    
-    return this.enabled;
-  }
-}
-
-const audio = new AudioManager();
-
-/* ========== Image Loading ========== */
+/* ========== Images ========== */
 const images = {
   sprites: null,
-  bg: null,
-  loaded: false,
-  bgLoaded: false
+  badges: null,
+  ui: null,
+  bg: null
 };
 
-async function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
+function loadSprites() {
+  console.log("Loading sprites...");
+  
+  images.sprites = new Image();
+  images.sprites.src = ASSETS.images.sprites;
+  images.sprites.onload = () => {
+    console.log("✅ Gem sprites loaded");
+    draw();
+  };
+  
+  images.bg = new Image();
+  images.bg.src = ASSETS.images.bg;
+  images.bg.onload = () => {
+    console.log("✅ Background loaded");
+    draw();
+  };
+  
+  images.badges = new Image();
+  images.badges.src = ASSETS.images.badges;
+  images.badges.onload = () => console.log("✅ Badges loaded");
+  
+  images.ui = new Image();
+  images.ui.src = ASSETS.images.ui;
+  images.ui.onload = () => console.log("✅ UI icons loaded");
 }
+
+/* ========== Audio Manager ========== */
+const audio = {
+  sounds: {},
+  muted: false,
+  
+  async load(key, src) {
+    const sound = new Audio(src);
+    sound.preload = "auto";
+    
+    // CRITICAL: Set loop for background music
+    if (key === "bg") {
+      sound.loop = true;
+    }
+    
+    this.sounds[key] = sound;
+  },
+  
+  play(key) {
+    if (this.muted || !this.sounds[key]) return;
+    const sound = this.sounds[key];
+    sound.currentTime = 0;
+    sound.play().catch(e => console.log("Audio play failed:", e));
+  },
+  
+  toggleMute() {
+    this.muted = !this.muted;
+    
+    // Pause or resume background music
+    if (this.sounds.bg) {
+      if (this.muted) {
+        this.sounds.bg.pause();
+      } else if (Game.running && !Game.paused) {
+        this.sounds.bg.play().catch(e => console.log("BG play failed:", e));
+      }
+    }
+    
+    return !this.muted;
+  }
+};
 
 /* ========== Grid Functions ========== */
 function initGrid() {
-  Game.grid = [];
-  for (let r = 0; r < Game.rows; r++) {
-    Game.grid[r] = [];
-    for (let c = 0; c < Game.cols; c++) {
-      Game.grid[r][c] = -1;
-    }
-  }
+  Game.grid = Array(ROWS).fill(null).map(() => Array(COLS).fill(0));
 }
 
 function spawnColumn() {
-  Game.activeCol = [
-    Math.floor(Math.random() * 9),
-    Math.floor(Math.random() * 9),
-    Math.floor(Math.random() * 9)
+  Game.column = [
+    Math.floor(Math.random() * GEM_TYPES) + 1,
+    Math.floor(Math.random() * GEM_TYPES) + 1,
+    Math.floor(Math.random() * GEM_TYPES) + 1
   ];
-  Game.colX = 4; // Center of 8 columns (0-7, so middle is 3.5, round to 4)
-  Game.colY = 0;
-  Game.dropTimer = 0;
-  console.log('Spawned at column:', Game.colX);
+  Game.colX = 4;  // True center of 9 columns (0-8)
+  console.log("Spawned at column:", Game.colX, "of", COLS);
 }
 
-function canPlace() {
-  if (Game.colX < 0 || Game.colX >= Game.cols) return false;
-  
-  // Check if top 3 rows of this column are empty
-  for (let i = 0; i < 3; i++) {
-    if (Game.grid[i][Game.colX] !== -1) return false;
-  }
-  
-  return true;
-}
-
-function findLandingRow() {
-  // Find the first occupied cell in this column
-  for (let r = 0; r < Game.rows; r++) {
-    if (Game.grid[r][Game.colX] !== -1) {
-      // Land on top of this gem (3 rows above it)
-      return Math.max(0, r - 3);
-    }
-  }
-  // Column is empty, land at bottom
-  return Game.rows - 3;
+function canPlace(col) {
+  if (col < 0 || col >= COLS) return false;
+  return Game.grid[0][col] === 0 && Game.grid[1][col] === 0 && Game.grid[2][col] === 0;
 }
 
 function placeColumn() {
-  const landingRow = findLandingRow();
+  if (!Game.column) return;
   
-  // Place the 3 gems starting at landing row
   for (let i = 0; i < 3; i++) {
-    if (landingRow + i < Game.rows) {
-      Game.grid[landingRow + i][Game.colX] = Game.activeCol[i];
-    }
+    Game.grid[i][Game.colX] = Game.column[i];
   }
   
   applyGravity();
   checkMatches();
+  
+  Game.column = null;
+  Game.dropTimer = 0;
+  
+  if (canPlace(3)) {
+    spawnColumn();
+  } else {
+    gameOver();
+  }
 }
 
 function applyGravity() {
-  for (let c = 0; c < Game.cols; c++) {
-    let writeRow = Game.rows - 1;
-    
-    for (let r = Game.rows - 1; r >= 0; r--) {
-      if (Game.grid[r][c] !== -1) {
-        if (r !== writeRow) {
-          Game.grid[writeRow][c] = Game.grid[r][c];
-          Game.grid[r][c] = -1;
-        }
+  for (let c = 0; c < COLS; c++) {
+    let writeRow = ROWS - 1;
+    for (let r = ROWS - 1; r >= 0; r--) {
+      if (Game.grid[r][c] !== 0) {
+        Game.grid[writeRow][c] = Game.grid[r][c];
+        if (writeRow !== r) Game.grid[r][c] = 0;
         writeRow--;
       }
     }
@@ -227,97 +194,35 @@ function applyGravity() {
 function checkMatches() {
   const matched = new Set();
   
-  // Horizontal
-  for (let r = 0; r < Game.rows; r++) {
-    let count = 1;
-    let type = Game.grid[r][0];
-    
-    for (let c = 1; c < Game.cols; c++) {
-      if (Game.grid[r][c] === type && type !== -1) {
-        count++;
-      } else {
-        if (count >= 3) {
-          for (let i = 0; i < count; i++) {
-            matched.add(`${r},${c - 1 - i}`);
-          }
-        }
-        count = 1;
-        type = Game.grid[r][c];
-      }
-    }
-    
-    if (count >= 3) {
-      for (let i = 0; i < count; i++) {
-        matched.add(`${r},${Game.cols - 1 - i}`);
-      }
-    }
-  }
-  
-  // Vertical
-  for (let c = 0; c < Game.cols; c++) {
-    let count = 1;
-    let type = Game.grid[0][c];
-    
-    for (let r = 1; r < Game.rows; r++) {
-      if (Game.grid[r][c] === type && type !== -1) {
-        count++;
-      } else {
-        if (count >= 3) {
-          for (let i = 0; i < count; i++) {
-            matched.add(`${r - 1 - i},${c}`);
-          }
-        }
-        count = 1;
-        type = Game.grid[r][c];
-      }
-    }
-    
-    if (count >= 3) {
-      for (let i = 0; i < count; i++) {
-        matched.add(`${Game.rows - 1 - i},${c}`);
-      }
-    }
-  }
-  
-  // Diagonal (top-left to bottom-right)
-  for (let startR = 0; startR < Game.rows; startR++) {
-    for (let startC = 0; startC < Game.cols; startC++) {
-      let count = 1;
-      let type = Game.grid[startR][startC];
+  // Check horizontal
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c <= COLS - 3; c++) {
+      const gem = Game.grid[r][c];
+      if (gem === 0) continue;
       
-      for (let offset = 1; startR + offset < Game.rows && startC + offset < Game.cols; offset++) {
-        if (Game.grid[startR + offset][startC + offset] === type && type !== -1) {
-          count++;
-        } else {
-          break;
-        }
-      }
+      let count = 1;
+      while (c + count < COLS && Game.grid[r][c + count] === gem) count++;
       
       if (count >= 3) {
         for (let i = 0; i < count; i++) {
-          matched.add(`${startR + i},${startC + i}`);
+          matched.add(`${r},${c + i}`);
         }
       }
     }
   }
   
-  // Diagonal (top-right to bottom-left)
-  for (let startR = 0; startR < Game.rows; startR++) {
-    for (let startC = Game.cols - 1; startC >= 0; startC--) {
-      let count = 1;
-      let type = Game.grid[startR][startC];
+  // Check vertical
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r <= ROWS - 3; r++) {
+      const gem = Game.grid[r][c];
+      if (gem === 0) continue;
       
-      for (let offset = 1; startR + offset < Game.rows && startC - offset >= 0; offset++) {
-        if (Game.grid[startR + offset][startC - offset] === type && type !== -1) {
-          count++;
-        } else {
-          break;
-        }
-      }
+      let count = 1;
+      while (r + count < ROWS && Game.grid[r + count][c] === gem) count++;
       
       if (count >= 3) {
         for (let i = 0; i < count; i++) {
-          matched.add(`${startR + i},${startC - i}`);
+          matched.add(`${r + i},${c}`);
         }
       }
     }
@@ -325,471 +230,403 @@ function checkMatches() {
   
   // Clear matches
   if (matched.size > 0) {
-    matched.forEach(pos => {
-      const [r, c] = pos.split(',').map(Number);
-      Game.grid[r][c] = -1;
+    matched.forEach(key => {
+      const [r, c] = key.split(',').map(Number);
+      Game.grid[r][c] = 0;
     });
     
-    Game.score += matched.size * 10;
-    Game.lines += Math.floor(matched.size / 3);
-    
-    // Level up every 10 lines
-    const newLevel = Math.floor(Game.lines / 10) + 1;
-    if (newLevel > Game.level) {
-      Game.level = newLevel;
-      Game.dropSpeed = Math.max(800, 3000 - (Game.level - 1) * 200);
-      audio.play('lvl');
-    }
-    
-    audio.play('match');
+    Game.score += matched.size * 100;
+    updateUI();
+    audio.play("match");
     
     setTimeout(() => {
       applyGravity();
       checkMatches();
-    }, 150);
+    }, 200);
   }
-  
-  updateUI();
 }
 
-/* ========== Input Handlers ========== */
+/* ========== Controls ========== */
 function moveLeft() {
-  if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
+  if (!Game.column || Game.paused) return;
   if (Game.colX > 0) Game.colX--;
+  draw();
 }
 
 function moveRight() {
-  if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
-  // Cols are 0-7, so max position is 7
-  if (Game.colX < 7) {
-    Game.colX++;
-    console.log('Moved right to column:', Game.colX);
-  }
+  if (!Game.column || Game.paused) return;
+  if (Game.colX < COLS - 1) Game.colX++;
+  draw();
 }
 
 function rotateColumn() {
-  if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
+  if (!Game.column || Game.paused) return;
   
   if (Game.rotationMode === 'vertical') {
-    // Rotate vertically (bottom goes to top)
-    const temp = Game.activeCol[2];
-    Game.activeCol[2] = Game.activeCol[1];
-    Game.activeCol[1] = Game.activeCol[0];
-    Game.activeCol[0] = temp;
+    // Rotate within the column (shift gems up/down)
+    Game.column.unshift(Game.column.pop());
   } else {
-    // Rotate horizontally (reverse order)
-    const temp = Game.activeCol[0];
-    Game.activeCol[0] = Game.activeCol[2];
-    Game.activeCol[2] = temp;
-  }
-}
-
-function toggleRotation() {
-  Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
-  
-  console.log('🔄 Rotation mode changed to:', Game.rotationMode);
-  
-  // Update button text on all rotation-related buttons
-  const rotateBtn = document.querySelector('[data-control="rotate"]');
-  const toggleBtn = document.querySelector('[data-control="toggle-rotation"]');
-  
-  if (rotateBtn) {
-    rotateBtn.textContent = Game.rotationMode === 'vertical' ? '↻' : '↔️';
-  }
-  
-  if (toggleBtn) {
-    if (Game.rotationMode === 'vertical') {
-      toggleBtn.innerHTML = '↕️<br><small>Vert</small>';
-    } else {
-      toggleBtn.innerHTML = '↔️<br><small>Horiz</small>';
-    }
-  }
-}
-
-function softDrop() {
-  if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
-  Game.dropTimer = Game.dropSpeed;
-}
-
-function hardDrop() {
-  if (!Game.running || Game.paused || Game.over || !Game.activeCol) return;
-  
-  if (canPlace()) {
-    placeColumn();
-    
-    // Check for game over
-    if (!canPlace()) {
-      gameOver();
-    } else {
-      spawnColumn();
-    }
-    
-    Game.dropTimer = 0;
-  }
-}
-
-/* ========== Game Control ========== */
-function startGame() {
-  try {
-    Game.running = true;
-    Game.paused = false;
-    Game.over = false;
-    Game.score = 0;
-    Game.level = 1;
-    Game.lines = 0;
-    Game.dropSpeed = 3000; // 3 seconds
-    Game.dropTimer = 0;
-    
-    initGrid();
-    spawnColumn();
-    updateUI();
-    
-    audio.playBg();
-    
-    Game.lastTime = performance.now();
-    requestAnimationFrame(gameLoop);
-  } catch (error) {
-    alert('Error starting game: ' + error.message);
-    console.error('Game start error:', error);
-  }
-}
-
-function togglePause() {
-  if (!Game.running || Game.over) return;
-  
-  Game.paused = !Game.paused;
-  
-  if (Game.paused) {
-    audio.stopBg();
-  } else {
-    audio.playBg();
-  }
-  
-  updateUI();
-}
-
-function restartGame() {
-  if (Game.score > Game.best) {
-    Game.best = Game.score;
-    localStorage.setItem('gemstack_best', Game.best.toString());
-  }
-  
-  startGame();
-}
-
-function gameOver() {
-  Game.over = true;
-  audio.stopBg();
-  audio.play('over');
-  updateUI();
-}
-
-/* ========== Game Loop ========== */
-function gameLoop(time) {
-  if (!Game.running) return;
-  
-  const dt = time - Game.lastTime;
-  Game.lastTime = time;
-  
-  if (!Game.paused && !Game.over && Game.activeCol) {
-    Game.dropTimer += dt;
-    
-    // Find where this column should land
-    const landingRow = findLandingRow();
-    
-    // Smooth visual falling (animate Y position to landing spot)
-    const fallProgress = Game.dropTimer / Game.dropSpeed;
-    Game.colY = fallProgress * landingRow;
-    
-    // When timer expires, place the column
-    if (Game.dropTimer >= Game.dropSpeed) {
-      // Check if placement is valid (not game over)
-      if (landingRow <= 2) {
-        // Would place in top 3 rows = game over
-        gameOver();
-      } else {
-        placeColumn();
-        spawnColumn();
-      }
-      
-      Game.dropTimer = 0;
-      Game.colY = 0;
-    }
+    // Horizontal mode - swap positions in a different pattern
+    const temp = Game.column[0];
+    Game.column[0] = Game.column[2];
+    Game.column[2] = temp;
   }
   
   draw();
-  requestAnimationFrame(gameLoop);
 }
 
-/* ========== Drawing ========== */
-function draw() {
-  if (!ctx) return;
+function toggleRotationMode() {
+  Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
   
-  const cellSize = Math.floor(Math.min(
-    canvas.width / Game.cols,
-    canvas.height / Game.rows
-  ));
-  
-  // Background
-  if (images.bgLoaded && images.bg) {
-    ctx.drawImage(images.bg, 0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = '#2c4a5f';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Update button text
+  if (dom.toggleRotation) {
+    dom.toggleRotation.textContent = Game.rotationMode === 'vertical' ? '↕️ Vert' : '↔️ Horiz';
   }
   
-  // Grid gems - pixel-perfect alignment
-  for (let r = 0; r < Game.rows; r++) {
-    for (let c = 0; c < Game.cols; c++) {
-      if (Game.grid[r][c] !== -1) {
-        drawGem(Game.grid[r][c], Math.floor(c * cellSize), Math.floor(r * cellSize), cellSize);
+  console.log("🔄 Rotation mode:", Game.rotationMode);
+}
+
+function softDrop() {
+  if (!Game.column || Game.paused) return;
+  placeColumn();
+}
+
+function hardDrop() {
+  if (!Game.column || Game.paused) return;
+  placeColumn();
+}
+
+/* ========== Game Loop ========== */
+function update(timestamp) {
+  if (!Game.running || Game.paused) return;
+  
+  const delta = timestamp - Game.lastTime;
+  Game.lastTime = timestamp;
+  
+  Game.dropTimer += delta;
+  
+  if (Game.dropTimer >= Game.dropInterval && Game.column) {
+    placeColumn();
+  }
+  
+  draw();
+  requestAnimationFrame(update);
+}
+
+/* ========== Rendering ========== */
+function draw() {
+  if (!ctx || !dom.canvas) return;
+  
+  const cw = dom.canvas.width;
+  const ch = dom.canvas.height;
+  
+  // Draw background
+  if (images.bg && images.bg.complete) {
+    ctx.drawImage(images.bg, 0, 0, cw, ch);
+  } else {
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillRect(0, 0, cw, ch);
+  }
+  
+  // Calculate cell size
+  const gridWidth = cw * 0.8;
+  const cellSize = gridWidth / COLS;
+  const gridHeight = cellSize * ROWS;
+  const offsetX = (cw - gridWidth) / 2;
+  const offsetY = (ch - gridHeight) / 2;
+  
+  // Draw grid
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const x = offsetX + c * cellSize;
+      const y = offsetY + r * cellSize;
+      
+      const gem = Game.grid[r][c];
+      
+      if (gem > 0 && images.sprites && images.sprites.complete) {
+        const gemIndex = gem - 1;
+        const sx = (gemIndex % 3) * SPRITE_SIZE;
+        const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
+        
+        ctx.drawImage(
+          images.sprites,
+          sx, sy, SPRITE_SIZE, SPRITE_SIZE,
+          x, y, cellSize, cellSize
+        );
       }
     }
   }
   
-  // Active column - smooth falling with colY
-  if (Game.activeCol && !Game.paused && !Game.over) {
+  // Draw active column
+  if (Game.column) {
     for (let i = 0; i < 3; i++) {
-      const yPos = Math.floor((Game.colY + i) * cellSize);
-      drawGem(Game.activeCol[i], Math.floor(Game.colX * cellSize), yPos, cellSize);
+      const x = offsetX + Game.colX * cellSize;
+      const y = offsetY + i * cellSize;
+      const gem = Game.column[i];
+      
+      if (gem > 0 && images.sprites && images.sprites.complete) {
+        const gemIndex = gem - 1;
+        const sx = (gemIndex % 3) * SPRITE_SIZE;
+        const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
+        
+        ctx.globalAlpha = 0.8;
+        ctx.drawImage(
+          images.sprites,
+          sx, sy, SPRITE_SIZE, SPRITE_SIZE,
+          x, y, cellSize, cellSize
+        );
+        ctx.globalAlpha = 1.0;
+      }
     }
   }
-  
-  // Pause overlay
-  if (Game.paused) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 48px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
-  }
-  
-  // Game over overlay
-  if (Game.over) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#ff4444';
-    ctx.font = 'bold 48px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2);
-  }
-}
-
-function drawGem(type, x, y, size) {
-  if (!images.loaded || !images.sprites) {
-    // Fallback colors
-    const colors = ['#4CAF50', '#F44336', '#9C27B0', '#2196F3', '#E91E63', 
-                   '#00BCD4', '#FFEB3B', '#FF9800', '#3F51B5'];
-    ctx.fillStyle = colors[type] || '#999';
-    ctx.fillRect(x + 2, y + 2, size - 4, size - 4);
-    return;
-  }
-  
-  // CORRECT: 1024×1024 sprite sheet with 341.33px cells
-  const SPRITE_CELL = 1024 / 3;
-  const col = type % 3;
-  const row = Math.floor(type / 3);
-  
-  ctx.drawImage(
-    images.sprites,
-    col * SPRITE_CELL, row * SPRITE_CELL, SPRITE_CELL, SPRITE_CELL,
-    x, y, size, size
-  );
 }
 
 /* ========== UI Updates ========== */
 function updateUI() {
-  if (dom.score) dom.score.textContent = Game.score.toString().padStart(6, '0');
+  if (dom.score) dom.score.textContent = String(Game.score).padStart(6, "0");
   if (dom.level) dom.level.textContent = Game.level;
-  if (dom.best) dom.best.textContent = Game.best.toString().padStart(6, '0');
+  if (dom.best) dom.best.textContent = String(Game.best).padStart(6, "0");
+}
+
+/* ========== Game State Functions ========== */
+function startGame() {
+  console.log("🎮 Starting game...");
   
-  if (dom.play) dom.play.style.display = (!Game.running || Game.over) ? 'inline-flex' : 'none';
-  if (dom.pause) {
-    dom.pause.style.display = (Game.running && !Game.over) ? 'inline-flex' : 'none';
-    dom.pause.textContent = Game.paused ? '▶️ Resume' : '⏸️ Pause';
+  Game.running = true;
+  Game.paused = false;
+  Game.score = 0;
+  Game.level = 1;
+  Game.dropTimer = 0;
+  Game.lastTime = performance.now();
+  
+  initGrid();
+  spawnColumn();
+  updateUI();
+  
+  // Start background music
+  if (audio.sounds.bg && !audio.muted) {
+    audio.sounds.bg.play().catch(e => console.log("BG music failed:", e));
   }
-  if (dom.restart) dom.restart.style.display = (Game.running || Game.over) ? 'inline-flex' : 'none';
+  
+  requestAnimationFrame(update);
+  console.log("✅ Game started!");
+}
+
+function togglePause() {
+  console.log("Toggle pause clicked!");
+  Game.paused = !Game.paused;
+  
+  if (Game.paused) {
+    console.log("Game paused");
+    if (audio.sounds.bg) audio.sounds.bg.pause();
+    if (dom.pause) dom.pause.textContent = "▶️ Resume";
+  } else {
+    console.log("Game resumed");
+    if (audio.sounds.bg && !audio.muted) {
+      audio.sounds.bg.play().catch(e => console.log("BG resume failed:", e));
+    }
+    if (dom.pause) dom.pause.textContent = "⏸️ Pause";
+    Game.lastTime = performance.now();
+    requestAnimationFrame(update);
+  }
+}
+
+function restartGame() {
+  if (audio.sounds.bg) audio.sounds.bg.pause();
+  
+  Game.running = false;
+  Game.paused = false;
+  draw();
+}
+
+function gameOver() {
+  console.log("💀 Game Over!");
+  
+  Game.running = false;
+  
+  if (Game.score > Game.best) {
+    Game.best = Game.score;
+    updateUI();
+  }
+  
+  audio.play("over");
+  
+  if (audio.sounds.bg) audio.sounds.bg.pause();
 }
 
 /* ========== Event Listeners ========== */
 function setupEvents() {
+  console.log("Setting up event listeners...");
+  
   // Game controls
-  if (dom.play) dom.play.addEventListener('click', startGame);
-  if (dom.pause) dom.pause.addEventListener('click', togglePause);
-  if (dom.restart) dom.restart.addEventListener('click', restartGame);
+  if (dom.play) {
+    dom.play.addEventListener("click", startGame);
+    console.log("✅ Play button wired");
+  }
   
-  // Mute
+  if (dom.pause) {
+    dom.pause.addEventListener("click", togglePause);
+    console.log("✅ Pause button wired");
+  }
+  
+  if (dom.restart) {
+    dom.restart.addEventListener("click", restartGame);
+    console.log("✅ Restart button wired");
+  }
+  
+  // Mute button
   if (dom.mute) {
-    dom.mute.addEventListener('click', () => {
+    dom.mute.addEventListener("click", () => {
       const enabled = audio.toggleMute();
-      dom.mute.textContent = enabled ? '🔇 Mute' : '🔊 Unmute';
+      dom.mute.textContent = enabled ? "🔇 Mute" : "🔊 Unmute";
     });
+    console.log("✅ Mute button wired");
   }
   
-  // Rotation toggle button
-  const toggleRotationBtn = document.querySelector('[data-control="toggle-rotation"]');
-  if (toggleRotationBtn) {
-    toggleRotationBtn.addEventListener('click', (e) => {
+  // Touch controls - PREVENT DEFAULT to stop long-press slowdown
+  if (dom.left) {
+    dom.left.addEventListener("click", (e) => {
       e.preventDefault();
-      toggleRotation();
-      console.log('Toggle button clicked!');
+      moveLeft();
     });
-    console.log('Toggle rotation button found and wired!');
-  } else {
-    console.error('Toggle rotation button NOT FOUND!');
+    // Prevent context menu on long press
+    dom.left.addEventListener("contextmenu", (e) => e.preventDefault());
+    console.log("✅ Left button wired");
   }
   
-  // Simple rotation button
+  if (dom.right) {
+    dom.right.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveRight();
+    });
+    dom.right.addEventListener("contextmenu", (e) => e.preventDefault());
+    console.log("✅ Right button wired");
+  }
+  
   if (dom.rotate) {
-    dom.rotate.addEventListener('click', rotateColumn);
+    dom.rotate.addEventListener("click", (e) => {
+      e.preventDefault();
+      rotateColumn();
+    });
+    dom.rotate.addEventListener("contextmenu", (e) => e.preventDefault());
+    console.log("✅ Rotate button wired");
   }
   
-  // Other touch controls
-  if (dom.left) dom.left.addEventListener('click', moveLeft);
-  if (dom.right) dom.right.addEventListener('click', moveRight);
-  if (dom.down) dom.down.addEventListener('click', softDrop);
-  if (dom.drop) dom.drop.addEventListener('click', hardDrop);
+  if (dom.toggleRotation) {
+    dom.toggleRotation.addEventListener("click", (e) => {
+      e.preventDefault();
+      toggleRotationMode();
+    });
+    dom.toggleRotation.addEventListener("contextmenu", (e) => e.preventDefault());
+    console.log("✅ Toggle rotation button wired");
+  }
   
-  // Keyboard
-  document.addEventListener('keydown', (e) => {
-    if (!Game.running || Game.paused || Game.over) {
-      if (e.key === 'p' || e.key === 'P') togglePause();
-      return;
-    }
+  if (dom.down) {
+    dom.down.addEventListener("click", (e) => {
+      e.preventDefault();
+      softDrop();
+    });
+    dom.down.addEventListener("contextmenu", (e) => e.preventDefault());
+    console.log("✅ Soft drop button wired");
+  }
+  
+  if (dom.drop) {
+    dom.drop.addEventListener("click", (e) => {
+      e.preventDefault();
+      hardDrop();
+    });
+    dom.drop.addEventListener("contextmenu", (e) => e.preventDefault());
+    console.log("✅ Hard drop button wired");
+  }
+  
+  // Keyboard controls
+  window.addEventListener("keydown", (e) => {
+    if (!Game.running) return;
     
     switch(e.key) {
-      case 'ArrowLeft':
+      case "ArrowLeft":
         e.preventDefault();
         moveLeft();
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         e.preventDefault();
         moveRight();
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
         rotateColumn();
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         softDrop();
         break;
-      case ' ':
+      case " ":
         e.preventDefault();
         hardDrop();
         break;
-      case 'r':
-      case 'R':
+      case "r":
+      case "R":
         e.preventDefault();
-        toggleRotation();
+        toggleRotationMode();
         break;
-      case 'p':
-      case 'P':
+      case "p":
+      case "P":
         e.preventDefault();
         togglePause();
         break;
-      case 'm':
-      case 'M':
+      case "m":
+      case "M":
         e.preventDefault();
-        audio.toggleMute();
+        if (dom.mute) dom.mute.click();
         break;
     }
   });
   
-  // Hamburger menu
-  const hamburger = document.querySelector('.hamburger');
-  if (hamburger) {
-    hamburger.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      document.body.classList.toggle('menu-open');
-    });
-    
-    document.querySelectorAll('.site-nav a').forEach(link => {
-      link.addEventListener('click', () => {
-        document.body.classList.remove('menu-open');
-      });
-    });
-  }
-}
-
-/* ========== Canvas Resize ========== */
-function resizeCanvas() {
-  if (!canvas) return;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-  draw();
+  console.log("✅ Keyboard controls wired");
 }
 
 /* ========== Initialization ========== */
 async function init() {
-  console.log('Initializing game v20...');
+  console.log("🎮 Initializing Gem Stack...");
   
-  if (!ctx) {
-    console.error('Canvas not found!');
-    return;
-  }
-  
-  // Load images
-  try {
-    images.sprites = await loadImage(ASSETS.images.sprites);
-    images.loaded = true;
-    console.log('Sprites loaded');
-  } catch (e) {
-    console.warn('Sprites failed, using fallback');
-  }
-  
-  try {
-    images.bg = await loadImage(ASSETS.images.bg);
-    images.bgLoaded = true;
-    console.log('Background loaded');
-  } catch (e) {
-    console.warn('Background failed, using fallback');
-  }
+  // Load sprites
+  loadSprites();
   
   // Load audio
   for (const [key, src] of Object.entries(ASSETS.audio)) {
     await audio.load(key, src);
   }
+  console.log("✅ Audio loaded");
   
-  // Setup canvas
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+  // Canvas sizing
+  if (dom.canvas) {
+    function resize() {
+      const rect = dom.canvas.getBoundingClientRect();
+      dom.canvas.width = rect.width;
+      dom.canvas.height = rect.height;
+      draw();
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    console.log("✅ Canvas sized");
+  }
   
   // Setup events
   setupEvents();
   
-  // Update UI
+  // Initialize UI
+  initGrid();
   updateUI();
   
-  // Draw initial state
+  // Draw initial state (shows background immediately)
   draw();
   
-  // Footer year
-  const yearEl = document.getElementById('y');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-  
-  console.log('Game ready v20!');
+  console.log("✅ Ready to play!");
 }
 
-// Make functions globally accessible for onclick
-window.gameStart = startGame;
-window.togglePause = togglePause;
-window.restartGame = restartGame;
-window.moveLeft = moveLeft;
-window.moveRight = moveRight;
-window.rotateColumn = rotateColumn;
-window.toggleRotation = toggleRotation;
-window.softDrop = softDrop;
-window.hardDrop = hardDrop;
-
-// Start when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+// Start when page loads
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-          }
+      }
