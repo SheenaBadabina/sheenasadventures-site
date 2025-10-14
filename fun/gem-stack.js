@@ -1,5 +1,5 @@
-/*  Desert Drop — Gem Stack - FINAL WORKING VERSION
-    All bugs fixed: Audio loop, drop buttons, mute, background display
+/*  Desert Drop — Gem Stack - CORRECTED VERSION
+    Proper horizontal/vertical orientation toggle!
     ----------------------------------------------------- */
 
 /* ========== Asset paths ========== */
@@ -45,7 +45,7 @@ const Game = {
   dropTimer: 0,
   dropInterval: 2000,
   lastTime: 0,
-  rotationMode: 'vertical'
+  orientation: 'vertical'  // 'vertical' or 'horizontal'
 };
 
 /* ========== Images ========== */
@@ -61,14 +61,13 @@ function loadSprites() {
   
   images.sprites = new Image();
   images.sprites.src = ASSETS.images.sprites;
-  images.sprites.onload = () => {
-    console.log("✅ Gem sprites loaded");
-  };
+  images.sprites.onload = () => console.log("✅ Gem sprites loaded");
   
   images.bg = new Image();
   images.bg.src = ASSETS.images.bg;
   images.bg.onload = () => {
     console.log("✅ Background loaded");
+    draw();
   };
   
   images.badges = new Image();
@@ -130,19 +129,41 @@ function spawnColumn() {
     Math.floor(Math.random() * GEM_TYPES) + 1
   ];
   Game.colX = 4;
-  console.log("Spawned at column:", Game.colX, "of", COLS);
+  Game.orientation = 'vertical';  // Always spawn vertical
+  console.log("Spawned at column:", Game.colX);
 }
 
-function canPlace(col) {
-  if (col < 0 || col >= COLS) return false;
-  return Game.grid[0][col] === 0 && Game.grid[1][col] === 0 && Game.grid[2][col] === 0;
+function canPlace() {
+  if (!Game.column) return false;
+  
+  if (Game.orientation === 'vertical') {
+    // Check if column is valid and top 3 rows are empty
+    if (Game.colX < 0 || Game.colX >= COLS) return false;
+    return Game.grid[0][Game.colX] === 0 && 
+           Game.grid[1][Game.colX] === 0 && 
+           Game.grid[2][Game.colX] === 0;
+  } else {
+    // Horizontal - check if 3 columns are valid and top row is empty
+    if (Game.colX - 1 < 0 || Game.colX + 1 >= COLS) return false;
+    return Game.grid[0][Game.colX - 1] === 0 && 
+           Game.grid[0][Game.colX] === 0 && 
+           Game.grid[0][Game.colX + 1] === 0;
+  }
 }
 
 function placeColumn() {
   if (!Game.column) return;
   
-  for (let i = 0; i < 3; i++) {
-    Game.grid[i][Game.colX] = Game.column[i];
+  if (Game.orientation === 'vertical') {
+    // Place vertically (stacked in one column)
+    for (let i = 0; i < 3; i++) {
+      Game.grid[i][Game.colX] = Game.column[i];
+    }
+  } else {
+    // Place horizontally (side by side in top row)
+    Game.grid[0][Game.colX - 1] = Game.column[0];
+    Game.grid[0][Game.colX] = Game.column[1];
+    Game.grid[0][Game.colX + 1] = Game.column[2];
   }
   
   applyGravity();
@@ -151,7 +172,10 @@ function placeColumn() {
   Game.column = null;
   Game.dropTimer = 0;
   
-  if (canPlace(4)) {
+  // Check if we can spawn a new column in the center
+  Game.colX = 4;
+  Game.orientation = 'vertical';
+  if (canPlace()) {
     spawnColumn();
   } else {
     gameOver();
@@ -229,38 +253,59 @@ function checkMatches() {
 /* ========== Controls ========== */
 function moveLeft() {
   if (!Game.column || Game.paused || !Game.running) return;
-  if (Game.colX > 0) Game.colX--;
+  
+  if (Game.orientation === 'vertical') {
+    if (Game.colX > 0) Game.colX--;
+  } else {
+    // Horizontal needs room for 3 gems
+    if (Game.colX > 1) Game.colX--;
+  }
   draw();
 }
 
 function moveRight() {
   if (!Game.column || Game.paused || !Game.running) return;
-  if (Game.colX < COLS - 1) Game.colX++;
+  
+  if (Game.orientation === 'vertical') {
+    if (Game.colX < COLS - 1) Game.colX++;
+  } else {
+    // Horizontal needs room for 3 gems
+    if (Game.colX < COLS - 2) Game.colX++;
+  }
   draw();
 }
 
 function rotateColumn() {
   if (!Game.column || Game.paused || !Game.running) return;
-  
-  if (Game.rotationMode === 'vertical') {
-    Game.column.unshift(Game.column.pop());
-  } else {
-    const temp = Game.column[0];
-    Game.column[0] = Game.column[2];
-    Game.column[2] = temp;
-  }
-  
+  // Rotate gems within the piece
+  Game.column.unshift(Game.column.pop());
   draw();
 }
 
 function toggleRotationMode() {
-  Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
+  if (!Game.column || Game.paused || !Game.running) return;
   
-  if (dom.toggleRotation) {
-    dom.toggleRotation.textContent = Game.rotationMode === 'vertical' ? '↕️ Vert' : '↔️ Horiz';
+  // Toggle between vertical and horizontal
+  const newOrientation = Game.orientation === 'vertical' ? 'horizontal' : 'vertical';
+  
+  // Check if new orientation fits
+  const oldOrientation = Game.orientation;
+  Game.orientation = newOrientation;
+  
+  // Adjust position if needed for horizontal
+  if (newOrientation === 'horizontal') {
+    // Make sure there's room (need colX-1, colX, colX+1)
+    if (Game.colX < 1) Game.colX = 1;
+    if (Game.colX > COLS - 2) Game.colX = COLS - 2;
   }
   
-  console.log("🔄 Rotation mode:", Game.rotationMode);
+  // Update button text
+  if (dom.toggleRotation) {
+    dom.toggleRotation.textContent = Game.orientation === 'vertical' ? '↕️ Vert' : '↔️ Horiz';
+  }
+  
+  console.log("🔄 Orientation:", Game.orientation);
+  draw();
 }
 
 function softDrop() {
@@ -297,7 +342,7 @@ function draw() {
   const cw = dom.canvas.width;
   const ch = dom.canvas.height;
   
-  // Draw background
+  // Draw background ALWAYS
   if (images.bg && images.bg.complete) {
     ctx.drawImage(images.bg, 0, 0, cw, ch);
   } else {
@@ -336,25 +381,65 @@ function draw() {
   
   // Draw active column
   if (Game.column) {
-    for (let i = 0; i < 3; i++) {
-      const x = offsetX + Game.colX * cellSize;
-      const y = offsetY + i * cellSize;
-      const gem = Game.column[i];
-      
-      if (gem > 0 && images.sprites && images.sprites.complete) {
-        const gemIndex = gem - 1;
-        const sx = (gemIndex % 3) * SPRITE_SIZE;
-        const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
+    if (Game.orientation === 'vertical') {
+      // Draw vertically (3 gems stacked)
+      for (let i = 0; i < 3; i++) {
+        const x = offsetX + Game.colX * cellSize;
+        const y = offsetY + i * cellSize;
+        const gem = Game.column[i];
         
-        ctx.globalAlpha = 0.8;
-        ctx.drawImage(
-          images.sprites,
-          sx, sy, SPRITE_SIZE, SPRITE_SIZE,
-          x, y, cellSize, cellSize
-        );
-        ctx.globalAlpha = 1.0;
+        if (gem > 0 && images.sprites && images.sprites.complete) {
+          const gemIndex = gem - 1;
+          const sx = (gemIndex % 3) * SPRITE_SIZE;
+          const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
+          
+          ctx.globalAlpha = 0.8;
+          ctx.drawImage(
+            images.sprites,
+            sx, sy, SPRITE_SIZE, SPRITE_SIZE,
+            x, y, cellSize, cellSize
+          );
+          ctx.globalAlpha = 1.0;
+        }
+      }
+    } else {
+      // Draw horizontally (3 gems side by side)
+      for (let i = 0; i < 3; i++) {
+        const x = offsetX + (Game.colX + i - 1) * cellSize;
+        const y = offsetY + 0 * cellSize;
+        const gem = Game.column[i];
+        
+        if (gem > 0 && images.sprites && images.sprites.complete) {
+          const gemIndex = gem - 1;
+          const sx = (gemIndex % 3) * SPRITE_SIZE;
+          const sy = Math.floor(gemIndex / 3) * SPRITE_SIZE;
+          
+          ctx.globalAlpha = 0.8;
+          ctx.drawImage(
+            images.sprites,
+            sx, sy, SPRITE_SIZE, SPRITE_SIZE,
+            x, y, cellSize, cellSize
+          );
+          ctx.globalAlpha = 1.0;
+        }
       }
     }
+  }
+  
+  // Draw "GAME OVER" text if game ended
+  if (!Game.running && Game.score > 0) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(0, 0, cw, ch);
+    
+    ctx.font = 'bold 48px sans-serif';
+    ctx.fillStyle = '#ff4444';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('GAME OVER', cw / 2, ch / 2);
+    
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillStyle = '#00bfa5';
+    ctx.fillText(`Score: ${Game.score}`, cw / 2, ch / 2 + 50);
   }
 }
 
@@ -387,17 +472,6 @@ function startGame() {
   requestAnimationFrame(update);
   console.log("✅ Game started!");
 }
-
-// Make functions globally accessible for inline onclick
-window.startGame = startGame;
-window.togglePause = togglePause;
-window.restartGame = restartGame;
-window.moveLeft = moveLeft;
-window.moveRight = moveRight;
-window.rotateColumn = rotateColumn;
-window.toggleRotationMode = toggleRotationMode;
-window.softDrop = softDrop;
-window.hardDrop = hardDrop;
 
 function togglePause() {
   if (!Game.running) return;
@@ -442,74 +516,24 @@ function gameOver() {
   audio.play("over");
   
   if (audio.sounds.bg) audio.sounds.bg.pause();
+  
+  draw();  // Redraw to show "GAME OVER" text
 }
+
+// Make functions globally accessible
+window.startGame = startGame;
+window.togglePause = togglePause;
+window.restartGame = restartGame;
+window.moveLeft = moveLeft;
+window.moveRight = moveRight;
+window.rotateColumn = rotateColumn;
+window.toggleRotationMode = toggleRotationMode;
+window.softDrop = softDrop;
+window.hardDrop = hardDrop;
 
 /* ========== Event Listeners ========== */
 function setupEvents() {
   console.log("Setting up event listeners...");
-  
-  // Game controls
-  const playBtn = $('[data-game="play"]');
-  const pauseBtn = $('[data-game="pause"]');
-  const restartBtn = $('[data-game="restart"]');
-  
-  console.log("Play button found:", playBtn);
-  console.log("Pause button found:", pauseBtn);
-  console.log("Restart button found:", restartBtn);
-  
-  if (playBtn) {
-    playBtn.addEventListener("click", function(e) {
-      console.log("🎮 PLAY CLICKED!");
-      e.preventDefault();
-      e.stopPropagation();
-      startGame();
-    });
-    playBtn.addEventListener("touchend", function(e) {
-      console.log("🎮 PLAY TOUCHED!");
-      e.preventDefault();
-      e.stopPropagation();
-      startGame();
-    });
-    console.log("✅ Play button wired");
-  } else {
-    console.error("❌ Play button NOT found!");
-  }
-  
-  if (pauseBtn) {
-    pauseBtn.addEventListener("click", function(e) {
-      console.log("⏸️ PAUSE CLICKED!");
-      e.preventDefault();
-      e.stopPropagation();
-      togglePause();
-    });
-    pauseBtn.addEventListener("touchend", function(e) {
-      console.log("⏸️ PAUSE TOUCHED!");
-      e.preventDefault();
-      e.stopPropagation();
-      togglePause();
-    });
-    console.log("✅ Pause button wired");
-  } else {
-    console.error("❌ Pause button NOT found!");
-  }
-  
-  if (restartBtn) {
-    restartBtn.addEventListener("click", function(e) {
-      console.log("🔄 RESTART CLICKED!");
-      e.preventDefault();
-      e.stopPropagation();
-      restartGame();
-    });
-    restartBtn.addEventListener("touchend", function(e) {
-      console.log("🔄 RESTART TOUCHED!");
-      e.preventDefault();
-      e.stopPropagation();
-      restartGame();
-    });
-    console.log("✅ Restart button wired");
-  } else {
-    console.error("❌ Restart button NOT found!");
-  }
   
   // Mute button
   if (dom.mute) {
@@ -518,61 +542,6 @@ function setupEvents() {
       dom.mute.textContent = enabled ? "🔇 Mute" : "🔊 Unmute";
     });
     console.log("✅ Mute button wired");
-  }
-  
-  // Touch controls - PREVENT DEFAULT to stop long-press slowdown
-  if (dom.left) {
-    dom.left.addEventListener("click", (e) => {
-      e.preventDefault();
-      moveLeft();
-    });
-    dom.left.addEventListener("contextmenu", (e) => e.preventDefault());
-    console.log("✅ Left button wired");
-  }
-  
-  if (dom.right) {
-    dom.right.addEventListener("click", (e) => {
-      e.preventDefault();
-      moveRight();
-    });
-    dom.right.addEventListener("contextmenu", (e) => e.preventDefault());
-    console.log("✅ Right button wired");
-  }
-  
-  if (dom.rotate) {
-    dom.rotate.addEventListener("click", (e) => {
-      e.preventDefault();
-      rotateColumn();
-    });
-    dom.rotate.addEventListener("contextmenu", (e) => e.preventDefault());
-    console.log("✅ Rotate button wired");
-  }
-  
-  if (dom.toggleRotation) {
-    dom.toggleRotation.addEventListener("click", (e) => {
-      e.preventDefault();
-      toggleRotationMode();
-    });
-    dom.toggleRotation.addEventListener("contextmenu", (e) => e.preventDefault());
-    console.log("✅ Toggle rotation button wired");
-  }
-  
-  if (dom.down) {
-    dom.down.addEventListener("click", (e) => {
-      e.preventDefault();
-      softDrop();
-    });
-    dom.down.addEventListener("contextmenu", (e) => e.preventDefault());
-    console.log("✅ Soft drop button wired");
-  }
-  
-  if (dom.drop) {
-    dom.drop.addEventListener("click", (e) => {
-      e.preventDefault();
-      hardDrop();
-    });
-    dom.drop.addEventListener("contextmenu", (e) => e.preventDefault());
-    console.log("✅ Hard drop button wired");
   }
   
   // Keyboard controls
@@ -618,7 +587,7 @@ function setupEvents() {
     }
   });
   
-  console.log("✅ Keyboard controls wired");
+  console.log("✅ All controls wired");
 }
 
 /* ========== Initialization ========== */
@@ -626,7 +595,7 @@ async function init() {
   try {
     console.log("🎮 Initializing Gem Stack...");
     
-    // SELECT ALL DOM ELEMENTS AFTER PAGE IS LOADED
+    // SELECT ALL DOM ELEMENTS
     dom = {
       canvas: $("#gameCanvas"),
       play:   $('[data-game="play"]'),
@@ -644,10 +613,8 @@ async function init() {
       toggleRotation: $('[data-control="toggle-rotation"]')
     };
     
-    // CRITICAL: Make sure canvas exists
     if (!dom.canvas) {
-      console.error("❌ Canvas not found! Retrying...");
-      setTimeout(init, 100);
+      console.error("❌ Canvas not found!");
       return;
     }
     
@@ -669,19 +636,20 @@ async function init() {
       const rect = dom.canvas.getBoundingClientRect();
       dom.canvas.width = rect.width;
       dom.canvas.height = rect.height;
+      draw();
     }
     resize();
     window.addEventListener("resize", resize);
     console.log("✅ Canvas sized");
     
-    // Setup events AFTER everything is ready
+    // Setup events
     setupEvents();
     
     // Initialize UI
     initGrid();
     updateUI();
     
-    // Draw initial state (shows background immediately)
+    // Draw initial background
     draw();
     
     console.log("✅ Ready to play!");
@@ -691,9 +659,9 @@ async function init() {
   }
 }
 
-// WAIT for DOM to be fully loaded before initializing
+// WAIT for DOM to be fully loaded
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-}
+          }
