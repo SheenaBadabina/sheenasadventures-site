@@ -2,45 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Pigeon Blood Agate and the Breakdown That Broke Me • Sheena’s Adventures</title>
-  <meta name="description" content="Pigeon Blood Agate near Moab, a breakdown in the desert, a long rescue, and the beauty that still shows up when everything goes wrong." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+  <title>Pigeon Blood Agate and the Breakdown That Broke Me • Sheena's Adventures</title>
+  <meta name="description" content="Pigeon Blood Agate near Moab, a breakdown in the desert, a long rescue, and the beauty that still shows up when everything goes wrong." />
+  
+  <link rel="icon" type="image/png" href="/assets/sheenas-adventures-favicon-logo.png" />
   <link rel="preload" href="/assets/prose/2025-10-12-pigeon-blood-agate.txt" as="fetch" crossorigin="anonymous" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="/static/js/site.js" defer></script>
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Pigeon Blood Agate and the Breakdown That Broke Me" />
   <meta property="og:description" content="A Moab-area hunt for Pigeon Blood Agate, a truck failure, a desert rescue, pottery sherds, and finding beauty in the mess." />
-  <meta property="og:url" content="https://sheenas-adventures.pages.dev/blogs/pigeon-blood-agate.html" />
+  <meta property="og:url" content="https://sheenasadventures.com/blog/pigeon-blood-agate.html" />
   <meta name="twitter:card" content="summary_large_image" />
 </head>
-<body>
-  <header class="site-header" role="banner">
-    <nav class="site-nav" aria-label="Main"></nav>
+
+<body class="page-blog-post">
+
+  <!-- Header with Navigation -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena's Adventures" height="48" width="48" />
+      </a>
+      <button class="hamburger" aria-label="Menu">☰</button>
+      <nav class="site-nav" data-collapsible>
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/work-with-me.html">Work With Me</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
   </header>
 
-  <main id="content" class="page page-blog" role="main">
-    <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
-      <header class="post-header">
-        <h1 class="post-title" itemprop="headline">Pigeon Blood Agate and the Breakdown That Broke Me</h1>
-        <p class="post-meta">
-          <time itemprop="datePublished" datetime="2025-10-12">October 12, 2025</time>
-          <span aria-hidden="true">•</span>
-          <span itemprop="author" itemscope itemtype="https://schema.org/Person">
-            <span itemprop="name">Sheena</span>
-          </span>
-        </p>
-      </header>
+  <!-- Hero Banner for Blog Post -->
+  <div class="post-hero">
+    <img src="/assets/sheenas-adventures-banner-rockhounding-agate-utah.png" alt="Utah desert landscape" class="post-hero-bg" />
+    <div class="post-hero-content">
+      <div class="post-breadcrumb">
+        <a href="/blog/">← Back to Blog</a>
+      </div>
+      <h1 class="post-hero-title">Pigeon Blood Agate and the Breakdown That Broke Me</h1>
+      <div class="post-meta">
+        <time datetime="2025-10-12">October 12, 2025</time>
+        <span aria-hidden="true">•</span>
+        <span>By Sheena</span>
+      </div>
+    </div>
+  </div>
 
-      <section id="post-body" class="post-body prose" itemprop="articleBody">
-        <noscript>Please enable JavaScript to view this post.</noscript>
+  <!-- Blog Post Content -->
+  <main class="post-main">
+    <article class="post-article">
+      <section id="post-body" class="post-prose">
+        <noscript>
+          <p class="error-message">Please enable JavaScript to view this post.</p>
+        </noscript>
       </section>
     </article>
+
+    <!-- Call to Action -->
+    <aside class="post-cta">
+      <h3>Enjoyed this story?</h3>
+      <p>Follow along for more rockhounding adventures, desert discoveries, and real stories from the Utah backcountry.</p>
+      <div class="cta-buttons">
+        <a href="https://www.youtube.com/@SheenasAdventures" target="_blank" rel="noopener" class="btn">Watch on YouTube</a>
+        <a href="/blog/" class="btn secondary">More Blog Posts</a>
+      </div>
+    </aside>
   </main>
 
-  <footer class="site-footer" role="contentinfo"></footer>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>
+      © <span id="y">2025</span> Sheena's Adventures •
+      <a href="/terms.html">Terms</a> •
+      <a href="/privacy.html">Privacy</a>
+    </p>
+  </footer>
 
+  <!-- Load Blog Content -->
   <script>
     (async function loadProse() {
       const target = document.getElementById('post-body');
@@ -64,8 +107,10 @@
       } catch (err) {
         console.error(err);
         target.innerHTML = `
-          <p>Sorry, I couldn’t load this post right now.</p>
-          <p><small>Looking for: <code>${src}</code></small></p>
+          <div class="error-message">
+            <p>Sorry, I couldn't load this post right now.</p>
+            <p><small>Looking for: <code>${src}</code></small></p>
+          </div>
         `;
       }
 
@@ -77,5 +122,6 @@
       }
     })();
   </script>
+
 </body>
-</html>
+  </html>
