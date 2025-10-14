@@ -59,6 +59,7 @@ const Game = {
   // Active column
   activeCol: null,
   colX: 3,
+  colY: 0, // Visual Y position for smooth falling
   
   // Timing
   dropTimer: 0,
@@ -165,6 +166,7 @@ function spawnColumn() {
     Math.floor(Math.random() * 9)
   ];
   Game.colX = Math.floor(Game.cols / 2); // Start in middle
+  Game.colY = 0; // Start at top
   Game.dropTimer = 0; // Reset timer
 }
 
@@ -455,6 +457,12 @@ function gameLoop(time) {
   if (!Game.paused && !Game.over && Game.activeCol) {
     Game.dropTimer += dt;
     
+    // Smooth visual falling (animate Y position)
+    const fallProgress = Game.dropTimer / Game.dropSpeed;
+    const targetRow = Game.rows - 3; // Bottom position for 3-gem column
+    Game.colY = fallProgress * targetRow;
+    
+    // When timer expires, place the column
     if (Game.dropTimer >= Game.dropSpeed) {
       if (canPlace()) {
         placeColumn();
@@ -469,6 +477,7 @@ function gameLoop(time) {
       }
       
       Game.dropTimer = 0;
+      Game.colY = 0;
     }
   }
   
@@ -502,10 +511,11 @@ function draw() {
     }
   }
   
-  // Active column - pixel-perfect alignment
+  // Active column - smooth falling with colY
   if (Game.activeCol && !Game.paused && !Game.over) {
     for (let i = 0; i < 3; i++) {
-      drawGem(Game.activeCol[i], Math.floor(Game.colX * cellSize), Math.floor(i * cellSize), cellSize);
+      const yPos = Math.floor((Game.colY + i) * cellSize);
+      drawGem(Game.activeCol[i], Math.floor(Game.colX * cellSize), yPos, cellSize);
     }
   }
   
@@ -747,4 +757,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-  }
+      }
