@@ -173,6 +173,7 @@ function spawnColumn() {
 function canPlace() {
   if (Game.colX < 0 || Game.colX >= Game.cols) return false;
   
+  // Check if top 3 rows of this column are empty
   for (let i = 0; i < 3; i++) {
     if (Game.grid[i][Game.colX] !== -1) return false;
   }
@@ -180,9 +181,26 @@ function canPlace() {
   return true;
 }
 
+function findLandingRow() {
+  // Find the first occupied cell in this column
+  for (let r = 0; r < Game.rows; r++) {
+    if (Game.grid[r][Game.colX] !== -1) {
+      // Land on top of this gem (3 rows above it)
+      return Math.max(0, r - 3);
+    }
+  }
+  // Column is empty, land at bottom
+  return Game.rows - 3;
+}
+
 function placeColumn() {
+  const landingRow = findLandingRow();
+  
+  // Place the 3 gems starting at landing row
   for (let i = 0; i < 3; i++) {
-    Game.grid[i][Game.colX] = Game.activeCol[i];
+    if (landingRow + i < Game.rows) {
+      Game.grid[landingRow + i][Game.colX] = Game.activeCol[i];
+    }
   }
   
   applyGravity();
@@ -457,23 +475,22 @@ function gameLoop(time) {
   if (!Game.paused && !Game.over && Game.activeCol) {
     Game.dropTimer += dt;
     
-    // Smooth visual falling (animate Y position)
+    // Find where this column should land
+    const landingRow = findLandingRow();
+    
+    // Smooth visual falling (animate Y position to landing spot)
     const fallProgress = Game.dropTimer / Game.dropSpeed;
-    const targetRow = Game.rows - 3; // Bottom position for 3-gem column
-    Game.colY = fallProgress * targetRow;
+    Game.colY = fallProgress * landingRow;
     
     // When timer expires, place the column
     if (Game.dropTimer >= Game.dropSpeed) {
-      if (canPlace()) {
-        placeColumn();
-        
-        if (!canPlace()) {
-          gameOver();
-        } else {
-          spawnColumn();
-        }
-      } else {
+      // Check if placement is valid (not game over)
+      if (landingRow <= 2) {
+        // Would place in top 3 rows = game over
         gameOver();
+      } else {
+        placeColumn();
+        spawnColumn();
       }
       
       Game.dropTimer = 0;
@@ -595,20 +612,53 @@ function setupEvents() {
   
   // Touch controls with long-press for rotation toggle
   if (dom.rotate) {
-    let pressTimer;
+    let pressTimer = null;
+    let longPressTriggered = false;
     
-    dom.rotate.addEventListener('click', rotateColumn);
+    // Regular click for rotation
+    dom.rotate.addEventListener('click', (e) => {
+      if (!longPressTriggered) {
+        rotateColumn();
+      }
+      longPressTriggered = false;
+    });
     
-    // Long press to toggle mode
-    dom.rotate.addEventListener('touchstart', (e) => {
+    // Long press to toggle mode (works on both touch and mouse)
+    dom.rotate.addEventListener('mousedown', (e) => {
+      longPressTriggered = false;
       pressTimer = setTimeout(() => {
+        longPressTriggered = true;
         toggleRotation();
         if (navigator.vibrate) navigator.vibrate(50);
       }, 500);
     });
     
-    dom.rotate.addEventListener('touchend', () => {
-      clearTimeout(pressTimer);
+    dom.rotate.addEventListener('mouseup', () => {
+      if (pressTimer) clearTimeout(pressTimer);
+    });
+    
+    dom.rotate.addEventListener('mouseleave', () => {
+      if (pressTimer) clearTimeout(pressTimer);
+    });
+    
+    // Touch events
+    dom.rotate.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      longPressTriggered = false;
+      pressTimer = setTimeout(() => {
+        longPressTriggered = true;
+        toggleRotation();
+        if (navigator.vibrate) navigator.vibrate(50);
+      }, 500);
+    });
+    
+    dom.rotate.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      if (pressTimer) clearTimeout(pressTimer);
+      if (!longPressTriggered) {
+        rotateColumn();
+      }
+      longPressTriggered = false;
     });
   }
   
@@ -757,4 +807,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-      }
+    }
