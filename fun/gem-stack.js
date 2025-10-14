@@ -1,4 +1,8 @@
-/*  Desert Drop — Gem Stack
+// Other touch controls
+  if (dom.left) dom.left.addEventListener('click', moveLeft);
+  if (dom.right) dom.right.addEventListener('click', moveRight);
+  if (dom.down) dom.down.addEventListener('click', softDrop);
+  if (dom.drop) dom.drop.addEventListener('click', hardDrop);/*  Desert Drop — Gem Stack
     SIMPLIFIED WORKING VERSION
     All core features, no fancy effects
     ----------------------------------------------------- */
@@ -58,7 +62,7 @@ const Game = {
   
   // Timing
   dropTimer: 0,
-  dropSpeed: 2000, // SLOWER - 2 seconds per drop
+  dropSpeed: 3000, // MUCH SLOWER - 3 seconds per drop
   lastTime: 0,
   
   // Rotation mode
@@ -349,18 +353,19 @@ function rotateColumn() {
     Game.activeCol[1] = Game.activeCol[0];
     Game.activeCol[0] = temp;
   } else {
-    // Rotate horizontally (swap positions)
+    // Rotate horizontally (reverse order)
     const temp = Game.activeCol[0];
-    Game.activeCol[0] = Game.activeCol[1];
-    Game.activeCol[1] = Game.activeCol[2];
+    Game.activeCol[0] = Game.activeCol[2];
     Game.activeCol[2] = temp;
   }
 }
 
 function toggleRotation() {
   Game.rotationMode = Game.rotationMode === 'vertical' ? 'horizontal' : 'vertical';
-  // Show feedback (optional)
-  console.log('Rotation mode:', Game.rotationMode);
+  // Visual feedback
+  if (dom.rotate) {
+    dom.rotate.textContent = Game.rotationMode === 'vertical' ? '↻' : '↔️';
+  }
 }
 
 function softDrop() {
@@ -396,7 +401,7 @@ function startGame() {
     Game.score = 0;
     Game.level = 1;
     Game.lines = 0;
-    Game.dropSpeed = 2000; // Start at 2 seconds
+    Game.dropSpeed = 3000; // Start at 3 seconds
     Game.dropTimer = 0;
     
     console.log('Initializing grid...');
@@ -429,6 +434,7 @@ window.restartGame = restartGame;
 window.moveLeft = moveLeft;
 window.moveRight = moveRight;
 window.rotateColumn = rotateColumn;
+window.toggleRotation = toggleRotation;
 window.softDrop = softDrop;
 window.hardDrop = hardDrop;
 
@@ -600,12 +606,25 @@ function setupEvents() {
     });
   }
   
-  // Touch controls
-  if (dom.left) dom.left.addEventListener('click', moveLeft);
-  if (dom.right) dom.right.addEventListener('click', moveRight);
-  if (dom.rotate) dom.rotate.addEventListener('click', rotateColumn);
-  if (dom.down) dom.down.addEventListener('click', softDrop);
-  if (dom.drop) dom.drop.addEventListener('click', hardDrop);
+  // Touch controls with long-press for rotation toggle
+  if (dom.rotate) {
+    let pressTimer;
+    
+    dom.rotate.addEventListener('click', rotateColumn);
+    
+    // Long press to toggle mode
+    dom.rotate.addEventListener('touchstart', (e) => {
+      pressTimer = setTimeout(() => {
+        toggleRotation();
+        // Haptic feedback if available
+        if (navigator.vibrate) navigator.vibrate(50);
+      }, 500); // 0.5 second long press
+    });
+    
+    dom.rotate.addEventListener('touchend', () => {
+      clearTimeout(pressTimer);
+    });
+  }
   
   // Keyboard
   document.addEventListener('keydown', (e) => {
@@ -723,4 +742,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-            }
+        }
