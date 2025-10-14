@@ -45,10 +45,10 @@
 
     <!-- Game Controls -->
     <section class="controls primary">
-      <button class="btn" data-game="play">▶️ Play</button>
-      <button class="btn" data-game="pause" style="display:none;">⏸️ Pause</button>
-      <button class="btn secondary" data-game="restart" style="display:none;">🔄 Restart</button>
-      <button class="btn secondary" data-audio="mute">🔇 Mute</button>
+      <button class="btn" data-game="play" id="playBtn" onclick="window.gameStart()">▶️ Play</button>
+      <button class="btn" data-game="pause" id="pauseBtn" style="display:none;">⏸️ Pause</button>
+      <button class="btn secondary" data-game="restart" id="restartBtn" style="display:none;">🔄 Restart</button>
+      <button class="btn secondary" data-audio="mute" id="muteBtn">🔇 Mute</button>
       <a href="/fun/gem-guide.html" class="btn secondary">📖 Guide</a>
     </section>
 
