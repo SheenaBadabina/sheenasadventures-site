@@ -9,7 +9,7 @@
   <!-- Global theme -->
   <link rel="stylesheet" href="/static/styles.css" />
 
-  <!-- Page-local polish (non-breaking, mobile-first) -->
+  <!-- Page-local polish (mobile-first) -->
   <style>
     :root{
       --sa-bg: #0b0f12;
@@ -17,7 +17,7 @@
       --sa-card-2: #0f1419;
       --sa-text: #e6edf3;
       --sa-subtle: #9fb0bf;
-      --sa-accent: #17b6a5; /* your teal */
+      --sa-accent: #17b6a5;
       --sa-ring: rgba(23,182,165,.35);
       --sa-shadow: 0 10px 30px rgba(0,0,0,.35);
       --sa-radius: 18px;
@@ -27,10 +27,10 @@
       --sa-maxw: 980px;
     }
 
-    /* Hero with background image + overlay */
+    /* Hero with background image + overlay (logo removed, height trimmed) */
     .hero{
       position: relative;
-      min-height: 38vh;
+      min-height: 30vh; /* was 38vh */
       display: grid;
       place-items: center;
       text-align: center;
@@ -47,19 +47,11 @@
       filter: saturate(1.05) contrast(1.05);
       opacity: 1;
     }
-    .hero-inner{ position: relative; z-index: 1; padding: 56px 18px 42px; }
-    .brand-badge{
-      width: 132px; height: 132px;
-      margin: 0 auto 14px;
-      border-radius: 999px;
-      background: url("/assets/logosheenas-adventures-logo-bubble-braids.png") center/contain no-repeat #0000;
-      box-shadow: 0 6px 22px rgba(0,0,0,.45);
-      border: 3px solid rgba(255,255,255,.15);
-    }
+    .hero-inner{ position: relative; z-index: 1; padding: 42px 18px 38px; }
     .hero h1{
       font-size: clamp(1.4rem, 2.8vw + .8rem, 2.2rem);
       letter-spacing:.2px;
-      margin: 8px 0 6px;
+      margin: 0 0 8px;
     }
     .hero p{
       max-width: 720px;
@@ -183,10 +175,9 @@
 </head>
 
 <body class="page-dark" style="background:#0b0f12;">
-  <!-- HERO -->
+  <!-- HERO (logo removed) -->
   <header class="hero" role="banner" aria-label="Sheena’s Adventures">
     <div class="hero-inner">
-      <div class="brand-badge" aria-label="Sheena’s Adventures logo"></div>
       <h1>Work With Me</h1>
       <p>Sponsor integrations that feel real, helpful, and memorable—because my audience trusts me to keep it that way.</p>
     </div>
@@ -336,7 +327,7 @@
     </footer>
   </main>
 
-  <!-- (Optional) Cloudflare Turnstile script if not already globally loaded -->
+  <!-- (Optional) Cloudflare Turnstile script if not already globally loaded) -->
   <script defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 </body>
-              </html>
+</html>
