@@ -6,8 +6,10 @@
   <title>Work With Me • Sheena’s Adventures</title>
   <meta name="description" content="Partner with Sheena’s Adventures for authentic sponsor integrations that feel real, helpful, and memorable." />
 
+  <!-- Global theme -->
   <link rel="stylesheet" href="/static/styles.css" />
 
+  <!-- Page-local polish (mobile-first) -->
   <style>
     :root{
       --sa-bg:#0b0f12;
@@ -23,118 +25,164 @@
       --sa-maxw:980px;
     }
 
+    /* === Simple top-right hamburger === */
+    .site-bar{
+      position:fixed; top:10px; right:10px; z-index:50;
+      display:flex; align-items:center; gap:8px;
+    }
+    .hamburger{
+      appearance:none; -webkit-appearance:none;
+      width:40px; height:40px; border-radius:10px;
+      background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.18);
+      display:grid; place-items:center; cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .hamburger:focus{ outline:none; box-shadow:0 0 0 3px var(--sa-ring); }
+    .ham-bars{ position:relative; width:20px; height:14px; }
+    .ham-bars span{
+      position:absolute; left:0; right:0; height:2px; background:#e6edf3; border-radius:2px;
+      transition:transform .2s ease, opacity .2s ease, top .2s ease;
+    }
+    .ham-bars span:nth-child(1){ top:0; }
+    .ham-bars span:nth-child(2){ top:6px; }
+    .ham-bars span:nth-child(3){ top:12px; }
+    .hamburger[aria-expanded="true"] .ham-bars span:nth-child(1){ top:6px; transform:rotate(45deg); }
+    .hamburger[aria-expanded="true"] .ham-bars span:nth-child(2){ opacity:0; }
+    .hamburger[aria-expanded="true"] .ham-bars span:nth-child(3){ top:6px; transform:rotate(-45deg); }
+
+    /* Off-canvas menu */
+    .nav-panel{
+      position:fixed; inset:0 0 0 auto; width:min(88vw, 360px); translate:100% 0;
+      background:#0e1418; color:var(--sa-text); z-index:49;
+      border-left:1px solid rgba(255,255,255,.08);
+      box-shadow:-20px 0 40px rgba(0,0,0,.5);
+      transition:translate .25s ease;
+      display:flex; flex-direction:column;
+    }
+    .nav-panel.open{ translate:0 0; }
+    .nav-head{ padding:16px; border-bottom:1px solid rgba(255,255,255,.08); font-weight:700; }
+    .nav-links{ display:grid; gap:2px; padding:8px; }
+    .nav-links a{
+      display:flex; align-items:center; gap:10px;
+      padding:12px 12px; border-radius:10px; text-decoration:none;
+      color:var(--sa-text); background:transparent;
+    }
+    .nav-links a:focus{ outline:none; box-shadow:0 0 0 3px var(--sa-ring); }
+    .nav-links a:hover{ background:#111920; }
+    .nav-foot{ margin-top:auto; padding:10px 12px; font-size:.9rem; color:var(--sa-subtle); }
+
+    /* Hero with background image + overlay */
     .hero{
-      position:relative;
-      min-height:30vh;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      color:var(--sa-text);
-      background:#000;
-      overflow:clip;
+      position:relative; min-height:30vh; display:grid; place-items:center;
+      text-align:center; color:var(--sa-text); background:#000; overflow:clip;
     }
     .hero::before{
-      content:"";
-      position:absolute; inset:0;
+      content:""; position:absolute; inset:0;
       background:
         linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.75)),
         url("/assets/sheenas-adventures-banner-spring-yucca-bloom-utah.png") center/cover no-repeat;
     }
-    .hero-inner{position:relative;z-index:1;padding:42px 18px 38px;}
-    .hero h1{font-size:clamp(1.4rem,2.8vw+.8rem,2.2rem);margin:0 0 8px;}
-    .hero p{max-width:720px;margin:0 auto;color:var(--sa-subtle);font-size:.98rem;line-height:1.5;}
+    .hero-inner{ position:relative; z-index:1; padding:42px 18px 38px; }
+    .hero h1{ font-size:clamp(1.4rem,2.8vw + .8rem,2.2rem); margin:0 0 8px; }
+    .hero p{ max-width:720px; margin:0 auto; color:var(--sa-subtle); font-size:.98rem; line-height:1.5; }
 
-    .wrap{max-width:var(--sa-maxw);margin:0 auto;padding:18px 14px 60px;}
+    .wrap{ max-width:var(--sa-maxw); margin:0 auto; padding:18px 14px 60px; }
 
     .card{
-      background:var(--sa-card);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:var(--sa-radius);
-      box-shadow:var(--sa-shadow);
-      padding:clamp(16px,2vw+10px,22px);
+      background:var(--sa-card); border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--sa-radius); box-shadow:var(--sa-shadow);
+      padding:clamp(16px,2vw + 10px,22px);
     }
-    .card + .card{margin-top:18px;}
+    .card + .card{ margin-top:18px; }
 
     .section-title{
-      display:flex;align-items:center;gap:10px;
-      margin:2px 0 12px;
-      font-weight:700;
+      display:flex; align-items:center; gap:10px; margin:2px 0 12px; font-weight:700;
     }
     .section-title::after{
-      content:"";flex:1;height:2px;
-      background:linear-gradient(90deg,var(--sa-accent),transparent 60%);
-      opacity:.5;
+      content:""; flex:1; height:2px; background:linear-gradient(90deg,var(--sa-accent),transparent 60%); opacity:.5;
     }
 
-    .grid{display:grid;gap:var(--sa-gap);}
-    .grid-2{grid-template-columns:1fr;}
-    @media(min-width:760px){.grid-2{grid-template-columns:repeat(2,1fr);}}
+    .grid{ display:grid; gap:var(--sa-gap); }
+    .grid-2{ grid-template-columns:1fr; }
+    @media (min-width:760px){ .grid-2{ grid-template-columns:repeat(2,1fr); } }
 
-    .field{display:grid;gap:6px;}
-    .field label{font-size:.92rem;color:var(--sa-text);}
+    .field{ display:grid; gap:6px; }
+    .field label{ font-size:.92rem; color:var(--sa-text); }
     .input,.textarea,select{
-      width:100%;
-      background:var(--sa-card-2);
-      color:var(--sa-text);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:12px;
-      padding:12px 14px;
+      width:100%; background:var(--sa-card-2); color:var(--sa-text);
+      border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:12px 14px;
+      outline:none; transition:box-shadow .15s ease, border-color .15s ease;
     }
-    .textarea{min-height:110px;resize:vertical;}
-    .input:focus,.textarea:focus,select:focus{
-      border-color:var(--sa-accent);
-      box-shadow:0 0 0 3px var(--sa-ring);
-    }
+    .textarea{ min-height:110px; resize:vertical; }
+    .input:focus,.textarea:focus,select:focus{ border-color:var(--sa-accent); box-shadow:0 0 0 3px var(--sa-ring); }
 
-    .checks{display:grid;gap:10px;}
-    .checks.grid-2>label{display:flex;align-items:center;gap:10px;}
-    .checks input[type="checkbox"]{inline-size:20px;block-size:20px;accent-color:var(--sa-accent);}
+    .checks{ display:grid; gap:10px; }
+    .checks.grid-2 > label{ display:flex; align-items:center; gap:10px; }
+    .checks input[type="checkbox"]{ inline-size:20px; block-size:20px; accent-color:var(--sa-accent); }
 
-    .hint{color:var(--sa-subtle);font-size:.9rem;}
+    .hint{ color:var(--sa-subtle); font-size:.9rem; }
 
-    .submit-wrap{position:relative;}
-    @media(max-width:768px){
-      .submit-stick{position:sticky;bottom:16px;background:linear-gradient(180deg,transparent,rgba(11,15,18,.85) 26%);padding-top:10px;}
+    .submit-wrap{ position:relative; }
+    @media (max-width:768px){
+      .submit-stick{ position:sticky; bottom:16px; background:linear-gradient(180deg,transparent,rgba(11,15,18,.85) 26%); padding-top:10px; }
     }
     .btn{
-      display:inline-flex;justify-content:center;align-items:center;width:100%;
-      padding:14px 16px;font-weight:700;border-radius:14px;background:var(--sa-accent);
-      color:#062a26;border:none;box-shadow:0 8px 18px rgba(23,182,165,.25);
+      display:inline-flex; justify-content:center; align-items:center; width:100%;
+      padding:14px 16px; font-weight:700; border-radius:14px; background:var(--sa-accent);
+      color:#062a26; border:none; box-shadow:0 8px 18px rgba(23,182,165,.25);
+      transition:transform .05s ease;
     }
+    .btn:active{ transform:translateY(1px); }
 
-    footer{text-align:center;color:var(--sa-subtle);padding:26px 0 10px;}
-    footer a{color:var(--sa-accent);}
+    footer{ text-align:center; color:var(--sa-subtle); padding:26px 0 10px; }
+    footer a{ color:var(--sa-accent); }
 
     .confirm{
-      display:flex;align-items:center;gap:10px;
-      padding:10px 12px;background:#0e1714;
-      border:1px solid rgba(23,182,165,.35);
-      border-radius:12px;color:var(--sa-text);
+      display:flex; align-items:center; gap:10px; padding:10px 12px; background:#0e1714;
+      border:1px solid rgba(23,182,165,.35); border-radius:12px; color:var(--sa-text);
     }
-    .confirm .dot{inline-size:10px;block-size:10px;border-radius:999px;background:var(--sa-accent);}
+    .confirm .dot{ inline-size:10px; block-size:10px; border-radius:999px; background:var(--sa-accent); }
 
     /* Force brand rules list left-aligned */
-    .rules-list{
-      text-align:left;
-      list-style-position:outside;
-      padding-left:24px;
-      margin:0;
-    }
-    .rules-list li{line-height:1.5em;}
+    .rules-list{ text-align:left; list-style-position:outside; padding-left:24px; margin:0; }
+    .rules-list li{ line-height:1.5em; }
   </style>
 </head>
 
 <body class="page-dark" style="background:#0b0f12;">
-  <header class="hero">
+  <!-- Fixed hamburger -->
+  <div class="site-bar">
+    <button class="hamburger" id="menuBtn" aria-label="Open menu" aria-controls="siteNav" aria-expanded="false">
+      <span class="ham-bars" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+  </div>
+
+  <!-- Off-canvas navigation -->
+  <nav class="nav-panel" id="siteNav" aria-hidden="true">
+    <div class="nav-head">Sheena’s Adventures</div>
+    <div class="nav-links">
+      <a href="/" rel="noopener">Home</a>
+      <a href="/work-with-me.html" aria-current="page">Work With Me</a>
+      <a href="/contact.html">Contact</a>
+      <a href="https://www.youtube.com/@SheenasAdventures" target="_blank" rel="noopener">YouTube</a>
+    </div>
+    <div class="nav-foot">© 2025 Sheena’s Adventures</div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" role="banner" aria-label="Sheena’s Adventures">
     <div class="hero-inner">
       <h1>Work With Me</h1>
       <p>Sponsor integrations that feel real, helpful, and memorable—because my audience trusts me to keep it that way.</p>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="card">
-      <h2 class="section-title">Brand Alignment &amp; Content Rules</h2>
+  <main class="wrap" id="content">
+    <!-- QUALIFICATION RULES -->
+    <section class="card" aria-labelledby="rules-title">
+      <h2 class="section-title" id="rules-title">Brand Alignment &amp; Content Rules</h2>
       <ul class="hint rules-list">
         <li><strong>Family-friendly only.</strong> No adult content or services.</li>
         <li><strong>No alcohol</strong> sponsorships.</li>
@@ -148,6 +196,7 @@
       </ul>
     </section>
 
+    <!-- FORM -->
     <form class="card" id="sponsor-form" method="post" action="/sponsor-submit" novalidate>
       <h2 class="section-title">Collaboration Request</h2>
 
@@ -244,6 +293,7 @@
           </div>
         </div>
 
+        <!-- Turnstile + success state -->
         <div class="grid" style="gap:10px;">
           <div class="confirm" role="status" aria-live="polite">
             <span class="dot" aria-hidden="true"></span>
@@ -269,6 +319,31 @@
       </p>
     </footer>
   </main>
+
+  <!-- Turnstile (if not globally loaded) -->
   <script defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+
+  <!-- Tiny JS to toggle the menu -->
+  <script>
+    (function(){
+      const btn = document.getElementById('menuBtn');
+      const panel = document.getElementById('siteNav');
+
+      function toggle(open){
+        const isOpen = open ?? (btn.getAttribute('aria-expanded') !== 'true');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        panel.classList.toggle('open', isOpen);
+        panel.setAttribute('aria-hidden', String(!isOpen));
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      }
+
+      btn.addEventListener('click', () => toggle());
+      panel.addEventListener('click', (e) => {
+        // close when clicking a link or empty area
+        if(e.target.tagName === 'A' || e.target === panel) toggle(false);
+      });
+      window.addEventListener('keydown', (e) => { if(e.key === 'Escape') toggle(false); });
+    })();
+  </script>
 </body>
-</html>
+            </html>
