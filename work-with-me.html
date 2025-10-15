@@ -6,188 +6,136 @@
   <title>Work With Me • Sheena’s Adventures</title>
   <meta name="description" content="Partner with Sheena’s Adventures for authentic sponsor integrations that feel real, helpful, and memorable." />
 
-  <!-- Global theme -->
   <link rel="stylesheet" href="/static/styles.css" />
 
-  <!-- Page-local polish (mobile-first) -->
   <style>
     :root{
-      --sa-bg: #0b0f12;
-      --sa-card: #11161b;
-      --sa-card-2: #0f1419;
-      --sa-text: #e6edf3;
-      --sa-subtle: #9fb0bf;
-      --sa-accent: #17b6a5;
-      --sa-ring: rgba(23,182,165,.35);
-      --sa-shadow: 0 10px 30px rgba(0,0,0,.35);
-      --sa-radius: 18px;
-      --sa-gap: 14px;
-      --sa-pad: 16px;
-      --sa-sec-pad: 18px;
-      --sa-maxw: 980px;
+      --sa-bg:#0b0f12;
+      --sa-card:#11161b;
+      --sa-card-2:#0f1419;
+      --sa-text:#e6edf3;
+      --sa-subtle:#9fb0bf;
+      --sa-accent:#17b6a5;
+      --sa-ring:rgba(23,182,165,.35);
+      --sa-shadow:0 10px 30px rgba(0,0,0,.35);
+      --sa-radius:18px;
+      --sa-gap:14px;
+      --sa-maxw:980px;
     }
 
-    /* Hero with background image + overlay (logo removed, height trimmed) */
     .hero{
-      position: relative;
-      min-height: 30vh; /* was 38vh */
-      display: grid;
-      place-items: center;
-      text-align: center;
-      color: var(--sa-text);
-      background: #000;
-      overflow: clip;
+      position:relative;
+      min-height:30vh;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:var(--sa-text);
+      background:#000;
+      overflow:clip;
     }
     .hero::before{
       content:"";
       position:absolute; inset:0;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.75)),
+        linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.75)),
         url("/assets/sheenas-adventures-banner-spring-yucca-bloom-utah.png") center/cover no-repeat;
-      filter: saturate(1.05) contrast(1.05);
-      opacity: 1;
     }
-    .hero-inner{ position: relative; z-index: 1; padding: 42px 18px 38px; }
-    .hero h1{
-      font-size: clamp(1.4rem, 2.8vw + .8rem, 2.2rem);
-      letter-spacing:.2px;
-      margin: 0 0 8px;
-    }
-    .hero p{
-      max-width: 720px;
-      margin: 0 auto;
-      color: var(--sa-subtle);
-      font-size: .98rem;
-      line-height: 1.5;
-    }
+    .hero-inner{position:relative;z-index:1;padding:42px 18px 38px;}
+    .hero h1{font-size:clamp(1.4rem,2.8vw+.8rem,2.2rem);margin:0 0 8px;}
+    .hero p{max-width:720px;margin:0 auto;color:var(--sa-subtle);font-size:.98rem;line-height:1.5;}
 
-    /* Main container */
-    .wrap{
-      max-width: var(--sa-maxw);
-      margin: 0 auto;
-      padding: 18px 14px 60px;
-    }
+    .wrap{max-width:var(--sa-maxw);margin:0 auto;padding:18px 14px 60px;}
 
-    /* Cards */
     .card{
-      background: var(--sa-card);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: var(--sa-radius);
-      box-shadow: var(--sa-shadow);
-      padding: clamp(16px, 2vw + 10px, 22px);
+      background:var(--sa-card);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--sa-radius);
+      box-shadow:var(--sa-shadow);
+      padding:clamp(16px,2vw+10px,22px);
     }
-    .card + .card{ margin-top: 18px; }
+    .card + .card{margin-top:18px;}
 
-    /* Section header */
     .section-title{
-      display:flex; align-items:center; gap:10px;
-      margin: 2px 0 12px;
-      font-weight: 700;
-      letter-spacing:.2px;
+      display:flex;align-items:center;gap:10px;
+      margin:2px 0 12px;
+      font-weight:700;
     }
     .section-title::after{
-      content:"";
-      flex:1;
-      height: 2px;
-      background: linear-gradient(90deg, var(--sa-accent), transparent 60%);
+      content:"";flex:1;height:2px;
+      background:linear-gradient(90deg,var(--sa-accent),transparent 60%);
       opacity:.5;
     }
 
-    /* Grid helpers */
-    .grid{ display:grid; gap: var(--sa-gap); }
-    .grid-2{ grid-template-columns: 1fr; }
-    @media (min-width: 760px){
-      .grid-2{ grid-template-columns: repeat(2, 1fr); }
+    .grid{display:grid;gap:var(--sa-gap);}
+    .grid-2{grid-template-columns:1fr;}
+    @media(min-width:760px){.grid-2{grid-template-columns:repeat(2,1fr);}}
+
+    .field{display:grid;gap:6px;}
+    .field label{font-size:.92rem;color:var(--sa-text);}
+    .input,.textarea,select{
+      width:100%;
+      background:var(--sa-card-2);
+      color:var(--sa-text);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;
+      padding:12px 14px;
+    }
+    .textarea{min-height:110px;resize:vertical;}
+    .input:focus,.textarea:focus,select:focus{
+      border-color:var(--sa-accent);
+      box-shadow:0 0 0 3px var(--sa-ring);
     }
 
-    /* Inputs */
-    .field{ display:grid; gap:6px; }
-    .field label{ font-size:.92rem; color:var(--sa-text); }
-    .input, .textarea, select{
-      width: 100%;
-      background: var(--sa-card-2);
-      color: var(--sa-text);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 12px;
-      padding: 12px 14px;
-      outline:none;
-      transition: box-shadow .15s ease, border-color .15s ease;
-    }
-    .textarea{ min-height: 110px; resize: vertical; }
-    .input:focus, .textarea:focus, select:focus{
-      border-color: var(--sa-accent);
-      box-shadow: 0 0 0 3px var(--sa-ring);
-    }
+    .checks{display:grid;gap:10px;}
+    .checks.grid-2>label{display:flex;align-items:center;gap:10px;}
+    .checks input[type="checkbox"]{inline-size:20px;block-size:20px;accent-color:var(--sa-accent);}
 
-    /* Checkbox groups */
-    .checks{ display:grid; gap: 10px; }
-    .checks.grid-2 > label{ display:flex; align-items:center; gap:10px; }
-    .checks input[type="checkbox"]{
-      inline-size: 20px; block-size: 20px;
-      accent-color: var(--sa-accent);
-    }
+    .hint{color:var(--sa-subtle);font-size:.9rem;}
 
-    /* Helper text */
-    .hint{ color: var(--sa-subtle); font-size: .9rem; }
-
-    /* Sticky submit on mobile */
-    .submit-wrap{ position: relative; }
-    @media (max-width: 768px){
-      .submit-stick{
-        position: sticky; bottom: 16px;
-        background: linear-gradient(180deg, transparent, rgba(11,15,18,.85) 26%);
-        padding-top: 10px;
-      }
+    .submit-wrap{position:relative;}
+    @media(max-width:768px){
+      .submit-stick{position:sticky;bottom:16px;background:linear-gradient(180deg,transparent,rgba(11,15,18,.85) 26%);padding-top:10px;}
     }
     .btn{
-      display:inline-flex; justify-content:center; align-items:center;
-      width: 100%;
-      padding: 14px 16px;
-      font-weight: 700;
-      border-radius: 14px;
-      background: var(--sa-accent);
-      color: #062a26;
-      border: none;
-      box-shadow: 0 8px 18px rgba(23,182,165,.25);
-      transition: transform .05s ease, filter .2s ease, box-shadow .2s ease;
+      display:inline-flex;justify-content:center;align-items:center;width:100%;
+      padding:14px 16px;font-weight:700;border-radius:14px;background:var(--sa-accent);
+      color:#062a26;border:none;box-shadow:0 8px 18px rgba(23,182,165,.25);
     }
-    .btn:active{ transform: translateY(1px); }
 
-    /* Footer spacing tweak */
-    footer{ padding: 26px 0 10px; text-align:center; color: var(--sa-subtle); }
-    footer a{ color: var(--sa-accent); }
+    footer{text-align:center;color:var(--sa-subtle);padding:26px 0 10px;}
+    footer a{color:var(--sa-accent);}
 
-    /* Success/turnstile panel */
     .confirm{
-      display:flex; align-items:center; gap:10px;
-      padding: 10px 12px;
-      background: #0e1714;
-      border: 1px solid rgba(23,182,165,.35);
-      border-radius: 12px;
-      color: var(--sa-text);
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;background:#0e1714;
+      border:1px solid rgba(23,182,165,.35);
+      border-radius:12px;color:var(--sa-text);
     }
-    .confirm .dot{
-      inline-size: 10px; block-size: 10px; border-radius:999px;
-      background: var(--sa-accent);
-      box-shadow: 0 0 0 4px rgba(23,182,165,.22);
+    .confirm .dot{inline-size:10px;block-size:10px;border-radius:999px;background:var(--sa-accent);}
+
+    /* Force brand rules list left-aligned */
+    .rules-list{
+      text-align:left;
+      list-style-position:outside;
+      padding-left:24px;
+      margin:0;
     }
+    .rules-list li{line-height:1.5em;}
   </style>
 </head>
 
 <body class="page-dark" style="background:#0b0f12;">
-  <!-- HERO (logo removed) -->
-  <header class="hero" role="banner" aria-label="Sheena’s Adventures">
+  <header class="hero">
     <div class="hero-inner">
       <h1>Work With Me</h1>
       <p>Sponsor integrations that feel real, helpful, and memorable—because my audience trusts me to keep it that way.</p>
     </div>
   </header>
 
-  <main class="wrap" id="content">
-    <!-- QUALIFICATION RULES -->
-    <section class="card" aria-labelledby="rules-title">
-      <h2 class="section-title" id="rules-title">Brand Alignment &amp; Content Rules</h2>
-      <ul class="hint" style="display:grid; gap:8px; margin:0; padding-left:18px;">
+  <main class="wrap">
+    <section class="card">
+      <h2 class="section-title">Brand Alignment &amp; Content Rules</h2>
+      <ul class="hint rules-list">
         <li><strong>Family-friendly only.</strong> No adult content or services.</li>
         <li><strong>No alcohol</strong> sponsorships.</li>
         <li><strong>No vaping or tobacco</strong> products.</li>
@@ -200,7 +148,6 @@
       </ul>
     </section>
 
-    <!-- FORM -->
     <form class="card" id="sponsor-form" method="post" action="/sponsor-submit" novalidate>
       <h2 class="section-title">Collaboration Request</h2>
 
@@ -269,7 +216,6 @@
           </div>
         </div>
 
-        <!-- Deliverables (IG Short removed) -->
         <div class="field">
           <label class="section-title" style="margin:0 0 6px;">Deliverables</label>
           <div class="checks grid-2">
@@ -298,14 +244,12 @@
           </div>
         </div>
 
-        <!-- Turnstile + success state -->
         <div class="grid" style="gap:10px;">
           <div class="confirm" role="status" aria-live="polite">
             <span class="dot" aria-hidden="true"></span>
             <strong>Success!</strong>
             <span class="hint">Human check protected by Cloudflare Turnstile.</span>
           </div>
-
           <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="dark"></div>
         </div>
 
@@ -325,7 +269,6 @@
       </p>
     </footer>
   </main>
-
   <script defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 </body>
-      </html>
+</html>
