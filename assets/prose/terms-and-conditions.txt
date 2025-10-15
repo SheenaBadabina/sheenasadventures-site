@@ -10,7 +10,7 @@ These terms govern your use of Sheena's Adventures, including all content, featu
 
 ## Who We Are
 
-Sheena's Adventures is a storytelling, travel, photography, and rockhounding brand operated by Sheena in Utah, USA. This website serves as a hub for field stories, photography, adventure blogs, and brand partnerships.
+Sheena's Adventures is a storytelling, travel, photography, and rockhounding brand operated by Sheena in Utah, USA. This website serves as a hub for field stories, photography, adventure blogs, brand partnerships, and website building services.
 
 ## Acceptable Use
 
@@ -20,15 +20,24 @@ You're welcome to:
 - Contact us with questions, collaboration ideas, or sponsorship inquiries
 - Use our contact forms respectfully and honestly
 - Link to our site from your own blog, social media, or website
+- Play Desert Drop and share your high scores
+- Request website building services through our inquiry form
+- Submit sponsorship proposals that align with our brand values
 
 You agree not to:
 
 - Use the site for any illegal purpose
-- Attempt to hack, disrupt, or damage the site
+- Attempt to hack, disrupt, or damage the site or game
 - Submit spam, malicious code, or fraudulent information
 - Scrape, copy, or republish large portions of our content without permission
 - Impersonate Sheena or Sheena's Adventures
 - Harass, threaten, or abuse anyone through site features
+- Reverse engineer, decompile, or attempt to extract source code from the game
+- Create cheats, bots, or automated tools to manipulate game scores
+- Use the game in any commercial manner without written permission
+- Submit false or misleading information in service requests
+- Submit sponsorship proposals for prohibited products or services
+- Initiate chargebacks or payment disputes in bad faith
 
 We reserve the right to refuse service, block access, or remove content that violates these terms.
 
@@ -57,6 +66,121 @@ If you'd like to use our content beyond these terms, reach out through our conta
 
 When you submit content to us through contact forms, sponsorship inquiries, or any other method, you grant us permission to use, store, and respond to your message. You confirm that your submission doesn't violate anyone else's rights or contain illegal content.
 
+## Website Building Services
+
+These terms govern website design and development services offered through Sheena's Adventures.
+
+### Service Overview
+
+We offer custom website design, development, copywriting, and deployment services. Projects start at a **$500 minimum** and are quoted individually based on scope, features, and complexity.
+
+### Project Process
+
+1. **Inquiry**: You submit a project request through our website form
+2. **Consultation**: We discuss your needs, timeline, and budget
+3. **Proposal**: We provide a detailed proposal with scope, deliverables, timeline, and pricing
+4. **Agreement**: Upon acceptance, we formalize the project agreement
+5. **Payment**: Initial payment or deposit is required before work begins
+6. **Development**: We design, develop, and iterate based on agreed milestones
+7. **Revisions**: Reasonable revisions are included per the project agreement
+8. **Delivery**: Final files and access are provided upon full payment
+9. **Support**: Post-launch support terms are defined in the project agreement
+
+### Proposals and Estimates
+
+Proposals are valid for 30 days from the date issued. Pricing is based on the scope outlined in the proposal. Significant changes to project scope may result in revised pricing and timelines.
+
+We reserve the right to decline any project request for any reason.
+
+### Payment Terms
+
+- **Payment Processor**: All payments are processed securely through Stripe
+- **Invoicing**: Invoices are sent via email with secure Stripe payment links
+- **Deposit**: Most projects require a deposit (typically 30-50%) before work begins
+- **Milestone Payments**: Larger projects may be structured with milestone-based payments
+- **Final Payment**: Remaining balance is due before final delivery and file transfer
+- **Payment Methods**: We accept credit cards, debit cards, and other methods supported by Stripe
+- **Currency**: All pricing is in U.S. dollars (USD)
+- **Late Payments**: Late payments may incur fees and delay project delivery
+- **Taxes**: You are responsible for any applicable taxes in your jurisdiction
+
+### Refunds and Cancellations
+
+- **Deposits**: Initial deposits are non-refundable once work has commenced
+- **Cancellation by Client**: If you cancel after work has begun, you are responsible for payment for work completed up to the cancellation date
+- **Cancellation by Us**: If we cancel or cannot complete the project, you will receive a refund for any work not completed
+- **Refund Process**: Refunds, when applicable, are processed through Stripe within 14 business days
+
+### Project Scope and Revisions
+
+- **Defined Scope**: Each project includes a defined scope of work agreed upon before development begins
+- **Included Revisions**: A reasonable number of revisions are included (typically 2-3 rounds per project phase)
+- **Additional Work**: Requests beyond the agreed scope constitute additional work and may incur extra fees
+- **Timeline**: Project timelines are estimates and depend on timely client feedback and asset provision
+- **Client Responsibilities**: You must provide required content, images, brand assets, and feedback within agreed timeframes
+
+### Intellectual Property and Ownership
+
+- **Work Product**: Upon full payment, you own the final delivered website and its custom content (design, copy we write, custom graphics)
+- **Third-Party Components**: Some projects may include third-party libraries, frameworks, fonts, or stock assets that remain under their respective licenses
+- **Source Code**: You receive the source code for your completed website
+- **Pre-Existing Work**: We retain ownership of any pre-existing code, templates, or tools used in development
+- **Portfolio Rights**: We reserve the right to showcase your project in our portfolio and marketing materials unless otherwise agreed in writing
+
+### Hosting and Domains
+
+- **Domain Registration**: You are responsible for domain registration and renewal
+- **Hosting**: Hosting is not included unless specifically stated in the proposal
+- **Deployment Assistance**: We can assist with deployment to your hosting platform
+- **Third-Party Services**: Any third-party services (hosting, email, analytics, etc.) are your responsibility to set up and maintain
+
+### Warranties and Support
+
+- **As-Delivered**: Websites are delivered functional and as specified in the project agreement
+- **Bug Fixes**: Critical bugs discovered within 30 days of delivery are fixed at no charge
+- **Browser Compatibility**: We ensure compatibility with modern, up-to-date browsers
+- **Ongoing Maintenance**: Long-term maintenance, updates, and content changes are not included unless separately contracted
+- **Third-Party Changes**: We are not responsible for issues caused by third-party service changes, hosting problems, or updates to external platforms
+
+### Limitation of Service Liability
+
+We are not liable for:
+
+- Lost revenue or business opportunities resulting from project delays
+- Issues arising from third-party services, hosting, or domain problems
+- Data loss due to hosting failures or client actions
+- Changes to your website made by you or third parties after delivery
+- Compatibility issues arising from future browser or platform updates
+- Content you provide (accuracy, copyright compliance, legality)
+
+Our total liability for any website building project is limited to the amount you paid for that specific project.
+
+## Desert Drop — Gem Stack Game
+
+### Game License
+
+Desert Drop is a free browser-based game provided for your entertainment. By playing, you receive a limited, non-exclusive, non-transferable license to access and play the game for personal, non-commercial use.
+
+### Game Assets and Code
+
+All game assets — including graphics, sprites, audio, code, and design — are owned by Sheena's Adventures and protected by copyright. You may not:
+
+- Copy, modify, or redistribute the game or its assets
+- Use game assets in your own projects without written permission
+- Create derivative works based on the game
+- Reverse engineer or decompile the game code
+
+### Gameplay and Scores
+
+- **No Guarantees**: We don't guarantee that the game will be error-free or always available.
+- **Score Storage**: High scores are stored locally in your browser only. We are not responsible for lost scores due to browser cache clearing, device changes, or technical issues.
+- **No Competitions**: Currently, Desert Drop does not feature leaderboards, competitions, or prizes. If this changes, separate terms will apply.
+- **Fair Play**: Cheating, exploiting bugs, or manipulating scores is prohibited.
+
+### Game Modifications
+
+We may update, modify, or discontinue Desert Drop at any time without notice. This includes changes to gameplay mechanics, graphics, audio, or features.
+
 ## Photography and Field Content
 
 The adventures, locations, and activities featured on this site reflect Sheena's personal experiences exploring Utah and beyond. This content is for storytelling and inspiration purposes.
@@ -77,11 +201,142 @@ Always research thoroughly, check current conditions, follow local regulations, 
 
 Outdoor adventures involve inherent risks. By using information from this site, you acknowledge that you are solely responsible for your own safety and decisions. Sheena's Adventures and its operator are not liable for injuries, accidents, or damages resulting from activities inspired by site content.
 
+## Brand Sponsorships and Partnerships
+
+These terms govern sponsored content, brand partnerships, and collaborations featured on Sheena's Adventures.
+
+### Sponsorship Eligibility and Brand Standards
+
+We only accept sponsorships from brands that align with our values and audience. By submitting a sponsorship inquiry, you confirm your brand meets these requirements:
+
+**Prohibited Sponsorships** — We do not accept sponsorships from:
+- Adult content or services
+- Alcohol brands or alcoholic beverages
+- Vaping, tobacco, or nicotine products
+- THC or psychoactive products
+- Gambling or betting services
+- Get-rich-quick schemes or multi-level marketing (MLM) programs
+- Products or services with deceptive, unsafe, or misleading claims
+- Any products or services that violate YouTube's advertising policies
+
+**Best Fit Brands**:
+- Outdoor and adventure gear
+- Geology, rockhounding, and earth science
+- Cameras and photography equipment
+- Hiking, camping, and travel gear
+- Educational products and services
+- Travel and tourism
+
+### Sponsorship Process
+
+1. **Inquiry**: You submit a collaboration request through our "Work With Me" form
+2. **Review**: We review your brand for alignment with our standards (response within 3 business days)
+3. **Proposal**: If approved, we provide a detailed proposal with deliverables, timeline, and pricing
+4. **Agreement**: Terms are finalized and documented
+5. **Invoice**: A Stripe payment link is sent via email
+6. **Product Access**: You provide physical samples or demo access at least 2 weeks before filming
+7. **Content Creation**: We create and produce the sponsored content
+8. **Review**: You receive one opportunity to review and request minor revisions
+9. **Publication**: Content goes live on agreed platforms
+10. **Deliverables**: Additional deliverables (photos, social posts) are provided per agreement
+
+### Sponsorship Payment Terms
+
+- **Payment Processor**: All sponsorship payments are processed through Stripe
+- **Invoicing**: Invoices are sent via email with secure Stripe payment links
+- **Payment Timing**: Full payment is typically required before content creation begins, unless milestone payments are agreed upon
+- **Budget Ranges**: Pricing varies based on integration type, deliverables, and campaign scope
+- **Non-Refundable**: Once content creation begins, payments are non-refundable
+- **Late Payments**: Late payments may delay content publication
+
+### Content and Creative Control
+
+- **Honest Reviews**: All sponsored content reflects Sheena's genuine experiences and honest opinions
+- **Editorial Independence**: We maintain full editorial control over content tone, style, and messaging
+- **Talking Points**: You may provide suggested talking points, but final content decisions rest with us
+- **Restrictions**: You may specify what should NOT be said (e.g., competitor mentions)
+- **Revisions**: One minor revision is included; additional significant changes may require renegotiation
+- **FTC Compliance**: All sponsored content includes proper disclosure in accordance with FTC guidelines
+- **YouTube Compliance**: Content adheres to YouTube's policies and community guidelines
+
+### Deliverables and Usage Rights
+
+Typical sponsorship deliverables may include:
+
+- **Mention**: 10-20 second product mention in video
+- **Integrated Segment**: 60-90 second dedicated segment
+- **Full Integration**: Product featured throughout entire video
+- **Description Link**: Clickable link in video description
+- **Pinned Comment**: Promotional comment pinned to top of video
+- **Still Photos**: 3-5 high-resolution photos for your marketing use
+- **Social Media**: Instagram Reel or Short (15-30 seconds)
+
+**Content Ownership**: We retain ownership of all created content (video, photos, scripts). You receive a license to use deliverables as specified in the agreement.
+
+**Usage Rights**: Unless otherwise agreed, you may:
+- Share or embed the sponsored video on your platforms
+- Use provided still photos in your marketing with proper credit
+- Reference the partnership in press releases or marketing materials
+
+**Restrictions**: You may not:
+- Edit or alter our content without permission
+- Remove our branding or watermarks
+- Use content in ways that misrepresent our opinions
+- License content to third parties without written consent
+
+### Product Samples and Access
+
+- **Physical Products**: You must provide product samples at least 2 weeks before filming for adequate testing
+- **Digital Products**: Demo accounts or access must be provided at least 2 weeks in advance
+- **Shipping**: You are responsible for shipping costs and any customs/import fees
+- **Sample Return**: Unless otherwise agreed, samples are not returned
+- **Defective Products**: If samples are defective or non-functional, we will notify you for replacement
+
+### Timeline and Publication
+
+- **Estimated Timelines**: Publication dates are estimates and depend on production schedules, product availability, and other factors
+- **No Guarantee**: We do not guarantee specific publication dates
+- **Delays**: We will communicate delays promptly
+- **Rush Fees**: Expedited timelines may incur additional fees
+
+### Cancellation and Termination
+
+- **Cancellation by Brand**: If you cancel after payment, no refund is provided for work already completed
+- **Cancellation by Us**: We reserve the right to cancel any sponsorship if the product doesn't meet expectations, violates our standards, or if circumstances change
+- **Refunds**: If we cancel before creating content, you receive a full refund
+- **Product Issues**: If we cannot authentically recommend your product after testing, we will offer options including content revision or cancellation with partial refund
+
+### Performance and Metrics
+
+- **No Guarantees**: We do not guarantee specific view counts, engagement rates, or sales conversions
+- **Analytics**: We may provide general performance metrics (views, likes, comments) but are not obligated to provide detailed analytics
+- **Results Vary**: Performance depends on many factors beyond our control including platform algorithms, timing, and audience interest
+
+### Exclusivity and Conflicts
+
+- **Category Exclusivity**: We may offer category exclusivity (e.g., no competing camping gear brands) for a specified period, if agreed upon in writing
+- **Competing Brands**: Without exclusivity agreements, we may work with competing brands
+- **Disclosure**: We disclose when category exclusivity is in effect
+
+### Brand Liability
+
+You agree to:
+- Ensure all product claims are truthful and substantiated
+- Maintain appropriate product liability insurance
+- Indemnify us against claims arising from product defects, false advertising, or legal violations related to your products or services
+- Comply with all applicable laws, regulations, and industry standards
+
+We are not liable for:
+- Product performance or customer satisfaction
+- Claims, injuries, or damages arising from product use
+- Regulatory actions against your brand or products
+- Your business practices or operations
+
 ## Sponsorships and Partnerships
 
-Information about sponsors, partners, and collaborations may appear on this site. These relationships are disclosed transparently. Sponsored content reflects Sheena's genuine experiences and opinions.
+All sponsored content and brand partnerships are disclosed transparently in accordance with FTC guidelines. Sponsored content reflects genuine experiences and honest opinions.
 
-We reserve the right to accept or decline any sponsorship or partnership at our discretion.
+We maintain full creative and editorial control over all content. We reserve the right to accept or decline any sponsorship or partnership at our discretion, before or after initial discussions.
 
 ## External Links
 
@@ -94,6 +349,17 @@ Linking to an external site doesn't imply endorsement unless explicitly stated.
 ### Content Accuracy
 
 We strive for accuracy but make no guarantees that all information on this site is complete, current, or error-free. Content reflects personal experiences and should not replace professional advice or your own research.
+
+### Game Performance
+
+Desert Drop is provided "as is" without warranties of any kind. We do not guarantee:
+
+- Uninterrupted or error-free gameplay
+- Compatibility with all devices or browsers
+- Preservation of game scores or progress
+- Specific game features or functionality
+
+Performance may vary based on your device, browser, and internet connection.
 
 ### Availability
 
@@ -132,6 +398,8 @@ Significant changes will be highlighted prominently on the site.
 ## Future Features
 
 As Sheena's Adventures grows, we may add new features like an online store, newsletter, community forum, or digital downloads. If we do, additional terms specific to those features may apply and will be clearly communicated.
+
+Website building service offerings, packages, and pricing may also change over time.
 
 ## Termination
 
