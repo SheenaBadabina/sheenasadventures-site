@@ -341,11 +341,22 @@ function toggleRotationMode() {
 
 function softDrop() {
   if (!Game.column || Game.paused || !Game.running) return;
-  lockPiece();
+  // Soft drop: move down one row immediately (speeds up the fall)
+  if (canPlacePiece()) {
+    Game.colY++;
+    Game.dropTimer = 0;  // Reset timer
+  } else {
+    lockPiece();
+  }
+  draw();
 }
 
 function hardDrop() {
   if (!Game.column || Game.paused || !Game.running) return;
+  // Hard drop: instantly drop to bottom
+  while (canPlacePiece()) {
+    Game.colY++;
+  }
   lockPiece();
 }
 
@@ -573,6 +584,12 @@ window.rotateColumn = rotateColumn;
 window.toggleRotationMode = toggleRotationMode;
 window.softDrop = softDrop;
 window.hardDrop = hardDrop;
+window.toggleMute = function() {
+  const enabled = audio.toggleMute();
+  if (dom.mute) {
+    dom.mute.textContent = enabled ? "🔇 Mute" : "🔊 Unmute";
+  }
+};
 
 /* ========== Event Listeners ========== */
 function setupEvents() {
@@ -707,4 +724,4 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
-    }
+            }
