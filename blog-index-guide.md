@@ -7,9 +7,9 @@
 ---
 
 ## Overview
-This page serves as the **titles-only** index for all blog posts.  
-No thumbnails, summaries, or excerpts are displayed.  
-It is clean, mobile-first, and fully styled by existing site-wide CSS and JavaScript.
+This page serves as the **titles-only grid** for all blog posts.  
+Each post appears as a simple card with a title and “Read Now” link—no thumbnails or summaries.  
+The layout is clean, mobile-first, and fully styled by the global CSS and JavaScript files.
 
 ---
 
@@ -35,38 +35,41 @@ Contains four main sections:
 1. **Header**
    - Displays the site logo in the **top-right corner**.
    - Logo links to the homepage (`/`).
-   - Uses `.site-header` and `.site-logo` classes.
+   - Navigation menu includes Home, Blog, Work With Me, About, and Contact.
 
 2. **Main Content**
-   - Title: `<h1 class="page-title">Blog</h1>`
-   - Navigation list of blog posts:
-     - `<ul class="blog-list">`
-     - Each post is represented by a single `<li><a></a></li>` item.
-     - Posts are manually ordered; the first item is the “latest blog” for global script logic.
+   - Includes a page title and subtitle.
+   - Uses a `<div class="blog-grid">` container with individual blog cards.
+   - Each card is an `<article class="blog-card">` containing:
+     - `<h2 class="blog-card-title">[Blog Title]</h2>`
+     - `<a href="/blog/[slug].html" class="blog-read-btn">Read Now</a>`
+   - Posts are manually ordered; the **first card** is always the newest post.
 
 3. **Footer**
-   - Contains copyright.
-   - The footer year is injected dynamically by `site.js`.
+   - Displays copyright.
+   - The year is automatically injected by `site.js`.
 
 4. **Banner**
-   - The background banner (`/assets/sheenas-adventures-banner-lifestyle-utah-desert.png`) is handled **via CSS**, not HTML.
+   - The background banner image is handled **via CSS**, not HTML.
 
 ---
 
 ## Blog Order (Current)
 
-1. `/blog/pigeon-blood-agate.html`  
-2. `/blog/2025-09-28-opalized-wood-yellow-cat-road.html`  
-3. `/blog/utah-desert-field-guide.html`  
-4. `/blog/meet-the-desert-dreamer.html`
+1. `/blog/desert-drop-gem-stack.html`  
+2. `/blog/pigeon-blood-agate.html`  
+3. `/blog/2025-09-28-opalized-wood-yellow-cat-road.html`  
+4. `/blog/utah-desert-field-guide.html`  
+5. `/blog/meet-the-desert-dreamer.html`
 
 ---
 
 ## Behavior Notes
-- The global JavaScript reads the **first blog link** on this page to display the “Latest Blog” across the site.
-- All layout, animations, and interactions come from `static/js/site.js` and `static/styles.css`.
-- No inline styles or additional markup should be added to this file.
-- Keep the structure simple and consistent for future posts.
+- The global JavaScript reads the **first blog card** to identify and feature the “Latest Blog” elsewhere on the site.
+- All styling and interactivity come from `static/js/site.js` and `static/styles.css`.
+- No inline styles or extra markup should ever be added.
+- Maintain the minimal grid structure for every update.
+- Always place new blog cards **at the top** of the grid to keep the homepage in sync.
 
 ---
 
