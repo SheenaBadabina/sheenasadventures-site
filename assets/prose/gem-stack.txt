@@ -1,0 +1,57 @@
+Desert Drop - Gem Stack: The Journey of Building My First Game
+
+Remember, it's not about the destination, it's the journey.
+
+That motto has never felt more true than it does right now, sitting here after finally launching Desert Drop - Gem Stack on Sheena's Adventures. This wasn't just about creating a game. This was about pushing myself into completely unfamiliar territory, wrestling with code I barely understood, and discovering that building something from scratch with AI is nowhere near as simple as everyone makes it sound.
+
+Let me take you back to where this all began.
+
+My truck broke down a few weeks ago. For someone who makes YouTube videos exploring the stunning landscapes of Utah, having a broken truck is like having your wings clipped. No adventures meant no content, and no content meant a lot of unexpected free time on my hands. I could have spent those weeks frustrated, dwelling on what I couldn't do. Instead, I decided to channel that energy into something I'd never attempted before: building a web game.
+
+I've always been a hobbyist when it comes to coding. I taught myself HTML and CSS years ago, enough to build sheenasadventures.com from the ground up. I understood the basics, could troubleshoot simple issues, and felt comfortable poking around in code. But JavaScript? That was always the language that intimidated me. It felt like stepping into a completely different world, one with logic gates and functions and event listeners that all had to work together in perfect harmony.
+
+But I thought, why not give it a shot? I had the time. I had the curiosity. And I had AI tools that everyone kept saying would revolutionize how we build software. Challenge accepted.
+
+The concept for Desert Drop came naturally. I wanted something that reflected my brand, something with that Utah desert aesthetic I've built my entire channel around. Gems found in the canyons and deserts of southern Utah have always fascinated me. The rich reds of jasper, the smooth blues of agate, the golden hues of calcite. These weren't just pretty stones; they represented the landscape I love exploring. So I decided to build a gem-matching puzzle game, something inspired by classic falling block games but with my own twist.
+
+What I didn't realize was just how much work goes into even a "simple" browser game.
+
+I started by vibe coding with AI. For those unfamiliar with the term, vibe coding is essentially describing what you want in natural language and letting AI generate the code. It sounds magical, doesn't it? Just tell the computer what you want, and boom, you have a working application. Except it doesn't work like that. Not even close.
+
+The first major lesson I learned: you can't just talk to AI and expect it to build exactly what you're envisioning. You need to know how to communicate with it effectively. You need to understand the fundamentals of what you're asking for. You need to know when the code it gives you is broken, why it's broken, and how to describe the fix in a way that makes sense. You need to know your way around a repository, understand file structures, and have at least a basic grasp of the languages you're working with.
+
+In other words, AI didn't replace my need to learn. It accelerated the learning process, but I still had to do the work.
+
+The early days of building Gem Stack were humbling. I started with the HTML structure, creating the game canvas, the control buttons, and the heads-up display for score and level tracking. That part felt comfortable. HTML is forgiving. If you mess something up, it's usually obvious, and fixing it is straightforward. But once I moved into CSS for styling, things got trickier. I wanted the game to match the aesthetic of my website, with that clean desert palette of sandstone, teal accents, and warm gradients. Every time I thought I had it looking right, I'd test it on mobile and discover the layout was completely broken. Responsive design is an art form, and I was finger painting.
+
+Then came the JavaScript. Oh, the JavaScript.
+
+I must have gone through a dozen different versions of the game logic. The first iteration couldn't detect matches properly. Gems would disappear randomly or refuse to clear at all. The second version had a bug where the falling column would phase through existing gems and stack incorrectly. The third version crashed every time you tried to rotate a piece. I spent an entire evening just trying to get the hard drop button to work. It would either do nothing at all, or it would drop the gems so fast they'd glitch out of existence.
+
+I learned about event listeners, game loops, collision detection, and state management. I learned that a single misplaced bracket could break an entire script. I learned the importance of console logging every step of the way so I could actually see what the code was doing under the hood. And I learned that sometimes, you need to throw out an entire section of code and start fresh because you've Frankensteined it so many times that it's beyond repair.
+
+One of the biggest challenges was getting the audio to work properly. I wanted background music that looped seamlessly, sound effects for gem matches and line clears, and a mute button so players could toggle sound on and off. Simple, right? Wrong. The background loop would play once and then stop. The mute button would change its label but wouldn't actually mute anything. The sound effects would overlap and create a cacophony of noise. Fixing audio in a web game is surprisingly complex, especially when you're trying to make it work across different browsers and devices.
+
+I also had to learn how to optimize asset loading. Images, audio files, and scripts all need to load in the right order, or the game breaks before it even starts. I implemented preloading for key assets, used sprite sheets to reduce the number of HTTP requests, and compressed everything I could without sacrificing quality. Every kilobyte mattered because I wanted the game to load quickly, even on slower mobile connections.
+
+Then there were the CSS conflicts. At one point, updating the blog section of my website completely broke the game's layout. Styles from the main site stylesheet were overriding the game's CSS, turning buttons into unrecognizable blobs and hiding the canvas entirely. I had to isolate the game's styles, remove dependencies on the global stylesheet, and ensure that every element had the specificity it needed to render correctly. It was like untangling a ball of yarn, except the yarn was written in a language I was still learning.
+
+But slowly, piece by piece, the game came together.
+
+I added the falling gem columns with smooth animations. I implemented rotation, letting players reorder the gems mid-fall. I built the match detection system, scanning horizontal, vertical, and diagonal lines for three or more matching gems. I added cascading clears, so when gems disappeared, the ones above would fall down and potentially trigger new matches. I created a scoring system with multipliers and combo bonuses. I added level progression that increased the falling speed, making the game progressively more challenging.
+
+I designed touch controls for mobile players, with large, tappable buttons that felt responsive and intuitive. I added keyboard controls for desktop players, mapping arrow keys for movement, spacebar for hard drop, and shift for rotation. I built a restart function, a pause button, and a mute toggle. I implemented local storage so high scores would persist between sessions.
+
+And I created a guide page, walking players through the rules, controls, and strategies for playing Desert Drop. Because a game is only as good as its accessibility, and I wanted everyone to be able to jump in and enjoy it without confusion.
+
+Throughout this entire process, I worked across multiple chat threads with AI assistants. Each conversation would hit a message limit, and I'd have to pull forward the most recent code into a new thread and continue from there. Some threads focused purely on bug fixes. Others explored new features or design improvements. There were moments of triumph, like when the audio loop finally worked seamlessly, and moments of frustration, like when a single typo broke the entire game and took me hours to find.
+
+But here's what I discovered: building something is deeply satisfying, even when it's hard. Especially when it's hard. Every bug I squashed felt like a small victory. Every feature I successfully implemented felt like leveling up in real life. I wasn't just creating a game; I was proving to myself that I could learn something entirely new, push through the difficult parts, and come out the other side with something I was proud of.
+
+Desert Drop - Gem Stack isn't perfect. It's not going to win any awards or go viral. But it's mine. I built it from scratch, line by line, with my own two hands and a lot of help from AI tools that forced me to think critically about every decision. It reflects my aesthetic, my brand, and my love for the Utah desert. And most importantly, it's fun to play.
+
+If you're reading this and thinking about building your own project, whether it's a game, a website, an app, or anything else, here's my advice: just start. Don't wait until you feel ready or until you think you know enough. You'll learn by doing. You'll make mistakes, and that's okay. You'll hit walls that feel insurmountable, and you'll find ways over them, under them, or straight through them. And when you finally finish, you'll look back at the journey and realize that the struggle was the whole point.
+
+So go play Desert Drop. Match some gems. Chase some combos. See if you can beat my high score. And remember, it's not about the destination. It's the journey.
+
+Welcome to Sheena's Adventures.
