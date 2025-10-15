@@ -24,10 +24,19 @@
   <meta property="og:description" content="Desert Drop Gem Stack — the behind-the-scenes story of building the game, told straight from the desert workshop." />
   <meta property="og:url" content="https://sheenasadventures.com/blog/desert-drop-gem-stack.html" />
   <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    /* responsive sizing for the linked game image */
+    .post-related img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 2rem auto;
+    }
+  </style>
 </head>
 
 <body class="page-blog-post">
-  <!-- Header with brand/logo -->
   <header class="site-header">
     <div class="header-inner">
       <a href="/" class="brand" aria-label="Sheena’s Adventures — Home">
@@ -51,13 +60,10 @@
     </div>
   </header>
 
-  <!-- Hero Banner (handled by CSS theme; keep markup consistent with other posts) -->
   <div class="post-hero">
     <img src="/assets/sheenas-adventures-banner-lifestyle-utah-desert.png" alt="Utah desert landscape" class="post-hero-bg" />
     <div class="post-hero-content">
-      <div class="post-breadcrumb">
-        <a href="/blog/">← Back to Blog</a>
-      </div>
+      <div class="post-breadcrumb"><a href="/blog/">← Back to Blog</a></div>
       <h1 class="post-hero-title">Desert Drop Gem Stack</h1>
       <div class="post-meta">
         <time datetime="2025-10-15">October 15, 2025</time>
@@ -67,7 +73,6 @@
     </div>
   </div>
 
-  <!-- Blog Post Content -->
   <main class="post-main" id="content" tabindex="-1">
     <article class="post-article">
       <section id="post-body" class="post-prose">
@@ -90,7 +95,6 @@
       </section>
     </article>
 
-    <!-- CTA (standard) -->
     <aside class="post-cta">
       <h3>Enjoyed this story?</h3>
       <p>Follow along for more rockhounding adventures, desert discoveries, and real stories from the Utah backcountry.</p>
@@ -101,16 +105,14 @@
     </aside>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <p>
-      © <span id="y">2025</span> Sheena’s Adventures •
-      <a href="/terms.html">Terms</a> •
+      © <span id="y">2025</span> Sheena’s Adventures • 
+      <a href="/terms.html">Terms</a> • 
       <a href="/privacy.html">Privacy</a>
     </p>
   </footer>
 
-  <!-- Load Blog Content from TXT -->
   <script>
     (async function loadProse() {
       const target = document.getElementById('post-body');
@@ -119,7 +121,6 @@
         const res = await fetch(src, { cache: 'no-store' });
         if (!res.ok) throw new Error('Fetch failed: ' + res.status);
         const raw = await res.text();
-
         const blocks = raw.replace(/\r\n/g, '\n').trim().split(/\n\s*\n/g);
         const html = blocks.map(p => `<p>${escapeHtml(p).replace(/\n/g, '<br>')}</p>`).join('\n');
         target.innerHTML = html;
@@ -129,10 +130,8 @@
           <div class="error-message">
             <p>Sorry, I couldn't load this post right now.</p>
             <p><small>Looking for: <code>${src}</code></small></p>
-          </div>
-        `;
+          </div>`;
       }
-
       function escapeHtml(str) {
         return str
           .replace(/&/g, '&amp;')
@@ -143,4 +142,3 @@
   </script>
 </body>
 </html>
-```0
