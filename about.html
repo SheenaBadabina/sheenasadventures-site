@@ -10,10 +10,9 @@
   <link rel="stylesheet" href="/static/styles.css" />
 
   <style>
-    /* Layout + stacking to keep content above any global overlays */
     .about-container {
       position: relative;
-      isolation: isolate; /* new stacking context */
+      isolation: isolate;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -37,43 +36,41 @@
       display: block;
     }
 
-    /* Framing ring precisely on the edge of the circular portrait */
     .ring {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      transform: rotate(-90deg); /* start at top */
+      transform: rotate(-90deg);
       pointer-events: none;
     }
-    /* Size math: viewBox 220, stroke 4 -> r = (220/2) - (4/2) = 108 */
+
     .ring circle {
       fill: none;
-      stroke: #c67a3d; /* copper tone */
+      stroke: #c67a3d;
       stroke-width: 4;
       stroke-linecap: round;
-      stroke-dasharray: 678; /* near circumference of r=108 (~678) */
+      stroke-dasharray: 678;
       stroke-dashoffset: 678;
       animation: shimmer 6s linear infinite;
       filter: drop-shadow(0 0 6px rgba(198,122,61,0.25));
     }
+
     @keyframes shimmer {
       0%   { stroke-dashoffset: 678; opacity: 0.65; }
       50%  { stroke-dashoffset: 0;   opacity: 1; }
       100% { stroke-dashoffset: -678; opacity: 0.65; }
     }
 
-    /* Bio content: ensure it sits ABOVE any global dark overlays */
     .bio {
       position: relative;
-      z-index: 2; /* above any page overlays */
+      z-index: 2;
       max-width: 720px;
       font-size: 1.075rem;
       line-height: 1.7;
       color: var(--text-strong, #f5f7fb);
       margin: 0 auto 1.25rem;
       white-space: pre-line;
-      text-wrap: pretty;
       text-shadow: 0 1px 2px rgba(0,0,0,0.25);
     }
 
@@ -99,11 +96,38 @@
       transition: transform 0.18s ease, filter 0.18s ease;
       will-change: transform;
     }
-    .btn:hover { transform: scale(1.05); filter: brightness(1.05); }
+
+    .btn:hover {
+      transform: scale(1.05);
+      filter: brightness(1.05);
+    }
 
     .btn-pink { background-color: #ff3eb5; color: #fff; }
     .btn-teal { background-color: #2ac1b5; color: #fff; }
-    .btn-olive { background-color: #8ea15a; color: #fff; } /* warmer olive */
+    .btn-olive { background-color: #8ea15a; color: #fff; }
+
+    /* Chakra gradient button */
+    .btn-chakra {
+      background: linear-gradient(90deg,
+        #ff0000 0%,    /* Root – red */
+        #ff7f00 16%,   /* Sacral – orange */
+        #ffff00 32%,   /* Solar – yellow */
+        #00ff00 48%,   /* Heart – green */
+        #00bfff 64%,   /* Throat – blue */
+        #4b0082 80%,   /* Third Eye – indigo */
+        #9400d3 100%   /* Crown – violet */
+      );
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.15);
+      background-size: 200% 200%;
+      animation: chakraGlow 6s linear infinite;
+    }
+
+    @keyframes chakraGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body>
@@ -112,7 +136,6 @@
   </header>
 
   <main class="about-container">
-    <!-- Portrait with animated desert ring (frames the edge, not the face) -->
     <div class="portrait-wrapper">
       <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena portrait" />
       <svg class="ring" viewBox="0 0 220 220" aria-hidden="true">
@@ -120,19 +143,17 @@
       </svg>
     </div>
 
-    <!-- Fetched biography text -->
     <section class="bio" id="bio"></section>
 
-    <!-- CTAs -->
     <div class="cta-buttons">
       <a href="/build-a-website.html" class="btn btn-pink">Build my website</a>
       <a href="/work-with-me.html" class="btn btn-teal">Work with me</a>
       <a href="/contact.html" class="btn btn-olive">Contact</a>
+      <a href="https://dragonbonesandwizardshats.com" target="_blank" rel="noopener" class="btn btn-chakra">Dragon Bones & Wizard Hats</a>
     </div>
   </main>
 
   <script>
-    // Fetch about text dynamically
     fetch('/assets/prose/about-sheena.txt')
       .then(r => r.ok ? r.text() : Promise.reject(r.status))
       .then(text => { document.getElementById('bio').textContent = text; })
