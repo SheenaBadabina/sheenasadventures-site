@@ -1,194 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Meet Sheena — Utah explorer, rockhound, and storyteller behind Sheena’s Adventures." />
-  <title>About Sheena • Sheena’s Adventures</title>
+  <meta charset="utf-8">
+  <title>Desert Drop — Gem Stack | Sheena's Adventures</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Match gems, chase combos, and keep the desert glowing. A mobile-first browser game from Sheena's Adventures.">
 
-  <!-- Global Styles -->
-  <link rel="stylesheet" href="/static/styles.css" />
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Desert Drop — Gem Stack">
+  <meta property="og:description" content="Match gems, chase combos, and keep the desert glowing.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sheenasadventures.com/fun/gem-stack.html">
+  <meta property="og:image" content="/assets/sheenas-adventures-game-gem-stack-screenshot.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#00BFA5">
 
-  <style>
-    .about-container {
-      position: relative;
-      isolation: isolate;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 3rem;
-      text-align: center;
-      gap: 1.25rem;
-    }
+  <!-- Preload key game assets -->
+  <link rel="preload" as="image" href="/assets/gem-sprites.png">
+  <link rel="preload" as="image" href="/assets/level-badges.png">
+  <link rel="preload" as="image" href="/assets/background-sky-canyon.png">
+  <link rel="preload" as="audio" href="/assets/background-loop.mp3">
 
-    .portrait-wrapper {
-      position: relative;
-      width: 220px;
-      height: 220px;
-      margin-bottom: 0.25rem;
-    }
-
-    .portrait-wrapper a {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-
-    .portrait-wrapper img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .ring {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-      pointer-events: none;
-    }
-
-    .ring circle {
-      fill: none;
-      stroke: #c67a3d;
-      stroke-width: 4;
-      stroke-linecap: round;
-      stroke-dasharray: 678;
-      stroke-dashoffset: 678;
-      animation: shimmer 6s linear infinite;
-      filter: drop-shadow(0 0 6px rgba(198,122,61,0.25));
-    }
-
-    @keyframes shimmer {
-      0%   { stroke-dashoffset: 678; opacity: 0.65; }
-      50%  { stroke-dashoffset: 0;   opacity: 1; }
-      100% { stroke-dashoffset: -678; opacity: 0.65; }
-    }
-
-    .bio {
-      position: relative;
-      z-index: 2;
-      max-width: 720px;
-      font-size: 1.075rem;
-      line-height: 1.7;
-      color: var(--text-strong, #f5f7fb);
-      margin: 0 auto 1.25rem;
-      white-space: pre-line;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-    }
-
-    .cta-buttons {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
-      align-items: center;
-      margin-top: 0.25rem;
-    }
-
-    .btn {
-      padding: 0.9rem 1.8rem;
-      border: none;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.2px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.18s ease, filter 0.18s ease;
-      will-change: transform;
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-      filter: brightness(1.05);
-    }
-
-    .btn-pink { background-color: #ff3eb5; color: #fff; }
-    .btn-teal { background-color: #2ac1b5; color: #fff; }
-    .btn-olive { background-color: #8ea15a; color: #fff; }
-
-    /* Chakra gradient button */
-    .btn-chakra {
-      background: linear-gradient(90deg,
-        #ff0000 0%,
-        #ff7f00 16%,
-        #ffff00 32%,
-        #00ff00 48%,
-        #00bfff 64%,
-        #4b0082 80%,
-        #9400d3 100%
-      );
-      color: #fff;
-      border: 2px solid rgba(255,255,255,0.15);
-      background-size: 200% 200%;
-      animation: chakraGlow 6s linear infinite;
-    }
-
-    @keyframes chakraGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* CTA above build button */
-    .custom-cta {
-      font-size: 1.1rem;
-      color: var(--text-strong, #f5f7fb);
-      margin-bottom: -0.2rem;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-    }
-  </style>
+  <!-- Page styles -->
+  <link rel="stylesheet" href="/fun/gem-stack.css">
+  
+  <!-- Game script - load with defer so it runs after DOM loads -->
+  <script defer src="/fun/gem-stack.js"></script>
 </head>
 <body>
-  <!-- Global header with hamburger -->
   <header class="site-header">
-    <nav class="nav">
-      <a href="/" class="logo">Sheena’s Adventures</a>
-      <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/blog.html">Blog</a></li>
-        <li><a href="/work-with-me.html">Work With Me</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
+    <a class="brand" href="/" aria-label="Sheena's Adventures Home">Sheena's Adventures</a>
+    <nav class="site-nav">
+      <a href="/work-with-me.html">Work With Me</a>
+      <a href="/contact.html">Contact</a>
     </nav>
   </header>
 
-  <main class="about-container">
-    <div class="portrait-wrapper">
-      <a href="/fun/gem-stack.html">
-        <img src="/assets/logosheenas-adventures-logo-bubble-braids.png" alt="Sheena portrait" />
-      </a>
-      <svg class="ring" viewBox="0 0 220 220" aria-hidden="true">
-        <circle cx="110" cy="110" r="108"></circle>
-      </svg>
-    </div>
+  <main class="game-wrap">
+    <h1>Desert Drop — Gem Stack</h1>
 
-    <section class="bio" id="bio"></section>
+    <!-- Game Controls -->
+    <section class="controls primary">
+      <button class="btn" data-game="play" onclick="window.startGame()">▶️ Play</button>
+      <button class="btn" data-game="pause" onclick="window.togglePause()">⏸️ Pause</button>
+      <button class="btn secondary" data-game="restart" onclick="window.restartGame()">🔄 Restart</button>
+      <button class="btn secondary" data-audio="mute">🔇 Mute</button>
+      <a href="/fun/gem-guide.html" class="btn secondary">📖 Guide</a>
+    </section>
 
-    <div class="cta-buttons">
-      <p class="custom-cta">Want me to build your website?</p>
-      <a href="/build-a-website.html" class="btn btn-pink">Build my website</a>
-      <a href="/work-with-me.html" class="btn btn-teal">Work with me</a>
-      <a href="/contact.html" class="btn btn-olive">Contact</a>
-      <a href="https://dragonbonesandwizardshats.com" target="_blank" rel="noopener" class="btn btn-chakra">Dragon Bones & Wizard Hats</a>
-    </div>
+    <!-- HUD -->
+    <section class="hud">
+      <div class="pill">Score: <span data-ui="score">000000</span></div>
+      <div class="pill">Level: <span data-ui="level">1</span></div>
+      <div class="pill">Best: <span data-ui="best">000000</span></div>
+    </section>
+
+    <!-- Canvas -->
+    <section class="canvas-shell">
+      <canvas id="gameCanvas" width="800" height="1200"></canvas>
+    </section>
+
+    <!-- Touch Controls -->
+    <section class="controls on-screen">
+      <button class="btn touch" data-control="left" onclick="window.moveLeft()" aria-label="Move Left">◀️</button>
+      <button class="btn touch" data-control="rotate" onclick="window.rotateColumn()" aria-label="Rotate">↻</button>
+      <button class="btn touch" data-control="right" onclick="window.moveRight()" aria-label="Move Right">▶️</button>
+      <button class="btn touch" data-control="down" onclick="window.softDrop()" aria-label="Soft Drop">⬇️</button>
+      <button class="btn touch" data-control="toggle-rotation" onclick="window.toggleRotationMode()" aria-label="Toggle Rotation Mode">↕️ Vert</button>
+      <button class="btn touch" data-control="drop" onclick="window.hardDrop()" aria-label="Hard Drop">⤓</button>
+    </section>
+
+    <!-- How to Play -->
+    <section class="howto">
+      <details>
+        <summary>How to Play</summary>
+        <div class="howto-body">
+          <p><strong>Match 3+ gems</strong> in a line (horizontal, vertical, or diagonal) to clear them. Cascades chain for bonus points. Every 10 clears levels you up and speeds the game.</p>
+          
+          <p><strong>Controls:</strong></p>
+          <ul>
+            <li><kbd>←</kbd> / <kbd>→</kbd> Move column left/right</li>
+            <li><kbd>↑</kbd> Rotate gems in column</li>
+            <li><kbd>↓</kbd> Soft drop (place immediately)</li>
+            <li><kbd>Space</kbd> Hard drop (instant place)</li>
+            <li><kbd>P</kbd> Pause game</li>
+            <li><kbd>M</kbd> Mute/unmute audio</li>
+          </ul>
+          
+          <p><strong>Scoring:</strong></p>
+          <ul>
+            <li>3 gems = 300 points</li>
+            <li>4 gems = 400 points</li>
+            <li>5+ gems = 500+ points</li>
+            <li>Combos add +10% per chain</li>
+          </ul>
+          
+          <p>Game ends when gems stack to the top. Chase your high score!</p>
+        </div>
+      </details>
+    </section>
   </main>
-
-  <script>
-    fetch('/assets/prose/about-sheena.txt')
-      .then(r => r.ok ? r.text() : Promise.reject(r.status))
-      .then(text => { document.getElementById('bio').textContent = text; })
-      .catch(err => {
-        console.error('Error loading bio:', err);
-        document.getElementById('bio').textContent = "Sheena is the creator, filmmaker, and explorer behind Sheena’s Adventures.";
-      });
-  </script>
 </body>
 </html>
