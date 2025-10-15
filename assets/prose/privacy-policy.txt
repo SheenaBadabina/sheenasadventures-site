@@ -21,6 +21,25 @@ When you reach out through our contact form or sponsorship inquiry form, you vol
 
 This information is sent to us via email using Resend and Cloudflare Workers. We use it solely to respond to your inquiry and maintain a record of our correspondence.
 
+**Website Build Requests**: When you submit a website build request, you provide additional project information including:
+
+- Project type and requirements
+- Budget preferences
+- Domain information (if applicable)
+- Feature requests and project details
+
+This information helps us understand your needs and provide accurate proposals. We store this information to reference during project discussions and development.
+
+**Sponsorship Inquiries**: When you submit a brand sponsorship request, you provide business information including:
+
+- Company name and contact information
+- Product or service details
+- Promotion preferences and deliverables
+- Budget range and timeline
+- Social media links and website
+
+This information helps us evaluate partnership fit and create proposals. We use this information solely for sponsorship discussions and do not share it with third parties.
+
 ### Automatically Collected Information
 
 Like most websites, we collect basic technical information when you visit:
@@ -35,6 +54,17 @@ We may use **Google Analytics** to understand how visitors use our site. This he
 
 We may also use **Cloudflare Turnstile**, a privacy-friendly tool that helps prevent spam and abuse on our forms. Turnstile operates without tracking you across websites.
 
+### Game Data (Desert Drop — Gem Stack)
+
+When you play Desert Drop, our browser-based gem stacking game:
+
+- **Local Storage Only**: Your high score and game progress are stored locally in your browser using localStorage. This data never leaves your device and is not transmitted to us or any third party.
+- **No Account Required**: You can play without creating an account or providing any personal information.
+- **No Tracking**: We do not track your gameplay, scores, or in-game behavior beyond standard website analytics.
+- **Audio**: The game includes background music and sound effects that play in your browser. No audio data is recorded or transmitted.
+
+You can clear your game data at any time by clearing your browser's local storage or cache.
+
 ### Cookies and Tracking Technologies
 
 We use minimal cookies for essential site functionality and analytics. You can disable cookies in your browser settings, though this may affect certain features.
@@ -46,11 +76,15 @@ We do not use advertising cookies or track you across other websites.
 We use the information we collect to:
 
 - Respond to your messages and inquiries
-- Process sponsorship requests
+- Process sponsorship requests and evaluate brand partnerships
+- Provide website building services and project management
+- Send invoices and process payments via Stripe
+- Communicate about active projects, sponsorships, deliverables, and revisions
 - Improve website content and functionality
 - Understand visitor interests and site performance
 - Prevent spam and abuse
 - Maintain basic security
+- Fulfill legal and accounting obligations
 
 We never sell, rent, or share your personal information with third parties for marketing purposes.
 
@@ -61,8 +95,23 @@ We work with trusted service providers to operate this website:
 - **Resend**: Email delivery service for contact form submissions
 - **Cloudflare**: Content delivery, security, and Workers infrastructure
 - **Google Analytics**: Website traffic and usage analysis (if enabled)
+- **Stripe**: Payment processing for website build services (see Payment Information below)
 
 These services may collect and process data according to their own privacy policies. We choose partners that respect user privacy.
+
+### Payment Information
+
+When you pay for website building services, payment processing is handled by **Stripe**, a secure third-party payment processor. We do not directly collect, store, or have access to your full credit card information.
+
+Stripe may collect:
+- Billing name and email
+- Payment card information
+- Billing address
+- Transaction details
+
+You can review Stripe's privacy practices at https://stripe.com/privacy.
+
+We receive confirmation of successful payments and basic transaction records (amount, date, invoice details) necessary for accounting and service delivery. When we send invoices via email, these contain secure Stripe payment links that direct you to Stripe's payment platform.
 
 ## External Links
 
@@ -71,6 +120,8 @@ Our website may contain links to other sites — photography resources, geology 
 ## Data Security
 
 We take reasonable precautions to protect your information using industry-standard security measures. However, no internet transmission is completely secure, and we cannot guarantee absolute security.
+
+Payment information is handled exclusively by Stripe using bank-level encryption and security standards. We do not store credit card details on our servers.
 
 ## Your Rights
 
@@ -96,6 +147,8 @@ Significant changes will be noted prominently on the site.
 ## Future Features
 
 As Sheena's Adventures grows, we may add features like a newsletter signup, online store, or community forums. If we do, we'll update this policy and clearly explain what information these features collect.
+
+For clients of our website building services, completed websites may include their own privacy policies tailored to their specific features and data practices.
 
 ## Contact Us
 
